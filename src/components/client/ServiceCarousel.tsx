@@ -41,48 +41,52 @@ function ServiceCard({
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleClick(); } }}
       onClick={handleClick}
       className={cn(
-        "group relative flex flex-col h-[580px] md:h-[640px] rounded-[32px] border border-black/5 transition-all duration-500 overflow-hidden outline-none",
+        "group relative flex flex-col md:flex-row h-[500px] md:h-[420px] rounded-[32px] border border-black/5 transition-all duration-500 overflow-hidden outline-none",
         isActive 
-          ? "bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] cursor-pointer hover:bg-black hover:text-white" 
+          ? "bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] cursor-pointer" 
           : "bg-white/40 cursor-pointer backdrop-blur-sm grayscale-[0.5] opacity-40 hover:opacity-60"
       )}
     >
-      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-black/10 group-hover:text-white/20 transition-colors duration-500 select-none">
+      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-black/10 select-none">
         {String(index + 1).padStart(2, '0')}
       </span>
       
-      <div className="flex flex-col flex-1 p-8 md:p-12">
-        <div className="mb-10">
+      {/* Informative side (Left on PC) */}
+      <div className="flex flex-col w-full md:w-[45%] p-8 md:p-12 md:border-r md:border-black/5 transition-colors duration-500 group-hover:bg-black group-hover:text-white">
+        <div className="mb-auto">
           <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-black/5 group-hover:bg-white/10 transition-colors duration-500">
             <ServiceIcon type={service.icon} size={24} className="transition-colors duration-500" />
           </div>
         </div>
         
-        <h3 className="text-3xl md:text-4xl font-light tracking-tight leading-[1.2] mb-6 transition-colors duration-500">
+        <h3 className="text-3xl md:text-4xl font-light tracking-tight leading-[1.2] transition-colors duration-500">
           {service.title}
         </h3>
-        
+      </div>
+
+      {/* Action side (Right on PC) */}
+      <div className="flex flex-col flex-1 p-8 md:p-12 justify-between bg-white/50 group-hover:bg-white transition-colors duration-500">
         <p className={cn(
-          "text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-4",
-          isActive ? "text-black/50 group-hover:text-white/60" : "text-black/30"
+          "text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-3 md:line-clamp-4",
+          isActive ? "text-black/50" : "text-black/30"
         )}>
           {service.shortDescription}
         </p>
         
-        <div className="flex items-center justify-between gap-4 mt-10 pt-8 border-t border-black/5 group-hover:border-white/10 transition-colors duration-500">
-          <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-4 mt-6 pt-6 border-t border-black/5">
+          <div className="flex flex-col gap-1 text-left">
             <span className={cn(
               "text-[10px] uppercase tracking-[0.2em] font-medium transition-colors duration-500",
-              isActive ? "text-black/30 group-hover:text-white/30" : "text-black/20"
+              isActive ? "text-black/30" : "text-black/20"
             )}>
               Duración
             </span>
-            <span className="text-sm font-light">
+            <span className="text-sm font-light text-black">
               {service.duration}&nbsp;min
             </span>
           </div>
           
-          <div className="group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full border border-black/10 group-hover:border-white/20 group-hover:bg-white group-hover:text-black transition-all duration-300">
+          <div className="group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full border border-black/10 transition-all duration-300 bg-black text-white hover:bg-gray-800">
             Explorar
             <ArrowRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
           </div>
