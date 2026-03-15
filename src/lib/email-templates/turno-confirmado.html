@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turno Confirmado - Portadora de Eros</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #fafafa; color: #111111;">
+  
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fafafa; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.06);">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding: 48px 40px 32px; text-align: center; border-bottom: 1px solid #f0f0f0;">
+              <p style="margin: 0 0 12px; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: #888888;">Sabiduría Ancestral</p>
+              <h1 style="margin: 0; font-size: 28px; font-weight: 300; letter-spacing: -0.02em; color: #111111;">Portadora de Eros</h1>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 40px;">
+              <!-- Success/Aviso Icon -->
+              <div style="text-align: center; margin-bottom: 24px;">
+                <div style="width: 64px; height: 64px; background: #111111; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+              </div>
+              
+              <h2 style="margin: 0 0 16px; font-size: 24px; font-weight: 300; color: #111111; text-align: center; letter-spacing: -0.01em;">{{title}}</h2>
+              
+              <div style="margin-bottom: 32px; text-align: center;">
+                <p style="margin: 0 0 8px; font-size: 16px; color: #111111;">Hola <strong>{{clientName}}</strong>,</p>
+                <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #666666;">
+                  {{message}}
+                </p>
+              </div>
+              
+              <!-- Appointment Details Card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="display: {{displayDetails}}; background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 20px; margin: 32px 0; overflow: hidden;">
+                <tr>
+                  <td style="padding: 32px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding-bottom: 12px; border-bottom: 1px solid #eeeeee;">
+                          <span style="font-size: 11px; color: #999999; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Servicio</span>
+                          <p style="margin: 6px 0 0; font-size: 16px; color: #111111; font-weight: 300;">{{service}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 12px 0; border-bottom: 1px solid #eeeeee;">
+                          <span style="font-size: 11px; color: #999999; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Fecha</span>
+                          <p style="margin: 6px 0 0; font-size: 16px; color: #111111; font-weight: 300;">{{date}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-top: 12px;">
+                          <span style="font-size: 11px; color: #999999; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">Hora</span>
+                          <p style="margin: 6px 0 0; font-size: 16px; color: #111111; font-weight: 300;">{{time}}</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- CTA Button -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="display: {{displayCTA}}; margin-top: 8px;">
+                <tr>
+                  <td align="center">
+                    <a href="https://wa.me/5491138854297" style="display: inline-block; padding: 18px 40px; background-color: #111111; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 12px; letter-spacing: 0.02em;">Contactar por WhatsApp</a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="margin: 24px 0 0; font-size: 14px; line-height: 1.7; color: #888888; text-align: center;">
+                ¿Necesitas reprogramar? <a href="https://wa.me/5491138854297" style="color: #111111; font-weight: 500;">Escríbenos por WhatsApp</a> con al menos 24hs de anticipación para mantener el reembolso o crédito.
+              </p>
+              <p style="margin: 12px 0 0; font-size: 12px; color: #aaaaaa; text-align: center;">
+                Al reservar, aceptaste nuestros <a href="{{baseUrl}}/terminos" style="color: #888888;">Términos</a> y <a href="{{baseUrl}}/politica-cancelacion" style="color: #888888;">Política de Cancelación</a>.
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 32px 40px; text-align: center; border-top: 1px solid #f0f0f0;">
+              <div style="margin-bottom: 20px;">
+                <a href="https://instagram.com/portadoradeeros" style="text-decoration: none; margin: 0 12px; color: #111111; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Instagram</a>
+                <a href="https://tiktok.com/@portadoradeeros" style="text-decoration: none; margin: 0 12px; color: #111111; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">TikTok</a>
+                <a href="https://wa.me/5491138854297" style="text-decoration: none; margin: 0 12px; color: #111111; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">WhatsApp</a>
+              </div>
+              <p style="margin: 0; font-size: 12px; color: #999999;">
+                © 2026 Portadora de Eros · Guía Espiritual
+              </p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+</body>
+</html>

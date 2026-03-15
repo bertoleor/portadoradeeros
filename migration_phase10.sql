@@ -1,0 +1,2 @@
+ALTER TABLE public.admin_settings
+ADD COLUMN IF NOT EXISTS business_hours JSONB DEFAULT '{"monday": {"end": "18:00", "start": "09:00", "closed": false}, "friday": {"end": "18:00", "start": "09:00", "closed": false}, "sunday": {"end": "", "start": "", "closed": true}, "tuesday": {"end": "18:00", "start": "09:00", "closed": false}, "saturday": {"end": "14:00", "start": "10:00", "closed": false}, "thursday": {"end": "18:00", "start": "09:00", "closed": false}, "wednesday": {"end": "18:00", "start": "09:00", "closed": false}}'::jsonb;

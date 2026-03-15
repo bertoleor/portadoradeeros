@@ -1,0 +1,7 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "html.validate.styles": false,
+  "sonarlint.ls.exclusions": {
+    "src/lib/email-templates/*.html": true
+  }
+}
