@@ -102,7 +102,7 @@ function buildLoop(items: Service[]): Service[] {
 }
 
 interface ServiceCarouselProps {
-  initialServices: Service[];
+  readonly initialServices: Service[];
 }
 
 export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
