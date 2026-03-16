@@ -64,9 +64,9 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="w-full py-12 md:py-16 border-t border-[rgba(255,255,255,0.25)] mt-auto glass-subtle">
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 items-start mb-12">
+    <footer className="w-full py-10 md:py-16 border-t border-[rgba(255,255,255,0.25)] mt-auto glass-subtle">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 items-start mb-10">
           {/* Logo & Brand */}
           <div className="space-y-4">
             <Link
@@ -127,7 +127,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-[rgba(15,15,20,0.1)] flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+        <div className="pt-6 md:pt-8 border-t border-[rgba(15,15,20,0.1)] flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-center md:text-left px-2">
           <p className="text-[10px] text-[rgba(15,15,20,0.35)] font-light tracking-wide leading-relaxed">
             © {currentYear} PORTADORA DE EROS. TODOS LOS DERECHOS RESERVADOS. <br className="md:hidden" />
             QUEDA PROHIBIDA LA REPRODUCCIÓN TOTAL O PARCIAL DE ESTE SITIO.

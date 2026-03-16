@@ -195,15 +195,7 @@ export default function BackgroundMesh(): React.JSX.Element {
   return (
     <canvas
       ref={canvasRef}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: -1,
-        pointerEvents: "none",
-      }}
+      className="fixed inset-0 w-full h-full -z-10 pointer-events-none"
       aria-hidden="true"
     />
   );

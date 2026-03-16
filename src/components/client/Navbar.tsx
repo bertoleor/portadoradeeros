@@ -46,14 +46,14 @@ export function Navbar() {
     <nav 
       className="fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 flex items-center justify-center glass-subtle"
     >
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between relative">
+      <div className="w-full max-w-7xl mx-auto px-4 md:px-10 flex items-center justify-between relative">
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 -ml-2 text-[rgba(15,15,20,0.85)] hover:text-[rgba(15,15,20,1)] hover:bg-white/20 rounded-xl transition-colors"
+          className="md:hidden p-3 -ml-3 text-[rgba(15,15,20,0.85)] hover:text-[rgba(15,15,20,1)] hover:bg-white/20 rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
         >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
         {/* Logo */}
@@ -82,7 +82,7 @@ export function Navbar() {
         </div>
 
         {/* Spacer for mobile (balance the hamburger) */}
-        <div className="w-8 md:hidden" />
+        <div className="w-12 md:hidden" />
       </div>
 
       {/* Mobile Navigation */}
@@ -136,9 +136,9 @@ export function Navbar() {
             <button
               onClick={() => setIsMenuOpen(false)}
               aria-label="Cerrar menú"
-              className="absolute top-6 right-6 p-3 bg-white/30 text-[rgba(15,15,20,0.7)] rounded-full hover:bg-white/50 transition-colors"
+              className="absolute top-4 right-4 md:hidden p-4 bg-white/30 text-[rgba(15,15,20,0.7)] rounded-full hover:bg-white/50 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
             >
-              <X size={22} />
+              <X size={24} />
             </button>
           </motion.div>
         )}

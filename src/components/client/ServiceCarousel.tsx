@@ -19,8 +19,7 @@ import type { Service } from '@/types';
 const AUTO_MS      = 5000;  // ms entre avances automáticos
 const DURATION_MS  = 500;   // ms de la transición CSS
 const GAP_PX       = 24;    // gap entre cards en px
-const CARD_PERCENT = 0.60;  // ancho de la card activa como fracción del viewport
-const PEEK_PERCENT = 0.20;  // cuánto se ve de cada card lateral (aprox)
+const CARD_PERCENT = 0.6;   // ancho de la card activa como fracción del viewport
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -54,7 +53,7 @@ function ServiceCard({
         if (e.key === 'Enter' || e.key === ' ') handleClick();
       }}
       className={cn(
-        'group relative flex flex-col md:flex-row h-[500px] md:h-[420px]',
+        'group relative flex flex-col md:flex-row h-[420px] md:h-[380px]',
         'rounded-[32px] border border-[rgba(255,255,255,0.3)]',
         'glass transition-all duration-500 overflow-hidden outline-none w-full',
         isActive
@@ -68,26 +67,26 @@ function ServiceCard({
       </span>
 
       {/* Lado izquierdo — ícono + título */}
-      <div className="flex flex-col w-full md:w-[45%] p-8 md:p-12 md:border-r border-[rgba(15,15,20,0.08)] transition-colors duration-500 group-hover:bg-white/30">
-        <div className="mb-auto">
-          <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[rgba(15,15,20,0.05)] group-hover:bg-[rgba(15,15,20,0.1)] transition-colors duration-500">
+      <div className="flex flex-col justify-between w-full md:w-[45%] p-6 md:p-12 md:border-r border-[rgba(15,15,20,0.08)] transition-colors duration-500 group-hover:bg-white/30">
+        <div className="flex items-center gap-3 mb-3 md:mb-auto md:block">
+          <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-2xl bg-[rgba(15,15,20,0.05)] group-hover:bg-[rgba(15,15,20,0.1)] transition-colors duration-500">
             <ServiceIcon
               type={service.icon}
-              size={24}
+              size={22}
               className="text-[rgba(15,15,20,0.8)] transition-colors duration-500"
             />
           </div>
+          <h3 className="text-2xl md:text-4xl font-light tracking-tight leading-[1.2] text-[rgba(15,15,20,0.85)] mt-4 md:mt-0">
+            {service.title}
+          </h3>
         </div>
-        <h3 className="text-3xl md:text-4xl font-light tracking-tight leading-[1.2] text-[rgba(15,15,20,0.85)]">
-          {service.title}
-        </h3>
       </div>
 
       {/* Lado derecho — descripción + CTA */}
-      <div className="flex flex-col flex-1 p-8 md:p-12 justify-between bg-white/30 group-hover:bg-white/45 transition-colors duration-500">
+      <div className="flex flex-col flex-1 p-6 md:p-12 justify-between bg-white/30 group-hover:bg-white/45 transition-colors duration-500">
         <p
           className={cn(
-            'text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-3 md:line-clamp-4',
+            'text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-2 md:line-clamp-4',
             isActive ? 'text-[rgba(15,15,20,0.6)]' : 'text-[rgba(15,15,20,0.5)]',
           )}
         >
@@ -136,8 +135,10 @@ function CarouselSkeleton() {
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="shrink-0 w-[85%] md:w-[60%] h-[420px] rounded-[32px] bg-black/5 animate-pulse"
-            style={{ opacity: i === 0 ? 1 : 0.4 }}
+            className={cn(
+              "shrink-0 w-[85%] md:w-[60%] h-[420px] rounded-[32px] bg-black/5 animate-pulse",
+              i === 0 ? "opacity-100" : "opacity-40"
+            )}
           />
         ))}
       </div>
@@ -178,13 +179,18 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
     if (!wrapper) return;
 
     const measure = () => {
-      cardWidthRef.current = wrapper.clientWidth * CARD_PERCENT;
+      const isMobile = window.innerWidth < 768;
+      cardWidthRef.current = wrapper.clientWidth * (isMobile ? 0.78 : CARD_PERCENT);
     };
     measure();
 
     const ro = new ResizeObserver(measure);
     ro.observe(wrapper);
-    return () => ro.disconnect();
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
   }, []);
 
   // ── Calcular translateX para un índice dado
@@ -302,17 +308,17 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   return (
     <section
       aria-label="Carrusel de servicios"
-      className="py-24 md:py-32"
+      className="py-12 md:py-32"
       onMouseEnter={() => { isPaused.current = true; }}
       onMouseLeave={() => { isPaused.current = false; }}
     >
       {/* Header */}
-      <div className="px-6 md:px-10 mb-16 flex items-end justify-between gap-8 max-w-[1248px] mx-auto">
+      <div className="px-6 md:px-10 mb-8 md:mb-16 flex items-end justify-between gap-8 max-w-[1248px] mx-auto">
         <div className="max-w-xl">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-4">
+          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-3 md:mb-4">
             Servicios Exclusivos
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
             Guía y Claridad{' '}
             <br />
             <span className="text-[rgba(15,15,20,0.4)]">en tu camino.</span>
@@ -339,6 +345,26 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
         </div>
       </div>
 
+      {/* Mobile Navigation Arrows */}
+      <div className="md:hidden flex items-center justify-between gap-2 px-4 mb-4">
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="Anterior"
+          className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center bg-white/50 backdrop-blur-sm hover:bg-black hover:text-white transition-all duration-300"
+        >
+          <ArrowLeft size={18} strokeWidth={1.5} />
+        </button>
+        <button
+          type="button"
+          onClick={next}
+          aria-label="Siguiente"
+          className="w-12 h-12 rounded-full border border-black/10 flex items-center justify-center bg-white/50 backdrop-blur-sm hover:bg-black hover:text-white transition-all duration-300"
+        >
+          <ArrowRight size={18} strokeWidth={1.5} />
+        </button>
+      </div>
+
       {/* Track */}
       <div
         ref={wrapperRef}
@@ -349,15 +375,13 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
       >
         <div
           ref={trackRef}
-          className="flex"
-          style={{ gap: `${GAP_PX}px` }}
+          className="flex gap-6"
           onTransitionEnd={handleTransitionEnd}
         >
           {looped.map((s, i) => (
             <div
               key={`${s.id}-${i}`}
-              className="shrink-0"
-              style={{ width: `${CARD_PERCENT * 100}%` }}
+              className="shrink-0 w-[78%] md:w-[60%]"
             >
               <ServiceCard
                 service={s}
