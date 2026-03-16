@@ -38,6 +38,26 @@
   --input: #e5e5ea;
   --ring: #1d1d1f;
   --radius: 1rem;
+
+  /* Z-index scale */
+  --z-canvas: -1;
+  --z-base: 0;
+  --z-card: 1;
+  --z-navbar: 50;
+  --z-modal: 100;
+  --z-tooltip: 200;
+
+  /* Glass tokens */
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-bg-opaque: rgba(255, 255, 255, 0.45);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(20px);
+  --glass-blur-heavy: blur(24px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.4);
+  --glass-border-subtle: 1px solid rgba(255, 255, 255, 0.25);
+  --glass-border-opaque: 1px solid rgba(255, 255, 255, 0.5);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.12);
 }
 
 .dark {
@@ -165,18 +185,13 @@
    SCROLLBAR (pseudo-elements are not affected
    by layer specificity, safe to keep here)
    ============================================ */
-::-webkit-scrollbar {
-  width: 4px;
+/* Scrollbar invisible */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gray-500);
-  border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-700);
+html::-webkit-scrollbar {
+  display: none;
 }
 
 /* ============================================
@@ -208,9 +223,83 @@
   }
 }
 
-/* ============================================
-   ACCESSIBILITY
-   ============================================ */
+/* === GLASSMORPHISM UTILITIES === */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Fallback para navegadores sin backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+  }
+}
+
+.glass-opaque {
+  background: var(--glass-bg-opaque);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: var(--glass-border-opaque);
+  box-shadow: var(--glass-shadow);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-opaque {
+    background: rgba(255, 255, 255, 0.92);
+  }
+}
+
+.glass-subtle {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.75);
+  }
+}
+
+.glass-hover {
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: var(--glass-shadow-elevated);
+  transform: translateY(-2px);
+}
+
+/* Texto sobre fondos glass — siempre usar estos, nunca blanco puro sobre glass claro */
+.glass-text-primary {
+  color: rgba(15, 15, 20, 0.9);
+}
+.glass-text-secondary {
+  color: rgba(15, 15, 20, 0.65);
+}
+.glass-text-muted {
+  color: rgba(15, 15, 20, 0.45);
+}
+
+/* Para glass oscuro opcional */
+.glass-dark {
+  background: rgba(10, 10, 20, 0.45);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: var(--glass-shadow);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

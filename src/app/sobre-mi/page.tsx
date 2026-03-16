@@ -96,7 +96,7 @@ export default async function SobreMiPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {values.map((value, idx) => (
               <FadeIn key={value.title} delay={0.2 + idx * 0.1} direction="up" distance={20} className="h-full">
-                <div className="h-full rounded-2xl bg-black border border-white/20 text-white p-7 md:p-8 hover:border-white transition-colors">
+                <div className="h-full rounded-2xl glass-dark p-7 md:p-8 hover:border-white/20 transition-colors">
                   <value.icon size={24} className="text-white mb-4" strokeWidth={1.5} />
                   <h3 className="text-base font-medium mb-2">{value.title}</h3>
                   <p className="text-sm text-white/60 leading-relaxed font-light">{value.description}</p>

@@ -5,7 +5,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
   ({ className = '', ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("rounded-3xl border border-gray-100 bg-white shadow-sm overflow-hidden", className)}
+      className={cn("rounded-3xl glass overflow-hidden", className)}
       {...props}
     />
   )
@@ -27,7 +27,7 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
   ({ className = '', ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn("text-3xl sm:text-4xl font-light tracking-tight text-gray-900 mb-4", className)}
+      className={cn("text-3xl sm:text-4xl font-light tracking-tight text-[rgba(15,15,20,0.9)] mb-4", className)}
       {...props}
     >
       {props.children || <span className="sr-only">Título de tarjeta</span>}
@@ -40,7 +40,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
   ({ className = '', ...props }, ref) => (
     <p
       ref={ref}
-      className={cn("text-lg leading-relaxed text-gray-500", className)}
+      className={cn("text-lg leading-relaxed text-[rgba(15,15,20,0.65)]", className)}
       {...props}
     />
   )

@@ -83,8 +83,8 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
 const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: StepProps & { nextStep: () => void }) => (
   <div className="space-y-8">
     <div className="flex items-center justify-between">
-      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 block mb-2">Paso 1 de 4</span><h3 className="text-2xl font-light text-white tracking-tight">Tus Datos</h3></div>
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40"><User size={20} /></div>
+      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.35)] block mb-2">Paso 1 de 4</span><h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Tus Datos</h3></div>
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]"><User size={20} /></div>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {[
@@ -94,8 +94,8 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
         { id: 'phone', label: 'WhatsApp', placeholder: '+54 9...' },
       ].map((f) => (
         <div key={f.id} className="space-y-2">
-          <Label htmlFor={f.id} className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">{f.label}</Label>
-          <Input id={f.id} type={f.type || 'text'} placeholder={f.placeholder} value={formData[f.id as keyof FormData]} onChange={(e) => handleChange(f.id as keyof FormData, e.target.value)} className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/20 h-14 rounded-2xl" />
+          <Label htmlFor={f.id} className="text-[10px] font-bold text-[rgba(15,15,20,0.5)] uppercase tracking-widest ml-1">{f.label}</Label>
+          <Input id={f.id} type={f.type || 'text'} placeholder={f.placeholder} value={formData[f.id as keyof FormData]} onChange={(e) => handleChange(f.id as keyof FormData, e.target.value)} className="bg-white/50 border-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-14 rounded-2xl" />
           {errors[f.id] && <p className="text-[10px] text-red-500 ml-1">{errors[f.id]}</p>}
         </div>
       ))}
@@ -349,19 +349,19 @@ export function ServiceContactForm({ serviceName, serviceId, serviceDuration = 6
 
   if (isSubmitted) {
     return (
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2.5rem] bg-black p-8 md:p-12 text-center min-h-[400px] flex flex-col items-center justify-center shadow-2xl border border-white/5">
-        <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center mb-8"><CheckCircle2 size={40} className="text-white" /></div>
-        <h3 className="text-3xl font-light text-white mb-4 tracking-tight">Turno Solicitado</h3>
-        <p className="text-white/50 text-base max-w-sm mx-auto mb-10 font-light leading-relaxed">Tu pedido para <span className="text-white font-medium">{serviceName}</span> ha sido enviado. Revisá tu email para los detalles del pago.</p>
-        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} className="rounded-full px-10 py-6 bg-white text-black hover:bg-white/90 font-medium">Finalizar</Button>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-[2.5rem] glass-opaque p-8 md:p-12 text-center min-h-[400px] flex flex-col items-center justify-center shadow-2xl border border-[rgba(255,255,255,0.5)]">
+        <div className="w-20 h-20 rounded-full bg-[rgba(15,15,20,0.06)] flex items-center justify-center mb-8"><CheckCircle2 size={40} className="text-[rgba(15,15,20,0.7)]" /></div>
+        <h3 className="text-3xl font-light text-[rgba(15,15,20,0.9)] mb-4 tracking-tight">Turno Solicitado</h3>
+        <p className="text-[rgba(15,15,20,0.6)] text-base max-w-sm mx-auto mb-10 font-light leading-relaxed">Tu pedido para <span className="text-[rgba(15,15,20,0.9)] font-medium">{serviceName}</span> ha sido enviado. Revisá tu email para los detalles del pago.</p>
+        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} className="rounded-full px-10 py-6 bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,0.95)] font-medium">Finalizar</Button>
       </motion.div>
     );
   }
 
   return (
-    <div className="rounded-[2.5rem] bg-black p-6 sm:p-10 shadow-2xl border border-white/5 relative overflow-hidden min-h-[520px]">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.03] blur-[100px] rounded-full -mr-32 -mt-32 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/[0.02] blur-[100px] rounded-full -ml-32 -mb-32 pointer-events-none" />
+    <div className="rounded-[2.5rem] glass-opaque p-6 sm:p-10 shadow-2xl border border-[rgba(255,255,255,0.5)] relative overflow-hidden min-h-[520px]">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[rgba(135,206,250,0.08)] blur-[100px] rounded-full -mr-32 -mt-32 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[rgba(216,180,226,0.08)] blur-[100px] rounded-full -ml-32 -mb-32 pointer-events-none" />
       <AnimatePresence mode="wait" custom={step}>
         <motion.div key={step} custom={step} initial={{ x: step > 0 ? 50 : -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: step < 0 ? 50 : -50, opacity: 0 }} className="relative z-10 h-full flex flex-col">
           {step === 0 && <StepIntro nextStep={() => setStep(1)} serviceName={serviceName} />}

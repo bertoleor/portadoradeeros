@@ -27,10 +27,10 @@ export function ServiceCard({ service, index = 0, featured = false, className = 
     >
       <Link
         href={`/servicios/${service.slug}`}
-        className="group relative flex flex-col h-full rounded-xl border border-gray-200 bg-white text-black transition-all duration-300 hover:bg-black hover:text-white hover:border-black hover:shadow-lg hover:shadow-black/20 overflow-hidden"
+        className="group relative flex flex-col h-full rounded-xl glass border border-[rgba(255,255,255,0.3)] text-[rgba(15,15,20,0.85)] transition-all duration-300 hover:bg-white/40 hover:shadow-lg hover:shadow-black/10 overflow-hidden"
       >
         {/* Number stamp */}
-        <span className="absolute top-4 right-4 text-[11px] font-mono tracking-widest text-gray-400 group-hover:text-white/40 transition-colors duration-300 select-none">
+        <span className="absolute top-4 right-4 text-[11px] font-mono tracking-widest text-[rgba(15,15,20,0.4)] group-hover:text-[rgba(15,15,20,0.6)] transition-colors duration-300 select-none">
           {numberLabel(index)}
         </span>
 
@@ -41,27 +41,27 @@ export function ServiceCard({ service, index = 0, featured = false, className = 
             <ServiceIcon
               type={service.icon}
               size={featured ? 30 : 24}
-              className="text-black group-hover:text-white/80 transition-colors duration-300"
+              className="text-[rgba(15,15,20,0.85)] group-hover:text-[rgba(15,15,20,0.95)] transition-colors duration-300"
             />
           </div>
 
           {/* Title */}
-          <h3 className={`font-light tracking-tight leading-tight mb-3 transition-colors duration-300 group-hover:text-white ${
+          <h3 className={`font-light tracking-tight leading-tight mb-3 transition-colors duration-300 group-hover:text-[rgba(15,15,20,0.95)] ${
             featured ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'
           }`}>
             {service.title}
           </h3>
 
           {/* Description */}
-          <p className={`text-gray-500 group-hover:text-white/60 leading-relaxed font-light transition-all duration-300 group-hover:translate-y-0.5 ${
+          <p className={`text-[rgba(15,15,20,0.65)] group-hover:text-[rgba(15,15,20,0.8)] leading-relaxed font-light transition-all duration-300 group-hover:translate-y-0.5 ${
             featured ? 'text-sm md:text-base' : 'text-sm line-clamp-3'
           }`}>
             {service.shortDescription}
           </p>
 
           {/* Footer */}
-          <div className="flex items-center justify-between gap-4 mt-6 pt-4 border-t border-gray-100 group-hover:border-white/10 transition-colors duration-300">
-            <span className="text-[11px] uppercase tracking-widest font-medium text-gray-400 group-hover:text-white/40 transition-colors duration-300">
+          <div className="flex items-center justify-between gap-4 mt-6 pt-4 border-t border-[rgba(15,15,20,0.08)] group-hover:border-[rgba(15,15,20,0.15)] transition-colors duration-300">
+            <span className="text-[11px] uppercase tracking-widest font-medium text-[rgba(15,15,20,0.5)] group-hover:text-[rgba(15,15,20,0.7)] transition-colors duration-300">
               {service.duration}&nbsp;min
             </span>
 
@@ -72,14 +72,14 @@ export function ServiceCard({ service, index = 0, featured = false, className = 
                   e.preventDefault();
                   globalThis.location.href = `/servicios/${service.slug}#message`;
                 }}
-                className="text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-full border border-gray-300 text-black bg-white group-hover:bg-white group-hover:text-black group-hover:border-white transition-all duration-200 hover:opacity-90"
+                className="text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-full border border-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.85)] bg-white/50 group-hover:bg-white/70 group-hover:text-[rgba(15,15,20,0.95)] group-hover:border-[rgba(15,15,20,0.25)] transition-all duration-200 hover:opacity-90"
               >
                 Agendar
               </button>
               <ArrowRight
                 size={15}
                 strokeWidth={1.5}
-                className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-white"
+                className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[rgba(15,15,20,0.7)]"
               />
             </div>
           </div>

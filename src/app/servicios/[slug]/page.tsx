@@ -116,11 +116,11 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
 
           {/* Full width - Contact Form (below on PC) */}
           <div className="xl:col-span-12 mt-4 xl:mt-8">
-            <div className="bg-white border border-black/5 rounded-3xl shadow-sm p-6 sm:p-8 md:p-10">
-              <h2 className="text-xl sm:text-2xl font-light tracking-tight text-black mb-2">
+            <div className="rounded-3xl p-6 sm:p-8 md:p-10">
+              <h2 className="text-xl sm:text-2xl font-light tracking-tight text-[rgba(15,15,20,0.85)] mb-2">
                 ¿Te interesa este servicio?
               </h2>
-              <p className="text-sm sm:text-base text-black/40 mb-8 font-light">
+              <p className="text-sm sm:text-base text-[rgba(15,15,20,0.5)] mb-8 font-light">
                 Completá el formulario para agendar tu consulta o solicitar más información.
               </p>
               <div className="max-w-xl">

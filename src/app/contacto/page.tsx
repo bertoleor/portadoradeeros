@@ -288,9 +288,9 @@ export default function ContactPage() {
             className="lg:col-span-2"
           >
             {/* Info card - Notion style */}
-            <div className="rounded-2xl bg-gray-50 border border-gray-100 p-8 mb-8">
-              <h3 className="text-lg font-medium text-gray-900 mb-3">Portadora de Eros</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+            <div className="rounded-2xl glass p-8 mb-8">
+              <h3 className="text-lg font-medium text-[rgba(15,15,20,0.9)] mb-3">Portadora de Eros</h3>
+              <p className="text-sm text-[rgba(15,15,20,0.65)] leading-relaxed">
                 Guía espiritual, canalizadora y puente entre lo terrenal y lo místico.
                 Conectando con la sabiduría ancestral para guiarte en tu camino.
               </p>
@@ -304,18 +304,18 @@ export default function ContactPage() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-200"
+                  className="group flex items-center gap-4 p-4 rounded-xl hover:bg-white/30 transition-colors border border-[rgba(255,255,255,0.3)]"
                 >
-                  <div className="w-11 h-11 rounded-lg bg-gray-100 flex items-center justify-center shrink-0 group-hover:bg-gray-200 transition-colors">
+                  <div className="w-11 h-11 rounded-lg bg-[rgba(15,15,20,0.06)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(15,15,20,0.1)] transition-colors">
                     {social.platform ? (
-                      <SocialIcon platform={social.platform} size={18} className="text-gray-600" />
+                      <SocialIcon platform={social.platform} size={18} className="text-[rgba(15,15,20,0.6)]" />
                     ) : (
-                      social.icon && <social.icon size={18} className="text-gray-600" />
+                      social.icon && <social.icon size={18} className="text-[rgba(15,15,20,0.6)]" />
                     )}
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-widest text-gray-400 group-hover:text-gray-500 mb-0.5">{social.label}</div>
-                    <div className="text-sm font-medium text-gray-700 group-hover:text-gray-900 truncate transition-colors">
+                    <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.45)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">{social.label}</div>
+                    <div className="text-sm font-medium text-[rgba(15,15,20,0.75)] group-hover:text-[rgba(15,15,20,0.9)] truncate transition-colors">
                       {social.handle}
                     </div>
                   </div>

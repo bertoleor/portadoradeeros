@@ -41,52 +41,52 @@ function ServiceCard({
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { handleClick(); } }}
       onClick={handleClick}
       className={cn(
-        "group relative flex flex-col md:flex-row h-[500px] md:h-[420px] rounded-[32px] border border-black/5 transition-all duration-500 overflow-hidden outline-none",
+        "group relative flex flex-col md:flex-row h-[500px] md:h-[420px] rounded-[32px] border border-[rgba(255,255,255,0.3)] glass transition-all duration-500 overflow-hidden outline-none",
         isActive 
-          ? "bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] cursor-pointer" 
-          : "bg-white/40 cursor-pointer backdrop-blur-sm grayscale-[0.5] opacity-40 hover:opacity-60"
+          ? "bg-white/45 shadow-[0_20px_50px_rgba(0,0,0,0.08)] cursor-pointer" 
+          : "bg-white/20 cursor-pointer backdrop-blur-sm opacity-70 hover:opacity-85"
       )}
     >
-      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-black/10 select-none">
+      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-[rgba(15,15,20,0.15)] select-none">
         {String(index + 1).padStart(2, '0')}
       </span>
       
       {/* Informative side (Left on PC) */}
-      <div className="flex flex-col w-full md:w-[45%] p-8 md:p-12 md:border-r md:border-black/5 transition-colors duration-500 group-hover:bg-black group-hover:text-white">
+      <div className="flex flex-col w-full md:w-[45%] p-8 md:p-12 md:border-r border-[rgba(15,15,20,0.08)] transition-colors duration-500 group-hover:bg-white/30">
         <div className="mb-auto">
-          <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-black/5 group-hover:bg-white/10 transition-colors duration-500">
-            <ServiceIcon type={service.icon} size={24} className="transition-colors duration-500" />
+          <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[rgba(15,15,20,0.05)] group-hover:bg-[rgba(15,15,20,0.1)] transition-colors duration-500">
+            <ServiceIcon type={service.icon} size={24} className="text-[rgba(15,15,20,0.8)] transition-colors duration-500" />
           </div>
         </div>
         
-        <h3 className="text-3xl md:text-4xl font-light tracking-tight leading-[1.2] transition-colors duration-500">
+        <h3 className="text-3xl md:text-4xl font-light tracking-tight leading-[1.2] text-[rgba(15,15,20,0.85)] transition-colors duration-500">
           {service.title}
         </h3>
       </div>
 
       {/* Action side (Right on PC) */}
-      <div className="flex flex-col flex-1 p-8 md:p-12 justify-between bg-white/50 group-hover:bg-white transition-colors duration-500">
+      <div className="flex flex-col flex-1 p-8 md:p-12 justify-between bg-white/30 group-hover:bg-white/45 transition-colors duration-500">
         <p className={cn(
           "text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-3 md:line-clamp-4",
-          isActive ? "text-black/50" : "text-black/30"
+          isActive ? "text-[rgba(15,15,20,0.6)]" : "text-[rgba(15,15,20,0.5)]"
         )}>
           {service.shortDescription}
         </p>
         
-        <div className="flex items-center justify-between gap-4 mt-6 pt-6 border-t border-black/5">
+        <div className="flex items-center justify-between gap-4 mt-6 pt-6 border-t border-[rgba(15,15,20,0.08)]">
           <div className="flex flex-col gap-1 text-left">
             <span className={cn(
               "text-[10px] uppercase tracking-[0.2em] font-medium transition-colors duration-500",
-              isActive ? "text-black/30" : "text-black/20"
+              isActive ? "text-[rgba(15,15,20,0.4)]" : "text-[rgba(15,15,20,0.3)]"
             )}>
               Duración
             </span>
-            <span className="text-sm font-light text-black">
+            <span className="text-sm font-light text-[rgba(15,15,20,0.8)]">
               {service.duration}&nbsp;min
             </span>
           </div>
           
-          <div className="group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full border border-black/10 transition-all duration-300 bg-black text-white hover:bg-gray-800">
+          <div className="group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full border border-[rgba(15,15,20,0.1)] bg-[rgba(15,15,20,0.8)] text-white hover:bg-[rgba(15,15,20,0.9)] transition-all duration-300">
             Explorar
             <ArrowRight size={14} className="transition-transform duration-300 group-hover/btn:translate-x-1" />
           </div>
@@ -240,11 +240,11 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
       {/* Header - Constrained to 1200px as per Audit 2026 */}
       <div className="px-6 md:px-10 mb-16 flex items-end justify-between gap-8 max-w-[1248px] mx-auto">
         <div className="max-w-xl">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-black/30 font-semibold block mb-4">
+          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-4">
             Servicios Exclusivos
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-black leading-tight">
-            Guía y Claridad <br/><span className="text-black/30">en tu camino.</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
+            Guía y Claridad <br/><span className="text-[rgba(15,15,20,0.4)]">en tu camino.</span>
           </h2>
         </div>
         
@@ -321,10 +321,10 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
         
         <Link 
           href="/servicios" 
-          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-black/40 hover:text-black transition-all duration-300"
+          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-[rgba(15,15,20,0.5)] hover:text-[rgba(15,15,20,0.85)] transition-all duration-300"
         >
           Ver todos los servicios
-          <div className="w-8 h-[1px] bg-black/10 group-hover:w-12 group-hover:bg-black transition-all duration-300" />
+          <div className="w-8 h-[1px] bg-[rgba(15,15,20,0.15)] group-hover:w-12 group-hover:bg-[rgba(15,15,20,0.8)] transition-all duration-300" />
         </Link>
       </div>
     </section>

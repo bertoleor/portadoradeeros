@@ -5,6 +5,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { Shell } from "@/components/client/Shell";
 import { cn } from "@/lib/utils";
 import { PWAHandler } from "@/components/pwa/PWAHandler";
+import BackgroundMesh from "@/components/client/BackgroundMesh";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -59,7 +60,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={cn("font-sans", geist.variable)}>
-      <body className={`${geist.variable} ${playfair.variable} font-sans antialiased text-black bg-white flex flex-col min-h-screen selection:bg-black selection:text-white`}>
+      <body className={`${geist.variable} ${playfair.variable} font-sans antialiased text-black bg-[#f8f9fb] flex flex-col min-h-screen selection:bg-black selection:text-white`}>
+        <BackgroundMesh />
         <AuthProvider>
           <PWAHandler />
           <Shell>
