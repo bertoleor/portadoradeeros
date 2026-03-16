@@ -66,7 +66,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-0"
       >
         <span className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)]">Scroll</span>
         <div className="w-px h-6 bg-[rgba(15,15,20,0.2)]" />

@@ -215,24 +215,24 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left: Form */}
             <div className="p-8 md:p-10 border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.25)]">
-              <h2 className="text-xl font-medium text-[rgba(15,15,20,0.85)] mb-6">Envíame un mensaje</h2>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <Label htmlFor="name" className={`text-xs ${errors.name ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Nombre</Label>
+              <h2 className="text-xl font-light text-[rgba(15,15,20,0.82)] mb-10 tracking-tight">Envíame un mensaje</h2>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Nombre</Label>
                     <Input
                       id="name"
                       placeholder="Tu nombre"
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       aria-invalid={!!errors.name}
-                      className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
+                      className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
                     />
                     {errors.name && <p className="text-[11px] text-red-500">{errors.name}</p>}
                   </div>
 
-                  <div className="space-y-1.5">
-                    <Label htmlFor="email" className={`text-xs ${errors.email ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Email</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Email</Label>
                     <Input
                       id="email"
                       type="email"
@@ -240,26 +240,26 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
                       aria-invalid={!!errors.email}
-                      className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
+                      className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
                     />
                     {errors.email && <p className="text-[11px] text-red-500">{errors.email}</p>}
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <Label htmlFor="phone" className="text-xs text-[rgba(15,15,20,0.45)]">Teléfono (opcional)</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="phone" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Teléfono (opcional)</Label>
                   <Input
                     id="phone"
                     type="tel"
                     placeholder="+54 9 11 1234 5678"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
+                    className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
                   />
                 </div>
 
-                <div className="space-y-1.5 flex flex-col">
-                  <Label htmlFor="message" className={`text-xs ${errors.message ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Mensaje</Label>
+                <div className="space-y-2 flex flex-col">
+                  <Label htmlFor="message" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Mensaje</Label>
                   <Textarea
                     id="message"
                     placeholder="Contame sobre tu consulta..."
@@ -267,16 +267,15 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     aria-invalid={!!errors.message}
-                    className="p-5 rounded-2xl resize-none bg-white/50 border border-[rgba(15,15,20,0.1)] text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)] min-h-[140px]"
+                    className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 resize-none text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200"
                   />
                   {errors.message && <p className="text-[11px] text-red-500">{errors.message}</p>}
                 </div>
 
                 <Button
                   type="submit"
-                  variant="default"
                   disabled={isLoading}
-                  className="w-full py-3 rounded-xl font-medium"
+                  className="w-full bg-[rgba(15,15,20,0.78)] text-white rounded-full py-4 text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:bg-[rgba(15,15,20,0.92)] hover:-translate-y-px flex items-center justify-center gap-2 mt-4"
                 >
                   {!isLoading && <Send className="w-4 h-4" />}
                   {isLoading ? 'Enviando...' : 'Enviar Mensaje'}

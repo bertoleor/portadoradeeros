@@ -76,7 +76,7 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
     </div>
     <h3 className="text-2xl md:text-3xl font-light text-[rgba(15,15,20,0.9)] tracking-tight mb-4">Agendar {serviceName}</h3>
     <p className="text-[rgba(15,15,20,0.5)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
-    <Button onClick={nextStep} className="group rounded-full px-12 py-4 md:py-7 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
+    <Button onClick={nextStep} className="group rounded-full px-12 py-4 md:py-6 h-auto bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px active:translate-y-0">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
   </div>
 );
 
@@ -113,8 +113,8 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
       />
     </div>
     <div className="pt-8 flex justify-between items-center">
-      <button onClick={prevStep} className="text-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium translation-colors">Cancelar</button>
-      <Button onClick={nextStep} className="rounded-full px-10 py-4 md:py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px]">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <button onClick={prevStep} className="text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors">Cancelar</button>
+      <Button onClick={nextStep} className="rounded-full px-10 py-3.5 h-auto bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -130,8 +130,8 @@ const StepDateSelection = ({ formData, handleChange, nextStep, prevStep, errors,
       {errors.appointmentDate && <p className="text-center text-[10px] text-red-500 mt-4">{errors.appointmentDate}</p>}
     </div>
     <div className="pt-8 flex justify-between items-center">
-      <button onClick={prevStep} className="flex items-center text-white/40 hover:text-white text-xs font-medium"><ChevronLeft size={16} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} disabled={!formData.appointmentDate} className="rounded-full px-10 py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px] disabled:opacity-50">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
+      <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
+      <Button onClick={nextStep} disabled={!formData.appointmentDate} className="rounded-full px-10 py-3.5 h-auto bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -148,8 +148,8 @@ const StepTimeSelection = ({ formData, handleChange, nextStep, prevStep, errors,
       {errors.appointmentTime && <p className="text-center text-[10px] text-red-500 mt-4">{errors.appointmentTime}</p>}
     </div>
     <div className="pt-8 flex justify-between items-center">
-      <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium"><ChevronLeft size={16} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} disabled={!formData.appointmentTime} className="rounded-full px-10 py-6 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] font-bold uppercase tracking-widest text-[11px] disabled:opacity-50">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
+      <Button onClick={nextStep} disabled={!formData.appointmentTime} className="rounded-full px-10 py-3.5 h-auto bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -250,7 +250,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
           <Button
             onClick={onSubmit}
             disabled={isLoading || !acceptedLegal}
-            className="w-full max-w-sm rounded-full py-8 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] font-bold uppercase tracking-[0.2em] text-[12px] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full max-w-sm rounded-full py-5 h-auto bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px active:translate-y-0 disabled:opacity-40"
           >
             {isLoading ? (
               <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
@@ -271,7 +271,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
     <div className="pt-6">
       <button
         onClick={prevStep}
-        className="flex items-center gap-2 text-[rgba(15,15,20,0.3)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium transition-colors group"
+        className="flex items-center gap-2 text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors group"
       >
         <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
         Volver atrás
@@ -353,7 +353,7 @@ export function ServiceContactForm({ serviceName, serviceId, serviceDuration = 6
         <div className="w-20 h-20 rounded-full bg-[rgba(15,15,20,0.06)] flex items-center justify-center mb-8"><CheckCircle2 size={40} className="text-[rgba(15,15,20,0.7)]" /></div>
         <h3 className="text-3xl font-light text-[rgba(15,15,20,0.9)] mb-4 tracking-tight">Turno Solicitado</h3>
         <p className="text-[rgba(15,15,20,0.6)] text-base max-w-sm mx-auto mb-10 font-light leading-relaxed">Tu pedido para <span className="text-[rgba(15,15,20,0.9)] font-medium">{serviceName}</span> ha sido enviado. Revisá tu email para los detalles del pago.</p>
-        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} className="rounded-full px-10 py-6 bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,0.95)] font-medium">Finalizar</Button>
+        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} className="rounded-full px-10 py-4 bg-[rgba(15,15,20,0.78)] text-white hover:bg-[rgba(15,15,20,0.92)] font-medium uppercase tracking-[0.12em] text-[13px] transition-all duration-200 hover:-translate-y-px">Finalizar</Button>
       </motion.div>
     );
   }

@@ -43,9 +43,9 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
   };
 
   return (
-    <div className="w-full bg-white/[0.03] border border-white/10 rounded-2xl p-5 overflow-hidden">
+    <div className="w-full bg-[rgba(15,15,20,0.03)] border border-[rgba(15,15,20,0.08)] rounded-2xl p-5 overflow-hidden">
       <div className="flex items-center justify-between mb-6">
-        <h4 className="text-sm font-medium text-white/90">
+        <h4 className="text-sm font-medium text-[rgba(15,15,20,0.85)]">
           {monthNames[month]} {year}
         </h4>
         <div className="flex items-center gap-1">
@@ -54,7 +54,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
             onClick={prevMonth}
             title="Mes anterior"
             aria-label="Mes anterior"
-            className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
+            className="p-2 hover:bg-[rgba(15,15,20,0.06)] rounded-full transition-colors text-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.80)]"
           >
             <ChevronLeft size={18} />
           </button>
@@ -63,7 +63,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
             onClick={nextMonth}
             title="Mes siguiente"
             aria-label="Mes siguiente"
-            className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
+            className="p-2 hover:bg-[rgba(15,15,20,0.06)] rounded-full transition-colors text-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.80)]"
           >
             <ChevronRight size={18} />
           </button>
@@ -72,7 +72,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
 
       <div className="grid grid-cols-7 gap-1">
         {dayLabels.map(label => (
-          <div key={`label-${label}`} className="text-center py-2 text-[10px] font-bold text-white/20 uppercase tracking-widest">
+          <div key={`label-${label}`} className="text-center py-2 text-[10px] font-bold text-[rgba(15,15,20,0.30)] uppercase tracking-widest">
             {label}
           </div>
         ))}
@@ -101,24 +101,24 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
               className={`
                 relative h-10 w-full flex items-center justify-center rounded-xl text-xs transition-all duration-200
                 ${isSelected 
-                  ? 'bg-white text-black font-bold shadow-lg shadow-white/10 scale-105 z-10' 
+                  ? 'bg-[rgba(15,15,20,0.88)] text-white font-bold shadow-sm scale-105 z-10' 
                   : ''
                 }
-                ${!isSelected && disabled ? 'text-white/10 cursor-not-allowed' : ''}
-                ${!isSelected && !disabled ? 'text-white/60 hover:bg-white/5 hover:text-white' : ''}
+                ${!isSelected && disabled ? 'text-[rgba(15,15,20,0.15)] cursor-not-allowed' : ''}
+                ${!isSelected && !disabled ? 'text-[rgba(15,15,20,0.70)] hover:bg-[rgba(15,15,20,0.06)] hover:text-[rgba(15,15,20,0.90)]' : ''}
               `}
             >
               {dayNumber}
               {isSelected && (
                 <motion.div
                   layoutId="activeDay"
-                  className="absolute inset-0 border-2 border-white rounded-xl pointer-events-none"
+                  className="absolute inset-0 border-2 border-[rgba(15,15,20,0.88)] rounded-xl pointer-events-none"
                   initial={false}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
               {!disabled && !isSelected && (
-                 <div className="absolute bottom-1.5 w-1 h-1 rounded-full bg-white/10" />
+                 <div className="absolute bottom-1.5 w-1 h-1 rounded-full bg-[rgba(15,15,20,0.15)]" />
               )}
             </button>
           );

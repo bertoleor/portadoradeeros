@@ -14,6 +14,8 @@ const navLinks = [
   { href: '/contacto', label: 'Contacto' },
 ];
 
+import { cn } from '@/lib/utils';
+
 export function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -56,9 +58,13 @@ export function Navbar() {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-300 flex items-center justify-center glass-subtle ${
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-500 flex items-center justify-center',
+        !isScrolled
+          ? 'bg-white/8 backdrop-blur-sm border-b border-white/10'
+          : 'bg-white/80 backdrop-blur-2xl border-b border-white/30 shadow-[0_1px_20px_rgba(0,0,0,0.04)]',
         hidden ? '-translate-y-full' : 'translate-y-0'
-      }`}
+      )}
     >
       <div className="w-full max-w-7xl mx-auto px-4 md:px-10 flex items-center justify-between relative">
         {/* Mobile Menu Button */}
@@ -103,11 +109,11 @@ export function Navbar() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 bg-white/90 backdrop-blur-2xl z-[90] pt-24 px-8"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="md:hidden fixed inset-0 bg-white/92 backdrop-blur-2xl z-[90] pt-24 px-8 shadow-lg"
           >
             <div className="flex flex-col gap-6 text-center pt-8">
               {navLinks.map((link, i) => (

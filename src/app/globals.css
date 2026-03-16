@@ -228,11 +228,50 @@ html::-webkit-scrollbar {
 
   /* Button utility classes */
   .btn-primary {
-    @apply bg-[rgba(15,15,20,0.88)] text-white rounded-full px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-[rgba(15,15,20,1)];
+    background: rgba(15, 15, 20, 0.78);
+    color: #ffffff;
+    border-radius: 9999px;
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover {
+    background: rgba(15, 15, 20, 0.92);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
   .btn-secondary {
-    @apply bg-transparent text-[rgba(15,15,20,0.75)] border border-[rgba(15,15,20,0.15)] rounded-full px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-all hover:border-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,1)];
+    background: transparent;
+    color: rgba(15, 15, 20, 0.55);
+    border: 1px solid rgba(15, 15, 20, 0.16);
+    border-radius: 9999px;
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(15, 15, 20, 0.38);
+    color: rgba(15, 15, 20, 0.88);
   }
 }
 
@@ -240,8 +279,8 @@ html::-webkit-scrollbar {
 
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: var(--glass-border);
   box-shadow: var(--glass-shadow);
 }
@@ -255,8 +294,8 @@ html::-webkit-scrollbar {
 
 .glass-opaque {
   background: var(--glass-bg-opaque);
-  backdrop-filter: var(--glass-blur-heavy);
   -webkit-backdrop-filter: var(--glass-blur-heavy);
+  backdrop-filter: var(--glass-blur-heavy);
   border: var(--glass-border-opaque);
   box-shadow: var(--glass-shadow);
 }
@@ -269,8 +308,8 @@ html::-webkit-scrollbar {
 
 .glass-subtle {
   background: var(--glass-bg-subtle);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: var(--glass-border-subtle);
   box-shadow: var(--glass-shadow);
 }
@@ -308,8 +347,8 @@ html::-webkit-scrollbar {
 /* Para glass oscuro opcional */
 .glass-dark {
   background: rgba(10, 10, 20, 0.45);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: var(--glass-shadow);
   color: rgba(255, 255, 255, 0.9);
@@ -325,8 +364,8 @@ html::-webkit-scrollbar {
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
