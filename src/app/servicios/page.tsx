@@ -111,7 +111,7 @@ export default function ServiciosPage() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="md:hidden columns-2 gap-4 space-y-4 px-4"
+          className="md:hidden columns-1 sm:columns-2 gap-4 space-y-4 px-4"
         >
           {visibleServices.map((service, index) => {
             const isLarge = index % 3 === 0;
@@ -125,7 +125,7 @@ export default function ServiciosPage() {
                   service={service} 
                   index={index} 
                   featured={isLarge}
-                  className={isLarge ? 'min-h-[340px]' : 'min-h-[280px]'}
+                  className={isLarge ? 'min-h-[200px] sm:min-h-[340px]' : 'min-h-[180px] sm:min-h-[280px]'}
                 />
               </motion.div>
             );

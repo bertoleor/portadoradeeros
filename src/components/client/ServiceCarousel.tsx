@@ -53,7 +53,7 @@ function ServiceCard({
         if (e.key === 'Enter' || e.key === ' ') handleClick();
       }}
       className={cn(
-        'group relative flex flex-col md:flex-row h-[420px] md:h-[380px]',
+        'group relative flex flex-col md:flex-row h-auto min-h-[340px] md:min-h-[380px] md:h-[380px]',
         'rounded-[32px] border border-[rgba(255,255,255,0.3)]',
         'glass transition-all duration-500 overflow-hidden outline-none w-full',
         isActive
@@ -136,7 +136,7 @@ function CarouselSkeleton() {
           <div
             key={i}
             className={cn(
-              "shrink-0 w-[85%] md:w-[60%] h-[420px] rounded-[32px] bg-black/5 animate-pulse",
+              "shrink-0 w-[85%] md:w-[60%] h-[340px] md:h-[380px] rounded-[32px] bg-black/5 animate-pulse",
               i === 0 ? "opacity-100" : "opacity-40"
             )}
           />
@@ -179,7 +179,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
     if (!wrapper) return;
 
     const measure = () => {
-      const isMobile = window.innerWidth < 768;
+      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
       cardWidthRef.current = wrapper.clientWidth * (isMobile ? 0.78 : CARD_PERCENT);
     };
     measure();
@@ -397,7 +397,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
       {/* Dots + link */}
       <div className="flex flex-col items-center gap-10 mt-16">
-        <div className="flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3 py-[21px] -my-[21px] box-content">
           {initialServices.map((s, i) => (
             <button
               key={`dot-${s.id}`}

@@ -93,7 +93,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm"
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm min-h-[100dvh] md:min-h-screen"
               onClick={() => setIsModalOpen(false)}
             >
               <button
@@ -109,7 +109,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="relative w-full h-[85vh]"
+                className="relative w-full h-[85dvh] max-h-[85dvh]"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Image
@@ -233,7 +233,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-lg"
+            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 backdrop-blur-lg min-h-[100dvh] md:min-h-screen"
             onClick={() => setIsModalOpen(false)}
           >
             {/* Close button */}
@@ -276,7 +276,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
                   goToPrevious();
                 }
               }}
-              className="relative w-full h-[85vh] flex items-center justify-center"
+              className="relative w-full h-[85dvh] max-h-[85dvh] flex items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               <Image

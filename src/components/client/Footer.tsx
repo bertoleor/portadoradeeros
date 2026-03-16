@@ -128,8 +128,8 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-6 md:pt-8 border-t border-[rgba(15,15,20,0.1)] flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-center md:text-left px-2">
-          <p className="text-[10px] text-[rgba(15,15,20,0.35)] font-light tracking-wide leading-relaxed">
-            © {currentYear} PORTADORA DE EROS. TODOS LOS DERECHOS RESERVADOS. <br className="md:hidden" />
+          <p className="text-xs text-[rgba(15,15,20,0.35)] font-light tracking-wide leading-relaxed flex flex-wrap justify-center md:justify-start">
+            © {currentYear} PORTADORA DE EROS. TODOS LOS DERECHOS RESERVADOS. 
             QUEDA PROHIBIDA LA REPRODUCCIÓN TOTAL O PARCIAL DE ESTE SITIO.
           </p>
           <div className="flex items-center gap-2">

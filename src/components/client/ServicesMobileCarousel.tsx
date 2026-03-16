@@ -15,7 +15,7 @@ function ServiceMobileCard({ service, index }: { readonly service: Service; read
     <Link
       href={`/servicios/${service.slug}`}
       draggable={false}
-      className="group relative flex flex-col min-h-[320px] rounded-2xl border border-black/10 bg-white text-black transition-all duration-300 hover:bg-black hover:text-white hover:border-black overflow-hidden"
+      className="group relative flex flex-col min-h-[260px] sm:min-h-[320px] rounded-2xl border border-black/10 bg-white text-black transition-all duration-300 hover:bg-black hover:text-white hover:border-black overflow-hidden"
     >
       <span className="absolute top-5 right-5 text-[10px] font-mono tracking-widest text-black/15 group-hover:text-white/15 transition-colors duration-300 select-none">
         {String(index + 1).padStart(2, '0')}

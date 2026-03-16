@@ -76,7 +76,7 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
     </div>
     <h3 className="text-2xl md:text-3xl font-light text-white tracking-tight mb-4">Agendar {serviceName}</h3>
     <p className="text-white/40 text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
-    <Button onClick={nextStep} className="group rounded-full px-12 py-7 h-auto bg-white text-black hover:bg-white/90 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
+    <Button onClick={nextStep} className="group rounded-full px-12 py-4 md:py-7 h-auto bg-white text-black hover:bg-white/90 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
   </div>
 );
 
@@ -86,7 +86,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
       <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.35)] block mb-2">Paso 1 de 4</span><h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Tus Datos</h3></div>
       <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]"><User size={20} /></div>
     </div>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {[
         { id: 'name', label: 'Nombre', placeholder: 'Tu nombre' },
         { id: 'surname', label: 'Apellido', placeholder: 'Tu apellido' },
@@ -114,7 +114,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="text-white/40 hover:text-white text-xs font-medium translation-colors">Cancelar</button>
-      <Button onClick={nextStep} className="rounded-full px-10 py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px]">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} className="rounded-full px-10 py-4 md:py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px]">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -193,7 +193,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
           <h4 className="text-sm font-medium text-white tracking-tight">Datos para el pago</h4>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="bg-black/40 rounded-2xl p-4 border border-white/5">
             <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Titular</p>
             <p className="text-sm text-white font-medium">{bankDetails.bankOwner || 'Jacqueline'}</p>
@@ -216,7 +216,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
                 <button
                   type="button"
                   onClick={() => handleCopy(field.value, field.id)}
-                  className="ml-4 p-2 hover:bg-white/10 rounded-xl transition-all active:scale-90"
+                  className="ml-4 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-xl transition-all active:scale-90"
                 >
                   {copiedField === field.id ? <Check size={16} className="text-green-400" /> : <Copy size={16} className="text-white/20 group-hover:text-white/40" />}
                 </button>
@@ -233,7 +233,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
             {errors.submit}
           </div>
         )}
-        <div className="px-4 py-2">
+        <div className="px-4 py-4">
           <Checkbox
             id="legal-accept"
             checked={acceptedLegal}
@@ -359,7 +359,7 @@ export function ServiceContactForm({ serviceName, serviceId, serviceDuration = 6
   }
 
   return (
-    <div className="rounded-[2.5rem] glass-opaque p-6 sm:p-10 shadow-2xl border border-[rgba(255,255,255,0.5)] relative overflow-hidden min-h-[520px]">
+    <div className="rounded-[2.5rem] glass-opaque p-6 sm:p-10 shadow-2xl border border-[rgba(255,255,255,0.5)] relative overflow-hidden min-h-[440px] sm:min-h-[520px]">
       <div className="absolute top-0 right-0 w-64 h-64 bg-[rgba(135,206,250,0.08)] blur-[100px] rounded-full -mr-32 -mt-32 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-[rgba(216,180,226,0.08)] blur-[100px] rounded-full -ml-32 -mb-32 pointer-events-none" />
       <AnimatePresence mode="wait" custom={step}>
