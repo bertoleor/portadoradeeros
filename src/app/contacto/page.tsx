@@ -157,22 +157,23 @@ export default function ContactPage() {
 
   if (isSubmitted) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)] px-6">
-        <div className="max-w-sm w-full text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <CheckCircle2 className="w-14 h-14 mx-auto mb-5 text-black/70" />
-            <h2 className="text-2xl font-light tracking-tight mb-3">
+      <div className="flex items-center justify-center min-h-[calc(100vh-12rem)] px-6 py-16">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-sm w-full"
+        >
+          <div className="glass rounded-3xl p-10 text-center">
+            <CheckCircle2 className="w-14 h-14 mx-auto mb-5 text-[rgba(15,15,20,0.7)]" />
+            <h2 className="text-2xl font-light tracking-tight mb-3 text-[rgba(15,15,20,0.9)]">
               Mensaje Enviado
             </h2>
-            <p className="text-sm text-black/50 mb-6">
+            <p className="text-sm text-[rgba(15,15,20,0.6)] mb-8">
               Gracias por contactarme. Te responderé pronto.
             </p>
             <Button
               variant="outline"
-              className="rounded-full"
+              className="rounded-full border-[rgba(15,15,20,0.2)] text-[rgba(15,15,20,0.8)]"
               onClick={() => {
                 setIsSubmitted(false);
                 setFormData({ name: '', email: '', phone: '', message: '' });
@@ -180,23 +181,23 @@ export default function ContactPage() {
             >
               Enviar otro mensaje
             </Button>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <div className="py-16 md:py-24 px-6 md:px-10">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
+          className="text-center mb-10"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-3">
             Contacto
           </span>
           <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-black">
@@ -204,126 +205,126 @@ export default function ContactPage() {
           </h1>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14 items-stretch">
-          {/* Left: Form (compact) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-3 flex flex-col"
-          >
-            <form onSubmit={handleSubmit} className="space-y-5 flex-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className={`text-xs ${errors.name ? 'text-red-500' : 'text-black/40'}`}>Nombre</Label>
-                  <Input
-                    id="name"
-                    placeholder="Tu nombre"
-                    value={formData.name}
-                    onChange={(e) => handleChange('name', e.target.value)}
-                    aria-invalid={!!errors.name}
-                    className="py-3 px-4 rounded-xl"
-                  />
-                  {errors.name && <p className="text-[11px] text-red-500">{errors.name}</p>}
+        {/* Main Glass Card - Divided in Two */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="glass rounded-3xl overflow-hidden"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            {/* Left: Form */}
+            <div className="p-8 md:p-10 border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.25)]">
+              <h2 className="text-xl font-medium text-[rgba(15,15,20,0.85)] mb-6">Envíame un mensaje</h2>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="name" className={`text-xs ${errors.name ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Nombre</Label>
+                    <Input
+                      id="name"
+                      placeholder="Tu nombre"
+                      value={formData.name}
+                      onChange={(e) => handleChange('name', e.target.value)}
+                      aria-invalid={!!errors.name}
+                      className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
+                    />
+                    {errors.name && <p className="text-[11px] text-red-500">{errors.name}</p>}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email" className={`text-xs ${errors.email ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={formData.email}
+                      onChange={(e) => handleChange('email', e.target.value)}
+                      aria-invalid={!!errors.email}
+                      className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
+                    />
+                    {errors.email && <p className="text-[11px] text-red-500">{errors.email}</p>}
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="email" className={`text-xs ${errors.email ? 'text-red-500' : 'text-black/40'}`}>Email</Label>
+                  <Label htmlFor="phone" className="text-xs text-[rgba(15,15,20,0.45)]">Teléfono (opcional)</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={formData.email}
-                    onChange={(e) => handleChange('email', e.target.value)}
-                    aria-invalid={!!errors.email}
-                    className="py-3 px-4 rounded-xl"
+                    id="phone"
+                    type="tel"
+                    placeholder="+54 9 11 1234 5678"
+                    value={formData.phone}
+                    onChange={(e) => handleChange('phone', e.target.value)}
+                    className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
                   />
-                  {errors.email && <p className="text-[11px] text-red-500">{errors.email}</p>}
                 </div>
-              </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="phone" className="text-xs text-black/40">Teléfono (opcional)</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="+54 9 11 1234 5678"
-                  value={formData.phone}
-                  onChange={(e) => handleChange('phone', e.target.value)}
-                  className="py-3 px-4 rounded-xl"
-                />
-              </div>
+                <div className="space-y-1.5 flex flex-col">
+                  <Label htmlFor="message" className={`text-xs ${errors.message ? 'text-red-500' : 'text-[rgba(15,15,20,0.45)]'}`}>Mensaje</Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Contame sobre tu consulta..."
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) => handleChange('message', e.target.value)}
+                    aria-invalid={!!errors.message}
+                    className="p-4 rounded-xl resize-none bg-white/40 border-[rgba(255,255,255,0.3)] min-h-[140px]"
+                  />
+                  {errors.message && <p className="text-[11px] text-red-500">{errors.message}</p>}
+                </div>
 
-              <div className="space-y-1.5 flex-1 flex flex-col">
-                <Label htmlFor="message" className={`text-xs ${errors.message ? 'text-red-500' : 'text-black/40'}`}>Mensaje</Label>
-                <Textarea
-                  id="message"
-                  placeholder="Contame sobre tu consulta..."
-                  rows={4}
-                  value={formData.message}
-                  onChange={(e) => handleChange('message', e.target.value)}
-                  aria-invalid={!!errors.message}
-                  className="p-4 rounded-xl resize-none flex-1 min-h-[140px] lg:min-h-[200px]"
-                />
-                {errors.message && <p className="text-[11px] text-red-500">{errors.message}</p>}
-              </div>
-
-              <Button
-                type="submit"
-                variant="default"
-                disabled={isLoading}
-                className="w-full py-3 rounded-xl font-medium"
-              >
-                {!isLoading && <Send className="w-4 h-4" />}
-                {isLoading ? 'Enviando...' : 'Enviar Mensaje'}
-              </Button>
-            </form>
-          </motion.div>
-
-          {/* Right: Info + Socials */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-2"
-          >
-            {/* Info card - Notion style */}
-            <div className="rounded-2xl glass p-8 mb-8">
-              <h3 className="text-lg font-medium text-[rgba(15,15,20,0.9)] mb-3">Portadora de Eros</h3>
-              <p className="text-sm text-[rgba(15,15,20,0.65)] leading-relaxed">
-                Guía espiritual, canalizadora y puente entre lo terrenal y lo místico.
-                Conectando con la sabiduría ancestral para guiarte en tu camino.
-              </p>
-            </div>
-
-            {/* Social links */}
-            <div className="space-y-2">
-              {contactLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 p-4 rounded-xl hover:bg-white/30 transition-colors border border-[rgba(255,255,255,0.3)]"
+                <Button
+                  type="submit"
+                  variant="default"
+                  disabled={isLoading}
+                  className="w-full py-3 rounded-xl font-medium"
                 >
-                  <div className="w-11 h-11 rounded-lg bg-[rgba(15,15,20,0.06)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(15,15,20,0.1)] transition-colors">
-                    {social.platform ? (
-                      <SocialIcon platform={social.platform} size={18} className="text-[rgba(15,15,20,0.6)]" />
-                    ) : (
-                      social.icon && <social.icon size={18} className="text-[rgba(15,15,20,0.6)]" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.45)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">{social.label}</div>
-                    <div className="text-sm font-medium text-[rgba(15,15,20,0.75)] group-hover:text-[rgba(15,15,20,0.9)] truncate transition-colors">
-                      {social.handle}
-                    </div>
-                  </div>
-                </a>
-              ))}
+                  {!isLoading && <Send className="w-4 h-4" />}
+                  {isLoading ? 'Enviando...' : 'Enviar Mensaje'}
+                </Button>
+              </form>
             </div>
-          </motion.div>
-        </div>
+
+            {/* Right: Info + Socials */}
+            <div className="p-8 md:p-10 bg-[rgba(255,255,255,0.08)]">
+              {/* Info card */}
+              <div className="mb-8">
+                <h3 className="text-lg font-medium text-[rgba(15,15,20,0.9)] mb-3">Portadora de Eros</h3>
+                <p className="text-sm text-[rgba(15,15,20,0.65)] leading-relaxed">
+                  Guía espiritual, canalizadora y puente entre lo terrenal y lo místico.
+                  Conectando con la sabiduría ancestral para guiarte en tu camino.
+                </p>
+              </div>
+
+              {/* Social links */}
+              <div className="space-y-2">
+                <h4 className="text-xs uppercase tracking-widest text-[rgba(15,15,20,0.45)] mb-4">Conectar</h4>
+                {contactLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-4 p-4 rounded-xl hover:bg-white/20 transition-colors border border-[rgba(255,255,255,0.2)]"
+                  >
+                    <div className="w-11 h-11 rounded-lg bg-[rgba(15,15,20,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(15,15,20,0.12)] transition-colors">
+                      {social.platform ? (
+                        <SocialIcon platform={social.platform} size={18} className="text-[rgba(15,15,20,0.6)]" />
+                      ) : (
+                        social.icon && <social.icon size={18} className="text-[rgba(15,15,20,0.6)]" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">{social.label}</div>
+                      <div className="text-sm font-medium text-[rgba(15,15,20,0.75)] group-hover:text-[rgba(15,15,20,0.9)] truncate transition-colors">
+                        {social.handle}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

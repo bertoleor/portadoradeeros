@@ -299,6 +299,30 @@ html::-webkit-scrollbar {
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* Skeleton glass - para cargar contenido sobre fondo mesh */
+.skeleton-glass {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
   *,

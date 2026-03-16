@@ -3,10 +3,11 @@ import { Card } from './Card';
 interface SkeletonProps {
   readonly className?: string;
   readonly variant?: 'text' | 'circular' | 'rectangular';
+  readonly glass?: boolean;
 }
 
-export function Skeleton({ className = '', variant = 'rectangular' }: SkeletonProps) {
-  const baseClasses = 'skeleton';
+export function Skeleton({ className = '', variant = 'rectangular', glass = false }: SkeletonProps) {
+  const baseClasses = glass ? 'skeleton-glass' : 'skeleton';
   
   const variantClasses = {
     text: 'h-4 w-full rounded',
@@ -34,12 +35,12 @@ export function HeroSkeleton() {
 
 export function ServiceCardSkeleton() {
   return (
-    <Card className="p-6 min-w-[300px] bg-white border-gray-200">
-      <Skeleton className="h-16 w-16 rounded-full mb-4" variant="circular" />
-      <Skeleton className="h-6 w-48 mb-2" variant="text" />
-      <Skeleton className="h-4 w-full mb-2" variant="text" />
-      <Skeleton className="h-4 w-3/4 mb-4" variant="text" />
-      <Skeleton className="h-10 w-32 rounded-xl" />
+    <Card className="p-6 min-w-[300px] glass">
+      <Skeleton className="h-16 w-16 rounded-full mb-4" variant="circular" glass />
+      <Skeleton className="h-6 w-48 mb-2" variant="text" glass />
+      <Skeleton className="h-4 w-full mb-2" variant="text" glass />
+      <Skeleton className="h-4 w-3/4 mb-4" variant="text" glass />
+      <Skeleton className="h-10 w-32 rounded-xl" glass />
     </Card>
   );
 }
@@ -70,12 +71,27 @@ export function AboutSkeleton() {
 
 export function ContactSkeleton() {
   return (
-    <div className="max-w-xl mx-auto p-8 space-y-6">
-      <Skeleton className="h-8 w-48 mx-auto" variant="text" />
-      <Skeleton className="h-12 w-full rounded-xl" variant="rectangular" />
-      <Skeleton className="h-12 w-full rounded-xl" variant="rectangular" />
-      <Skeleton className="h-32 w-full rounded-xl" variant="rectangular" />
-      <Skeleton className="h-12 w-48 mx-auto rounded-xl" />
+    <div className="max-w-4xl mx-auto">
+      <div className="glass rounded-3xl p-8 md:p-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {/* Form section */}
+          <div className="space-y-5">
+            <Skeleton className="h-8 w-32" variant="text" glass />
+            <Skeleton className="h-12 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-12 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-12 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-32 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-12 w-40 rounded-xl" glass />
+          </div>
+          {/* Info section */}
+          <div className="space-y-4">
+            <Skeleton className="h-8 w-48" variant="text" glass />
+            <Skeleton className="h-24 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-16 w-full rounded-xl" variant="rectangular" glass />
+            <Skeleton className="h-16 w-full rounded-xl" variant="rectangular" glass />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
