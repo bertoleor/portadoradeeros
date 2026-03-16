@@ -308,7 +308,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   return (
     <section
       aria-label="Carrusel de servicios"
-      className="py-12 md:py-32"
+      className="py-12 md:py-32 bg-transparent"
       onMouseEnter={() => { isPaused.current = true; }}
       onMouseLeave={() => { isPaused.current = false; }}
     >

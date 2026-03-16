@@ -76,7 +76,7 @@ export default function ServiciosPage() {
             <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
               Servicios
             </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-black">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight text-black">
               Lo que ofrezco
             </h1>
           </div>
@@ -101,7 +101,7 @@ export default function ServiciosPage() {
           <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
             Servicios
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-black">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight text-black">
             Lo que ofrezco
           </h1>
         </div>
@@ -111,7 +111,7 @@ export default function ServiciosPage() {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="md:hidden columns-1 sm:columns-2 gap-4 space-y-4 px-4"
+          className="md:hidden columns-1 sm:columns-2 gap-4 space-y-4 px-4 md:px-0"
         >
           {visibleServices.map((service, index) => {
             const isLarge = index % 3 === 0;

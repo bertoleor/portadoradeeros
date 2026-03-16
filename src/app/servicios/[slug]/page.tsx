@@ -53,7 +53,7 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
   };
 
   return (
-    <section className="py-12 md:py-20 px-4 sm:px-6 md:px-10">
+    <section className="py-12 md:py-20 px-4 sm:px-6 md:px-10 bg-transparent">
       <div className="max-w-6xl mx-auto">
         {/* Mobile: stacked layout | PC: horizontal layout with form below */}
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-12">

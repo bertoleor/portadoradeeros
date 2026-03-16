@@ -16,7 +16,7 @@
   --gray-700: #4a4a4a;
   --gray-600: #666666;
   --gray-500: #86868b;
-  
+
   /* Core Shadcn Theme */
   --background: #ffffff;
   --foreground: #1d1d1f;
@@ -67,7 +67,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.87 0.00 0);
+  --primary: oklch(0.87 0 0);
   --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
@@ -198,8 +198,12 @@ html::-webkit-scrollbar {
    ANIMATIONS
    ============================================ */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes fadeInUp {
@@ -220,6 +224,15 @@ html::-webkit-scrollbar {
 
   .animate-fade-in-up {
     animation: fadeInUp 0.4s ease forwards;
+  }
+
+  /* Button utility classes */
+  .btn-primary {
+    @apply bg-[rgba(15,15,20,0.88)] text-white rounded-full px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-[rgba(15,15,20,1)];
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-[rgba(15,15,20,0.75)] border border-[rgba(15,15,20,0.15)] rounded-full px-7 py-3.5 text-[13px] font-medium uppercase tracking-[0.12em] transition-all hover:border-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,1)];
   }
 }
 
@@ -269,7 +282,10 @@ html::-webkit-scrollbar {
 }
 
 .glass-hover {
-  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .glass-hover:hover {

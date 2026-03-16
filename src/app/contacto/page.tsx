@@ -226,7 +226,7 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       aria-invalid={!!errors.name}
-                      className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
+                      className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
                     />
                     {errors.name && <p className="text-[11px] text-red-500">{errors.name}</p>}
                   </div>
@@ -240,7 +240,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
                       aria-invalid={!!errors.email}
-                      className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
+                      className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
                     />
                     {errors.email && <p className="text-[11px] text-red-500">{errors.email}</p>}
                   </div>
@@ -254,7 +254,7 @@ export default function ContactPage() {
                     placeholder="+54 9 11 1234 5678"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    className="py-3 px-4 rounded-xl bg-white/40 border-[rgba(255,255,255,0.3)]"
+                    className="bg-white/50 border border-[rgba(15,15,20,0.1)] rounded-2xl px-5 py-4 text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)]"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     aria-invalid={!!errors.message}
-                    className="p-4 rounded-xl resize-none bg-white/40 border-[rgba(255,255,255,0.3)] min-h-[140px]"
+                    className="p-5 rounded-2xl resize-none bg-white/50 border border-[rgba(15,15,20,0.1)] text-[15px] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.3)] focus:border-[rgba(15,15,20,0.25)] focus:ring-2 focus:ring-[rgba(135,206,250,0.2)] min-h-[140px]"
                   />
                   {errors.message && <p className="text-[11px] text-red-500">{errors.message}</p>}
                 </div>

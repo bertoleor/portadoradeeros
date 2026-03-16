@@ -70,13 +70,13 @@ const parseLocalDate = (dateStr: string) => {
 
 const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceName: string }) => (
   <div className="flex flex-col items-center justify-center text-center py-12 md:py-20 h-full">
-    <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-8 relative border border-white/10 shadow-lg shadow-black">
-      <Sparkles size={32} className="text-white/80" />
-      <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full animate-pulse" />
+    <div className="w-16 h-16 rounded-2xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center mb-8 relative border border-[rgba(15,15,20,0.1)]">
+      <Sparkles size={32} className="text-[rgba(15,15,20,0.7)]" />
+      <div className="absolute -top-1 -right-1 w-3 h-3 bg-[rgba(15,15,20,0.6)] rounded-full" />
     </div>
-    <h3 className="text-2xl md:text-3xl font-light text-white tracking-tight mb-4">Agendar {serviceName}</h3>
-    <p className="text-white/40 text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
-    <Button onClick={nextStep} className="group rounded-full px-12 py-4 md:py-7 h-auto bg-white text-black hover:bg-white/90 text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
+    <h3 className="text-2xl md:text-3xl font-light text-[rgba(15,15,20,0.9)] tracking-tight mb-4">Agendar {serviceName}</h3>
+    <p className="text-[rgba(15,15,20,0.5)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
+    <Button onClick={nextStep} className="group rounded-full px-12 py-4 md:py-7 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] text-sm font-bold uppercase tracking-widest transition-all hover:scale-105 active:scale-95">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
   </div>
 );
 
@@ -101,7 +101,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
       ))}
     </div>
     <div className="space-y-2">
-      <Label htmlFor="message" className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1 flex items-center gap-1.5">
+      <Label htmlFor="message" className="text-[10px] font-bold text-[rgba(15,15,20,0.4)] uppercase tracking-widest ml-1 flex items-center gap-1.5">
         <MessageSquare size={12} /> Notas (opcional)
       </Label>
       <Textarea
@@ -109,11 +109,11 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
         placeholder="Contame brevemente tu consulta..."
         value={formData.message}
         onChange={(e) => handleChange('message', e.target.value)}
-        className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/20 h-32 rounded-2xl resize-none"
+        className="bg-white/50 border border-[rgba(15,15,20,0.1)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-32 rounded-2xl resize-none"
       />
     </div>
     <div className="pt-8 flex justify-between items-center">
-      <button onClick={prevStep} className="text-white/40 hover:text-white text-xs font-medium translation-colors">Cancelar</button>
+      <button onClick={prevStep} className="text-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium translation-colors">Cancelar</button>
       <Button onClick={nextStep} className="rounded-full px-10 py-4 md:py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px]">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
@@ -122,8 +122,8 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
 const StepDateSelection = ({ formData, handleChange, nextStep, prevStep, errors, businessHours }: StepProps & { nextStep: () => void; businessHours: Record<string, { closed: boolean; start: string; end: string }> | undefined }) => (
   <div className="space-y-8">
     <div className="flex items-center justify-between">
-      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 block mb-2">Paso 2 de 4</span><h3 className="text-2xl font-light text-white tracking-tight">Seleccionar Día</h3></div>
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40"><CalendarIcon size={20} /></div>
+      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">Paso 2 de 4</span><h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Seleccionar Día</h3></div>
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]"><CalendarIcon size={20} /></div>
     </div>
     <div className="max-w-md mx-auto w-full">
       <BookingCalendar selectedDate={formData.appointmentDate} onDateSelect={(d) => handleChange('appointmentDate', d)} businessHours={businessHours} />
@@ -139,17 +139,17 @@ const StepDateSelection = ({ formData, handleChange, nextStep, prevStep, errors,
 const StepTimeSelection = ({ formData, handleChange, nextStep, prevStep, errors, businessHours, bookedSlots, blockedTimes }: StepProps & { nextStep: () => void; businessHours: Record<string, { closed: boolean; start: string; end: string }> | undefined; bookedSlots: string[]; blockedTimes: { start: string; end: string; isAllDay: boolean }[] }) => (
   <div className="space-y-8">
     <div className="flex items-center justify-between">
-      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 block mb-2">Paso 3 de 4</span><h3 className="text-2xl font-light text-white tracking-tight">Horarios Disponibles</h3></div>
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40"><Clock size={20} /></div>
+      <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">Paso 3 de 4</span><h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Horarios Disponibles</h3></div>
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]"><Clock size={20} /></div>
     </div>
     <div className="max-w-md mx-auto w-full">
-      <div className="mb-4 text-center"><p className="text-sm text-white/60 font-light">Sesiones para el {parseLocalDate(formData.appointmentDate).toLocaleDateString('es-AR', { day: 'numeric', month: 'long' })}</p></div>
+      <div className="mb-4 text-center"><p className="text-sm text-[rgba(15,15,20,0.6)] font-light">Sesiones para el {parseLocalDate(formData.appointmentDate).toLocaleDateString('es-AR', { day: 'numeric', month: 'long' })}</p></div>
       <CustomTimePicker value={formData.appointmentTime} onChange={(val) => handleChange('appointmentTime', val)} businessHours={businessHours} selectedDate={formData.appointmentDate} bookedSlots={bookedSlots} blockedTimes={blockedTimes} />
       {errors.appointmentTime && <p className="text-center text-[10px] text-red-500 mt-4">{errors.appointmentTime}</p>}
     </div>
     <div className="pt-8 flex justify-between items-center">
-      <button onClick={prevStep} className="flex items-center text-white/40 hover:text-white text-xs font-medium"><ChevronLeft size={16} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} disabled={!formData.appointmentTime} className="rounded-full px-10 py-6 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-widest text-[11px] disabled:opacity-50">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.4)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium"><ChevronLeft size={16} className="mr-1" /> Atrás</button>
+      <Button onClick={nextStep} disabled={!formData.appointmentTime} className="rounded-full px-10 py-6 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] font-bold uppercase tracking-widest text-[11px] disabled:opacity-50">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -158,49 +158,49 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
   <div className="space-y-10">
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 block mb-2">Finalizar Reserva</span>
-        <h3 className="text-2xl font-light text-white tracking-tight">Confirmación y Pago</h3>
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">Finalizar Reserva</span>
+        <h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Confirmación y Pago</h3>
       </div>
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40">
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]">
         <CreditCard size={20} />
       </div>
     </div>
 
     <div className="max-w-2xl mx-auto w-full space-y-8">
       {/* Resumen del Turno */}
-      <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 text-center space-y-3 relative overflow-hidden group">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-        <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">Resumen de tu Sesión</p>
-        <h4 className="text-xl text-white font-light tracking-wide">{serviceName}</h4>
+      <div className="bg-[rgba(15,15,20,0.03)] border border-[rgba(15,15,20,0.1)] rounded-[2rem] p-8 text-center space-y-3 relative overflow-hidden group">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[rgba(15,15,20,0.1)] to-transparent" />
+        <p className="text-[10px] font-bold text-[rgba(15,15,20,0.2)] uppercase tracking-[0.3em]">Resumen de tu Sesión</p>
+        <h4 className="text-xl text-[rgba(15,15,20,0.9)] font-light tracking-wide">{serviceName}</h4>
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-          <div className="flex items-center gap-2 text-white/60 text-xs font-light">
-            <CalendarIcon size={14} className="text-white/30" />
+          <div className="flex items-center gap-2 text-[rgba(15,15,20,0.6)] text-xs font-light">
+            <CalendarIcon size={14} className="text-[rgba(15,15,20,0.3)]" />
             {parseLocalDate(formData.appointmentDate).toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}
           </div>
-          <div className="flex items-center gap-2 text-white/60 text-xs font-light">
-            <Clock size={14} className="text-white/30" />
+          <div className="flex items-center gap-2 text-[rgba(15,15,20,0.6)] text-xs font-light">
+            <Clock size={14} className="text-[rgba(15,15,20,0.3)]" />
             {formData.appointmentTime} hs
           </div>
         </div>
       </div>
 
       {/* Datos de Transferencia */}
-      <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-8 space-y-6">
+      <div className="bg-[rgba(15,15,20,0.03)] border border-[rgba(15,15,20,0.1)] rounded-[2rem] p-8 space-y-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-white/30">
+          <div className="w-8 h-8 rounded-lg bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.3)]">
             <CreditCard size={16} />
           </div>
-          <h4 className="text-sm font-medium text-white tracking-tight">Datos para el pago</h4>
+          <h4 className="text-sm font-medium text-[rgba(15,15,20,0.9)] tracking-tight">Datos para el pago</h4>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-black/40 rounded-2xl p-4 border border-white/5">
-            <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Titular</p>
-            <p className="text-sm text-white font-medium">{bankDetails.bankOwner || 'Jacqueline'}</p>
+          <div className="bg-[rgba(15,15,20,0.04)] rounded-2xl p-4 border border-[rgba(15,15,20,0.05)]">
+            <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-1">Titular</p>
+            <p className="text-sm text-[rgba(15,15,20,0.9)] font-medium">{bankDetails.bankOwner || 'Jacqueline'}</p>
           </div>
-          <div className="bg-black/40 rounded-2xl p-4 border border-white/5">
-            <p className="text-[10px] text-white/30 uppercase tracking-widest mb-1">Banco</p>
-            <p className="text-sm text-white font-medium">{bankDetails.bankName || 'Mercado Pago'}</p>
+          <div className="bg-[rgba(15,15,20,0.04)] rounded-2xl p-4 border border-[rgba(15,15,20,0.05)]">
+            <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-1">Banco</p>
+            <p className="text-sm text-[rgba(15,15,20,0.9)] font-medium">{bankDetails.bankName || 'Mercado Pago'}</p>
           </div>
         </div>
 
@@ -210,15 +210,15 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
             { id: 'alias', label: 'Alias', value: bankDetails.alias }
           ].map(field => (
             <div key={field.id} className="relative group">
-              <p className="text-[10px] text-white/30 uppercase tracking-widest mb-2 ml-1">{field.label}</p>
-              <div className="flex items-center justify-between bg-black/60 rounded-2xl border border-white/10 px-5 py-4 transition-all group-hover:border-white/20">
-                <code className="text-xs text-white/90 font-mono tracking-wider">{field.value || '—'}</code>
+              <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-2 ml-1">{field.label}</p>
+              <div className="flex items-center justify-between bg-[rgba(15,15,20,0.06)] rounded-2xl border border-[rgba(15,15,20,0.1)] px-5 py-4 transition-all group-hover:border-[rgba(15,15,20,0.2)]">
+                <code className="text-xs text-[rgba(15,15,20,0.9)] font-mono tracking-wider">{field.value || '—'}</code>
                 <button
                   type="button"
                   onClick={() => handleCopy(field.value, field.id)}
-                  className="ml-4 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-white/10 rounded-xl transition-all active:scale-90"
+                  className="ml-4 p-3 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-[rgba(15,15,20,0.1)] rounded-xl transition-all active:scale-90"
                 >
-                  {copiedField === field.id ? <Check size={16} className="text-green-400" /> : <Copy size={16} className="text-white/20 group-hover:text-white/40" />}
+                  {copiedField === field.id ? <Check size={16} className="text-green-500" /> : <Copy size={16} className="text-[rgba(15,15,20,0.2)] group-hover:text-[rgba(15,15,20,0.4)]" />}
                 </button>
               </div>
             </div>
@@ -240,7 +240,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
             onChange={(e) => setAcceptedLegal(e.target.checked)}
             label={
               <span>
-                He leído y acepto los <Link href="/terminos" target="_blank" className="text-white underline decoration-white/20 hover:decoration-white transition-all">Términos y Condiciones</Link> y la <Link href="/politica-cancelacion" target="_blank" className="text-white underline decoration-white/20 hover:decoration-white transition-all">Política de Cancelación</Link> (24hs).
+                He leído y acepto los <Link href="/terminos" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Términos y Condiciones</Link> y la <Link href="/politica-cancelacion" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Política de Cancelación</Link> (24hs).
               </span>
             }
           />
@@ -250,10 +250,10 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
           <Button
             onClick={onSubmit}
             disabled={isLoading || !acceptedLegal}
-            className="w-full max-w-sm rounded-full py-8 h-auto bg-white text-black hover:bg-white/90 font-bold uppercase tracking-[0.2em] text-[12px] shadow-2xl shadow-white/5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full max-w-sm rounded-full py-8 h-auto bg-[rgba(15,15,20,0.85)] text-white hover:bg-[rgba(15,15,20,1)] font-bold uppercase tracking-[0.2em] text-[12px] shadow-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
           >
             {isLoading ? (
-              <div className="w-5 h-5 rounded-full border-2 border-black/20 border-t-black animate-spin" />
+              <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
             ) : (
               <span className="flex items-center gap-3">
                 Confirmar Turno <ChevronRight size={18} />
@@ -261,7 +261,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
             )}
           </Button>
 
-          <p className="text-[10px] text-white/20 text-center mt-8 leading-relaxed font-light max-w-xs uppercase tracking-widest">
+          <p className="text-[10px] text-[rgba(15,15,20,0.3)] text-center mt-8 leading-relaxed font-light max-w-xs uppercase tracking-widest">
             Recibirás un email con los detalles. El turno será validado al recibir el comprobante.
           </p>
         </div>
@@ -271,7 +271,7 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
     <div className="pt-6">
       <button
         onClick={prevStep}
-        className="flex items-center gap-2 text-white/30 hover:text-white text-xs font-medium transition-colors group"
+        className="flex items-center gap-2 text-[rgba(15,15,20,0.3)] hover:text-[rgba(15,15,20,0.7)] text-xs font-medium transition-colors group"
       >
         <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
         Volver atrás
