@@ -46,7 +46,7 @@ export function Hero() {
         >
           <Link 
             href="/servicios" 
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-[rgba(15,15,20,0.85)] text-white px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.95)] transition-all min-h-[48px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center bg-[rgba(15,15,20,0.78)] text-white px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.92)] transition-all min-h-[48px]"
           >
             <Calendar className="w-4 h-4 mr-2 shrink-0" />
             Agendar Consulta
@@ -100,14 +100,14 @@ export function AboutPreview() {
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4">
             <Link 
               href="/sobre-mi" 
-              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full border border-black text-black text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center min-h-[48px]"
+              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full border border-black text-black text-xs uppercase tracking-widest hover:bg-[rgba(15,15,20,0.78)] hover:text-white transition-all flex items-center justify-center min-h-[48px]"
             >
               Conocer más
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
             <Link 
               href="/servicios" 
-              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full bg-black text-white text-xs uppercase tracking-widest hover:bg-gray-800 transition-all flex items-center justify-center min-h-[48px]"
+              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full bg-[rgba(15,15,20,0.78)] text-white text-xs uppercase tracking-widest hover:bg-[rgba(15,15,20,0.92)] transition-all flex items-center justify-center min-h-[48px]"
             >
               <Calendar className="w-4 h-4 mr-2" />
               Agendar Consulta
@@ -141,7 +141,7 @@ export function ContactCTA() {
           </p>
           <Link
             href="/servicios"
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-white text-[rgba(15,15,20,0.85)] px-6 md:px-7 py-3.5 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-white/80 transition-all min-h-[48px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center bg-[rgba(15,15,20,0.78)] text-white px-6 md:px-7 py-3.5 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.92)] transition-all min-h-[48px]"
           >
             <Calendar className="w-4 h-4 mr-2" />
             Agendar Consulta

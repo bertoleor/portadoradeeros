@@ -66,20 +66,10 @@ export function ServiceCard({ service, index = 0, featured = false, className = 
             </span>
 
             <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  globalThis.location.href = `/servicios/${service.slug}#message`;
-                }}
-                className="text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-full border border-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.85)] bg-white/50 group-hover:bg-white/70 group-hover:text-[rgba(15,15,20,0.95)] group-hover:border-[rgba(15,15,20,0.25)] transition-all duration-200 hover:opacity-90"
-              >
-                Agendar
-              </button>
               <ArrowRight
                 size={15}
                 strokeWidth={1.5}
-                className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[rgba(15,15,20,0.7)]"
+                className="text-[rgba(15,15,20,0.5)] group-hover:text-[rgba(15,15,20,0.85)] group-hover:translate-x-1 transition-all duration-300"
               />
             </div>
           </div>

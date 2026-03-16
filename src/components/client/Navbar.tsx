@@ -51,6 +51,11 @@ export function Navbar() {
     });
   }, []);
 
+  // Close menu when pathname changes
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
     return pathname.startsWith(href);
@@ -60,9 +65,9 @@ export function Navbar() {
     <nav 
       className={cn(
         'fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-500 flex items-center justify-center',
-        !isScrolled
-          ? 'bg-white/8 backdrop-blur-sm border-b border-white/10'
-          : 'bg-white/80 backdrop-blur-2xl border-b border-white/30 shadow-[0_1px_20px_rgba(0,0,0,0.04)]',
+        isScrolled
+          ? 'bg-white/80 backdrop-blur-2xl border-b border-white/30 shadow-[0_1px_20px_rgba(0,0,0,0.04)]'
+          : 'bg-white/8 backdrop-blur-sm border-b border-white/10',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >

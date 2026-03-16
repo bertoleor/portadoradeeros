@@ -69,8 +69,7 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
           <div className="xl:col-span-5 xl:flex xl:flex-col xl:justify-center">
             {/* Icon */}
             <div className="mb-6">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/40 backdrop-blur-sm border border-white/60 flex items-center justify-center shadow-sm"
-                   style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/40 backdrop-blur-sm border border-white/60 flex items-center justify-center shadow-sm glass">
                 <ServiceIcon
                   type={service.icon}
                   size={24}
@@ -117,14 +116,7 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
                     href={settings.socialLinks.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.35)',
-                      backdropFilter: 'blur(12px)',
-                      WebkitBackdropFilter: 'blur(12px)',
-                      border: '1px solid rgba(255,255,255,0.55)',
-                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md glass-pill"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(15,15,20,0.65)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -140,14 +132,7 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
                     href={settings.socialLinks.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.35)',
-                      backdropFilter: 'blur(12px)',
-                      WebkitBackdropFilter: 'blur(12px)',
-                      border: '1px solid rgba(255,255,255,0.55)',
-                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md glass-pill"
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(15,15,20,0.65)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
@@ -161,14 +146,7 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
                     href={settings.socialLinks.tiktok}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md"
-                    style={{
-                      background: 'rgba(255,255,255,0.35)',
-                      backdropFilter: 'blur(12px)',
-                      WebkitBackdropFilter: 'blur(12px)',
-                      border: '1px solid rgba(255,255,255,0.55)',
-                      boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-                    }}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md glass-pill"
                   >
                     <svg width="12" height="14" viewBox="0 0 24 24" fill="rgba(15,15,20,0.65)" stroke="none">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>

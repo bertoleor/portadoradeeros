@@ -81,7 +81,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
           const dayNumber = i - startOffset + 1;
           const isCurrentMonth = dayNumber > 0 && dayNumber <= totalDays;
           
-          if (!isCurrentMonth) return <div key={`offset-${i}`} />;
+          if (!isCurrentMonth) return <div key={`empty-${year}-${month}-${i}`} />;
 
           const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
           const dateObj = new Date(year, month, dayNumber);
@@ -101,7 +101,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
               className={`
                 relative h-10 w-full flex items-center justify-center rounded-xl text-xs transition-all duration-200
                 ${isSelected 
-                  ? 'bg-[rgba(15,15,20,0.88)] text-white font-bold shadow-sm scale-105 z-10' 
+                  ? 'bg-[rgba(15,15,20,0.72)] text-white font-bold shadow-sm scale-105 z-10' 
                   : ''
                 }
                 ${!isSelected && disabled ? 'text-[rgba(15,15,20,0.15)] cursor-not-allowed' : ''}
@@ -112,7 +112,7 @@ export function BookingCalendar({ selectedDate, onDateSelect, businessHours }: B
               {isSelected && (
                 <motion.div
                   layoutId="activeDay"
-                  className="absolute inset-0 border-2 border-[rgba(15,15,20,0.88)] rounded-xl pointer-events-none"
+                  className="absolute inset-0 border-2 border-[rgba(15,15,20,0.72)] rounded-xl pointer-events-none"
                   initial={false}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />

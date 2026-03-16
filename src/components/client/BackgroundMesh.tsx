@@ -21,7 +21,7 @@ const PARTICLE_SPEED  = 0.55; // velocidad de movimiento. 0 = estático, 1 = rá
 const BREATH_AMOUNT   = 0.12; // cuánto pulsa el tamaño (0 = sin respiración, 0.2 = mucho)
 const BREATH_SPEED    = 0.003; // velocidad del pulso
 const BASE_OPACITY    = 0.55; // opacidad máxima en el centro del gradiente
-const VEIL_OPACITY    = 0.20; // velo final que suaviza la mezcla (más alto = más blanco)
+const VEIL_OPACITY    = 0.2; // velo final que suaviza la mezcla (más alto = más blanco)
 const BG_COLOR        = "#f8f9fb"; // color base del canvas
 
 // ---------------------------------------------------------------------------
@@ -104,7 +104,7 @@ export default function BackgroundMesh(): React.JSX.Element {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reducedMotion = window.matchMedia(
+    const reducedMotion = globalThis.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
     const speed = reducedMotion ? 0 : PARTICLE_SPEED;
@@ -117,12 +117,41 @@ export default function BackgroundMesh(): React.JSX.Element {
     let resizeTimeout: ReturnType<typeof setTimeout>;
 
     function init() {
-      width  = canvas!.width  = window.innerWidth;
-      height = canvas!.height = window.innerHeight;
+      width  = canvas!.width  = globalThis.innerWidth;
+      height = canvas!.height = globalThis.innerHeight;
       // 2 partículas por par (una por cada color)
       particles = COLOR_PAIRS.flatMap((pair) =>
         pair.map((color) => createParticle(width, height, color, speed))
       );
+    }
+
+    function updateAndDrawParticle(p: Particle, color: RGB, pairAlpha: number) {
+      // Respiración
+      p.tick += BREATH_SPEED;
+      p.size = p.baseSize + Math.sin(p.tick) * p.baseSize * BREATH_AMOUNT;
+
+      // Movimiento con wrap en bordes
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -p.size) p.x = width  + p.size;
+      if (p.x > width  + p.size) p.x = -p.size;
+      if (p.y < -p.size) p.y = height + p.size;
+      if (p.y > height + p.size) p.y = -p.size;
+
+      // Gradiente radial modulado por la opacidad del par
+      const grad = ctx!.createRadialGradient(
+        p.x, p.y, 0,
+        p.x, p.y, p.size
+      );
+      const { r, g, b } = color;
+      grad.addColorStop(0,    `rgba(${r},${g},${b},${BASE_OPACITY * pairAlpha})`);
+      grad.addColorStop(0.5,  `rgba(${r},${g},${b},${0.2 * pairAlpha})`);
+      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
+
+      ctx!.beginPath();
+      ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx!.fillStyle = grad;
+      ctx!.fill();
     }
 
     function draw() {
@@ -139,33 +168,7 @@ export default function BackgroundMesh(): React.JSX.Element {
 
         pair.forEach((color, colorIndex) => {
           const p = particles[pairIndex * 2 + colorIndex];
-
-          // Respiración
-          p.tick += BREATH_SPEED;
-          p.size = p.baseSize + Math.sin(p.tick) * p.baseSize * BREATH_AMOUNT;
-
-          // Movimiento con wrap en bordes
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < -p.size) p.x = width  + p.size;
-          if (p.x > width  + p.size) p.x = -p.size;
-          if (p.y < -p.size) p.y = height + p.size;
-          if (p.y > height + p.size) p.y = -p.size;
-
-          // Gradiente radial modulado por la opacidad del par
-          const grad = ctx!.createRadialGradient(
-            p.x, p.y, 0,
-            p.x, p.y, p.size
-          );
-          const { r, g, b } = color;
-          grad.addColorStop(0,    `rgba(${r},${g},${b},${BASE_OPACITY * pairAlpha})`);
-          grad.addColorStop(0.50, `rgba(${r},${g},${b},${0.20 * pairAlpha})`);
-          grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
-
-          ctx!.beginPath();
-          ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx!.fillStyle = grad;
-          ctx!.fill();
+          updateAndDrawParticle(p, color, pairAlpha);
         });
       });
 
@@ -181,14 +184,14 @@ export default function BackgroundMesh(): React.JSX.Element {
       resizeTimeout = setTimeout(init, 200);
     }
 
-    window.addEventListener("resize", handleResize);
+    globalThis.addEventListener("resize", handleResize);
     init();
     draw();
 
     return () => {
       cancelAnimationFrame(rafId);
       clearTimeout(resizeTimeout);
-      window.removeEventListener("resize", handleResize);
+      globalThis.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -197,6 +200,7 @@ export default function BackgroundMesh(): React.JSX.Element {
       ref={canvasRef}
       className="fixed inset-0 w-full h-full -z-10 pointer-events-none"
       aria-hidden="true"
+      tabIndex={-1}
     />
   );
 }

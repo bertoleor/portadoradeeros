@@ -179,7 +179,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
     if (!wrapper) return;
 
     const measure = () => {
-      const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+      const isMobile = typeof globalThis !== 'undefined' && globalThis.innerWidth < 768;
       cardWidthRef.current = wrapper.clientWidth * (isMobile ? 0.78 : CARD_PERCENT);
     };
     measure();

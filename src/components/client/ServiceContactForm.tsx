@@ -86,7 +86,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
       <div><span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.35)] block mb-2">Paso 1 de 4</span><h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Tus Datos</h3></div>
       <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]"><User size={20} /></div>
     </div>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
       {[
         { id: 'name', label: 'Nombre', placeholder: 'Tu nombre' },
         { id: 'surname', label: 'Apellido', placeholder: 'Tu apellido' },
@@ -94,14 +94,14 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
         { id: 'phone', label: 'WhatsApp', placeholder: '+54 9...' },
       ].map((f) => (
         <div key={f.id} className="space-y-2">
-          <Label htmlFor={f.id} className="text-[10px] font-bold text-[rgba(15,15,20,0.5)] uppercase tracking-widest ml-1">{f.label}</Label>
-          <Input id={f.id} type={f.type || 'text'} placeholder={f.placeholder} value={formData[f.id as keyof FormData]} onChange={(e) => handleChange(f.id as keyof FormData, e.target.value)} className="bg-white/50 border-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-14 rounded-2xl" />
+          <Label htmlFor={f.id} className="text-[10px] font-medium text-[rgba(15,15,20,0.5)] uppercase tracking-widest ml-1">{f.label}</Label>
+          <Input id={f.id} type={f.type || 'text'} placeholder={f.placeholder} value={formData[f.id as keyof FormData]} onChange={(e) => handleChange(f.id as keyof FormData, e.target.value)} className="bg-transparent border-0 border-b border-[rgba(15,15,20,0.2)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-12 rounded-none px-1 focus:border-[rgba(15,15,20,0.5)] focus:ring-0" />
           {errors[f.id] && <p className="text-[10px] text-red-500 ml-1">{errors[f.id]}</p>}
         </div>
       ))}
     </div>
     <div className="space-y-2">
-      <Label htmlFor="message" className="text-[10px] font-bold text-[rgba(15,15,20,0.4)] uppercase tracking-widest ml-1 flex items-center gap-1.5">
+      <Label htmlFor="message" className="text-[10px] font-medium text-[rgba(15,15,20,0.4)] uppercase tracking-widest ml-1 flex items-center gap-1.5">
         <MessageSquare size={12} /> Notas (opcional)
       </Label>
       <Textarea
@@ -109,7 +109,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
         placeholder="Contame brevemente tu consulta..."
         value={formData.message}
         onChange={(e) => handleChange('message', e.target.value)}
-        className="bg-white/50 border border-[rgba(15,15,20,0.1)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-32 rounded-2xl resize-none"
+        className="bg-transparent border border-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.9)] placeholder:text-[rgba(15,15,20,0.35)] h-32 rounded-2xl resize-none"
       />
     </div>
     <div className="pt-8 flex justify-between items-center">
@@ -234,16 +234,22 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
           </div>
         )}
         <div className="px-4 py-4">
-          <Checkbox
-            id="legal-accept"
-            checked={acceptedLegal}
-            onChange={(e) => setAcceptedLegal(e.target.checked)}
-            label={
-              <span>
-                He leído y acepto los <Link href="/terminos" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Términos y Condiciones</Link> y la <Link href="/politica-cancelacion" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Política de Cancelación</Link> (24hs).
-              </span>
-            }
-          />
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={acceptedLegal}
+              onChange={(e) => setAcceptedLegal(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded border-[rgba(15,15,20,0.25)] text-[rgba(15,15,20,0.78)] focus:ring-[rgba(15,15,20,0.3)] focus:ring-offset-0 cursor-pointer"
+            />
+            <span className="text-xs text-[rgba(15,15,20,0.6)] leading-relaxed">
+              He leído y acepto los <Link href="/terminos" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Términos y Condiciones</Link> y la <Link href="/politica-cancelacion" target="_blank" className="text-[rgba(15,15,20,0.8)] underline decoration-[rgba(15,15,20,0.2)] hover:decoration-[rgba(15,15,20,0.4)] transition-all">Política de Cancelación</Link> (24hs).
+            </span>
+          </label>
+          {!acceptedLegal && (
+            <p className="text-[10px] text-[rgba(15,15,20,0.4)] mt-2 ml-7">
+              Debes aceptar los términos para continuar
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col items-center">
