@@ -233,18 +233,28 @@ export default function AdminDashboard() {
   };
 
   const getServicePopularity = () => {
+    const now = new Date();
+    const thisMonth = now.getMonth();
+    const thisYear = now.getFullYear();
+
     const counts: Record<string, number> = {};
-    appointments.forEach(a => {
-      const title = a.services?.title || 'Otros';
-      counts[title] = (counts[title] || 0) + 1;
-    });
+    appointments
+      .filter(app => {
+        const d = new Date(app.appointment_date);
+        return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+      })
+      .forEach(a => {
+        const title = a.services?.title || 'Otros';
+        counts[title] = (counts[title] || 0) + 1;
+      });
     return Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3);
   };
 
+  const now = new Date();
   const stats = [
-    { label: 'Servicio Popular', value: getServicePopularity()[0]?.[0] || 'Sin datos', icon: Sparkles, sublabel: 'Este mes' },
+    { label: 'Servicio Popular', value: getServicePopularity()[0]?.[0] || 'Sin datos', icon: Sparkles, sublabel: now.toLocaleDateString('es-AR', { month: 'long' }) },
     { label: 'Pendientes', value: appointments.filter(a => a.status === 'pending').length.toString(), icon: Clock, sublabel: 'Por confirmar' },
     { label: 'Mensajes', value: messages.filter(m => m.status === 'unread').length.toString(), icon: MessageSquare, sublabel: 'Sin leer' },
     { label: 'Total Turnos', value: appointments.length.toString(), icon: CheckCircle, sublabel: 'Histórico' },

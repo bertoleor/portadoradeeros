@@ -802,3 +802,19 @@ export async function updateClient(clientId: string, data: Partial<ClientData>) 
   return { success: true, data: updated as Client };
 }
 
+export async function deleteAppointment(appointmentId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('appointments')
+    .delete()
+    .eq('id', appointmentId);
+
+  if (error) {
+    console.error('Failed to delete appointment:', error);
+    return { success: false, error: 'Error al eliminar el turno.' };
+  }
+
+  return { success: true };
+}
+

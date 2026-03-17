@@ -38,8 +38,39 @@ export default function BankConfigPage() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const validateBankData = () => {
+    const errors: string[] = [];
+
+    // CBU/CVU: exactamente 22 dígitos numéricos
+    const cbuClean = formData.cbu.replace(/\s/g, '');
+    if (cbuClean.length > 0 && !/^\d{22}$/.test(cbuClean)) {
+      errors.push('El CBU/CVU debe tener exactamente 22 dígitos numéricos');
+    }
+
+    // Alias: 6-20 caracteres, solo letras, números y puntos
+    const aliasClean = formData.alias.trim();
+    if (aliasClean.length > 0 && !/^[a-zA-Z0-9.]{6,20}$/.test(aliasClean)) {
+      errors.push('El alias debe tener entre 6 y 20 caracteres (letras, números y puntos)');
+    }
+
+    // Titular: no vacío si se ingresó CBU
+    if (cbuClean.length > 0 && !formData.bankOwner.trim()) {
+      errors.push('El titular es requerido cuando hay CBU configurado');
+    }
+
+    return errors;
+  };
+
   const handleSubmit = async (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
+
+    // Validación
+    const validationErrors = validateBankData();
+    if (validationErrors.length > 0) {
+      validationErrors.forEach(err => error(err));
+      return;
+    }
+
     setIsSaving(true);
     
     // Server action
@@ -110,6 +141,9 @@ export default function BankConfigPage() {
             required
             className="bg-gray-50/50"
           />
+          <p className="text-[10px] text-black/35 mt-1 ml-1">
+            22 dígitos numéricos sin espacios
+          </p>
         </div>
 
         <div className="space-y-1.5">
@@ -122,6 +156,9 @@ export default function BankConfigPage() {
             required
             className="bg-gray-50/50"
           />
+          <p className="text-[10px] text-black/35 mt-1 ml-1">
+            Entre 6 y 20 caracteres. Solo letras, números y puntos. Ej: mi.alias.mp
+          </p>
         </div>
 
         <div className="pt-4 flex justify-end">

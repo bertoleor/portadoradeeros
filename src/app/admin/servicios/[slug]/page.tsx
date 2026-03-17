@@ -21,6 +21,17 @@ interface AdminEditServicioProps {
   readonly params: Promise<{ slug: string }>;
 }
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // eliminar acentos
+    .replace(/[^a-z0-9\s-]/g, '')    // solo alfanuméricos, espacios y guiones
+    .trim()
+    .replace(/\s+/g, '-')            // espacios → guiones
+    .replace(/-+/g, '-');            // múltiples guiones → uno
+}
+
 export default function AdminEditServicio({ params }: AdminEditServicioProps) {
   const router = useRouter();
   const resolvedParams = use(params);
@@ -191,20 +202,34 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
                   <Input 
                     id="svc-title"
                     value={service.title}
-                    onChange={(e) => updateField('title', e.target.value)}
+                    onChange={(e) => {
+                      const newTitle = e.target.value;
+                      // Auto-slug solo si el campo slug está vacío o si es un servicio nuevo
+                      const newSlug = (!service.slug || isNew) ? slugify(newTitle) : service.slug;
+                      setService(prev => prev ? { ...prev, title: newTitle, slug: newSlug } : null);
+                    }}
                     required
                     className="bg-white border-black/20"
                   />
                 </div>
                 <div>
                   <label htmlFor="svc-slug" className="block text-sm font-medium text-black/70 mb-2">Slug (URL)</label>
-                  <Input 
-                    id="svc-slug"
-                    value={service.slug}
-                    onChange={(e) => updateField('slug', e.target.value)}
-                    required
-                    className="bg-white border-black/20"
-                  />
+                  <div className="relative">
+                    <Input 
+                      id="svc-slug"
+                      value={service.slug}
+                      onChange={(e) => updateField('slug', e.target.value)}
+                      required
+                      className="bg-white border-black/20 pr-16"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setService(prev => prev ? { ...prev, slug: slugify(prev.title) } : null)}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 mt-px text-[10px] text-black/40 hover:text-black/70 transition-colors underline underline-offset-2"
+                    >
+                      Regenerar
+                    </button>
+                  </div>
                 </div>
               </div>
 

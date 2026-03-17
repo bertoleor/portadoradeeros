@@ -14,9 +14,9 @@ import {
   Plus,
   Ban,
 } from 'lucide-react';
-import { getAppointments, confirmAppointment, completeAppointment, cancelAppointment, createAppointmentAdmin } from '@/lib/api/appointments';
+import { getAppointments, confirmAppointment, completeAppointment, cancelAppointment, createAppointmentAdmin, deleteAppointment } from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
-import { getBlockedTimes, createBlockedTime, type BlockedTime } from '@/lib/api/blocked-times';
+import { getBlockedTimes, createBlockedTime, deleteBlockedTime, type BlockedTime } from '@/lib/api/blocked-times';
 import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
 import { createClient } from '@/lib/supabase/client';
@@ -521,6 +521,27 @@ export default function AdminCalendario() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    const res = await deleteAppointment(id);
+    if (res.success) {
+      setAppointments(prev => prev.filter(a => a.id !== id));
+      setSelectedAppointment(null);
+      success('Turno eliminado permanentemente.');
+    } else {
+      toastError('Error al eliminar el turno.');
+    }
+  };
+
+  const handleDeleteBlock = async (id: string) => {
+    try {
+      await deleteBlockedTime(id);
+      setBlockedTimes(prev => prev.filter(bt => bt.id !== id));
+      success('Bloqueo eliminado.');
+    } catch {
+      toastError('Error al eliminar el bloqueo.');
+    }
+  };
+
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto w-full">
       <motion.div
@@ -838,6 +859,42 @@ export default function AdminCalendario() {
                   </div>
                 )}
               </div>
+
+              {/* Bloqueos del día seleccionado */}
+              {selectedDay && blockedTimes.filter(bt => {
+                const d = new Date(bt.date);
+                return d.getDate() === selectedDay && d.getMonth() === month && d.getFullYear() === year;
+              }).length > 0 && (
+                <div className="mt-4 pt-4 border-t border-black/5">
+                  <p className="text-[10px] uppercase tracking-widest text-red-400 font-bold mb-3">
+                    Bloqueos
+                  </p>
+                  {blockedTimes
+                    .filter(bt => {
+                      const d = new Date(bt.date);
+                      return d.getDate() === selectedDay && d.getMonth() === month && d.getFullYear() === year;
+                    })
+                    .map(bt => (
+                      <div key={bt.id} className="flex items-center justify-between p-3 rounded-xl bg-red-50 border border-red-100 mb-2">
+                        <div>
+                          <p className="text-xs font-medium text-red-700">{bt.title}</p>
+                          <p className="text-[10px] text-red-400 mt-0.5">
+                            {bt.is_all_day ? 'Todo el día' : `${bt.time_start} — ${bt.time_end}`}
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteBlock(bt.id)}
+                          className="p-1.5 hover:bg-red-100 rounded-lg transition-colors text-red-400 hover:text-red-600"
+                          aria-label="Eliminar bloqueo"
+                          title="Eliminar bloqueo"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -970,6 +1027,22 @@ export default function AdminCalendario() {
                       className="w-full py-3 text-red-500 text-sm font-medium hover:bg-red-50 rounded-xl transition-colors"
                     >
                       Cancelar Turno
+                    </button>
+                  </div>
+                )}
+
+                {/* Delete button - only for cancelled/completed appointments */}
+                {(selectedAppointment.status === 'cancelled' || selectedAppointment.status === 'completed') && (
+                  <div className="pt-3">
+                    <button
+                      onClick={() => {
+                        if (confirm('¿Eliminar este turno permanentemente? Esta acción no se puede deshacer.')) {
+                          handleDelete(selectedAppointment.id);
+                        }
+                      }}
+                      className="w-full py-2.5 text-red-400 text-xs font-medium hover:bg-red-50 rounded-xl transition-colors opacity-70 hover:opacity-100"
+                    >
+                      Eliminar registro permanentemente
                     </button>
                   </div>
                 )}
