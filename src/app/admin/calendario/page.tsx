@@ -13,11 +13,13 @@ import {
   CheckCircle2,
   Plus,
   Ban,
+  Trash2,
 } from 'lucide-react';
 import { getAppointments, confirmAppointment, completeAppointment, cancelAppointment, createAppointmentAdmin, deleteAppointment } from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
 import { getBlockedTimes, createBlockedTime, deleteBlockedTime, type BlockedTime } from '@/lib/api/blocked-times';
 import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { useToast } from '@/components/ui/ToastProvider';
 import { createClient } from '@/lib/supabase/client';
 import type { Service } from '@/types';
@@ -365,6 +367,7 @@ export default function AdminCalendario() {
   const [showNewAppt, setShowNewAppt] = useState(false);
   const [showBlockModal, setShowBlockModal] = useState(false);
   const [selectedDateForBlock, setSelectedDateForBlock] = useState<string | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { success, error: toastError } = useToast();
 
   const loadData = async (isMounted = true) => {
@@ -566,10 +569,10 @@ export default function AdminCalendario() {
                   key={v}
                   type="button"
                   onClick={() => setViewMode(v)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
                     viewMode === v 
-                      ? 'bg-black text-white' 
-                      : 'text-black/50 hover:text-black hover:bg-gray-50'
+                      ? 'bg-[rgba(15,15,20,0.78)] text-white shadow-sm' 
+                      : 'text-black/50 hover:text-black hover:bg-white/50 backdrop-blur-sm'
                   }`}
                 >
                   {v === 'month' && 'Mes'}
@@ -599,7 +602,7 @@ export default function AdminCalendario() {
               <button
                 onClick={prevMonth}
                 aria-label="Mes anterior"
-                className="p-2 hover:bg-gray-50 rounded-lg transition-colors text-black/60"
+                className="p-2 hover:bg-white/50 backdrop-blur-sm rounded-lg transition-all text-black/60"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -609,7 +612,7 @@ export default function AdminCalendario() {
               <button
                 onClick={nextMonth}
                 aria-label="Mes siguiente"
-                className="p-2 hover:bg-gray-50 rounded-lg transition-colors text-black/60"
+                className="p-2 hover:bg-white/50 backdrop-blur-sm rounded-lg transition-all text-black/60"
               >
                 <ChevronRight size={18} />
               </button>
@@ -831,7 +834,7 @@ export default function AdminCalendario() {
 
               
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 hide-scrollbar">
-                {selectedDay && getAppointmentsForDay(selectedDay).length > 0 ? (
+                {selectedDay && getAppointmentsForDay(selectedDay).some(() => true) ? (
                   getAppointmentsForDay(selectedDay)
                     .sort((a, b) => new Date(a.appointment_date).getTime() - new Date(b.appointment_date).getTime())
                     .map((app) => (
@@ -861,10 +864,10 @@ export default function AdminCalendario() {
               </div>
 
               {/* Bloqueos del día seleccionado */}
-              {selectedDay && blockedTimes.filter(bt => {
+              {selectedDay && blockedTimes.some(bt => {
                 const d = new Date(bt.date);
                 return d.getDate() === selectedDay && d.getMonth() === month && d.getFullYear() === year;
-              }).length > 0 && (
+              }) && (
                 <div className="mt-4 pt-4 border-t border-black/5">
                   <p className="text-[10px] uppercase tracking-widest text-red-400 font-bold mb-3">
                     Bloqueos
@@ -889,7 +892,7 @@ export default function AdminCalendario() {
                           aria-label="Eliminar bloqueo"
                           title="Eliminar bloqueo"
                         >
-                          <X size={14} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     ))}
@@ -1031,26 +1034,40 @@ export default function AdminCalendario() {
                   </div>
                 )}
 
-                {/* Delete button - only for cancelled/completed appointments */}
-                {(selectedAppointment.status === 'cancelled' || selectedAppointment.status === 'completed') && (
-                  <div className="pt-3">
-                    <button
-                      onClick={() => {
-                        if (confirm('¿Eliminar este turno permanentemente? Esta acción no se puede deshacer.')) {
-                          handleDelete(selectedAppointment.id);
-                        }
-                      }}
-                      className="w-full py-2.5 text-red-400 text-xs font-medium hover:bg-red-50 rounded-xl transition-colors opacity-70 hover:opacity-100"
-                    >
-                      Eliminar registro permanentemente
-                    </button>
-                  </div>
-                )}
+                {/* Delete button - always visible now */}
+                <div className="pt-3">
+                  <button
+                    onClick={() => setDeleteModalOpen(true)}
+                    className="w-full py-2.5 text-red-400 text-xs font-medium hover:bg-red-50 rounded-xl transition-colors opacity-70 hover:opacity-100 border border-transparent hover:border-red-100 flex items-center justify-center gap-2"
+                  >
+                    <Trash2 size={12} />
+                    Eliminar registro permanentemente
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      <ConfirmModal 
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={async () => {
+          if (selectedAppointment) {
+            await handleDelete(selectedAppointment.id);
+            setDeleteModalOpen(false);
+          }
+        }}
+        title="¿Eliminar turno permanentemente?"
+        description={
+          selectedAppointment?.status === 'confirmed'
+            ? "ATENCIÓN: Este turno está CONFIRMADO. Si lo eliminas, no habrá registro histórico. Te sugerimos 'Cancelar' si quieres mantener el registro."
+            : "Esta acción eliminará todos los datos de este turno de forma irreversible."
+        }
+        confirmText="Sí, eliminar"
+        isDestructive={true}
+      />
     </div>
   );
 }

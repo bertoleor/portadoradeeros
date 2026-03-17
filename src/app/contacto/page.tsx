@@ -278,9 +278,9 @@ export default function ContactPage() {
 
                 <Button
                   type="submit"
-                  variant="outline"
+                  variant="default"
                   disabled={isLoading}
-                  className="w-full rounded-full py-4 text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px flex items-center justify-center gap-2 mt-4 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40"
+                  className="w-full rounded-full py-4 text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px flex items-center justify-center gap-2 mt-4"
                 >
                   {!isLoading && <Send className="w-4 h-4" />}
                   {isLoading ? 'Enviando...' : 'Enviar Mensaje'}

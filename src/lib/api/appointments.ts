@@ -162,7 +162,7 @@ export async function getAppointments() {
     .from('appointments')
     .select(`
       *,
-      services ( title )
+      services ( title, price )
     `)
     .order('created_at', { ascending: false });
 

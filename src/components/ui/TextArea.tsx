@@ -32,10 +32,10 @@ const textareaVariants = cva(
 )
 
 interface TextareaProps
-  extends React.ComponentProps<"textarea">,
+  extends React.ComponentPropsWithoutRef<"textarea">,
     VariantProps<typeof textareaVariants> {}
 
-function Textarea({ className, variant, ...props }: TextareaProps) {
+function Textarea({ className, variant, ...props }: Readonly<TextareaProps>) {
   return (
     <textarea
       data-slot="textarea"

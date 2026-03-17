@@ -42,7 +42,7 @@ export default function BankConfigPage() {
     const errors: string[] = [];
 
     // CBU/CVU: exactamente 22 dígitos numéricos
-    const cbuClean = formData.cbu.replace(/\s/g, '');
+    const cbuClean = formData.cbu.replaceAll(/\s/g, '');
     if (cbuClean.length > 0 && !/^\d{22}$/.test(cbuClean)) {
       errors.push('El CBU/CVU debe tener exactamente 22 dígitos numéricos');
     }

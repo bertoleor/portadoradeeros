@@ -33,10 +33,10 @@ const inputVariants = cva(
 )
 
 interface InputProps
-  extends React.ComponentProps<"input">,
+  extends React.ComponentPropsWithoutRef<"input">,
     VariantProps<typeof inputVariants> {}
 
-function Input({ className, type, variant, ...props }: InputProps) {
+function Input({ className, type, variant, ...props }: Readonly<InputProps>) {
   return (
     <InputPrimitive
       type={type}

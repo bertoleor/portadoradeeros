@@ -108,7 +108,7 @@ function ServiceCard({
             </span>
           </div>
 
-          <div className="group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full border border-[rgba(15,15,20,0.1)] bg-[rgba(15,15,20,0.8)] text-white hover:bg-[rgba(15,15,20,0.9)] transition-all duration-300">
+          <div className="btn-primary group/btn flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.2em] px-6 py-3 rounded-full transition-all duration-300">
             Explorar
             <ArrowRight
               size={14}

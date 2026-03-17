@@ -19,7 +19,7 @@ export function ScrollToFormButton({ label = 'Agendar Consulta' }: ScrollToFormB
   return (
     <button 
       onClick={handleClick}
-      className="w-full border border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] px-8 py-4 rounded-full text-sm font-medium tracking-widest uppercase hover:border-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.90)] hover:bg-white/40 transition-all duration-200 flex items-center justify-center gap-3"
+      className="btn-primary w-full px-8 py-4 rounded-full text-sm font-medium tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-3"
     >
       {label}
       <ArrowRight size={18} />

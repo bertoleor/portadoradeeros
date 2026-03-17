@@ -25,11 +25,11 @@ function slugify(text: string): string {
   return text
     .toLowerCase()
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '') // eliminar acentos
-    .replace(/[^a-z0-9\s-]/g, '')    // solo alfanuméricos, espacios y guiones
+    .replaceAll(/[\u0300-\u036f]/g, '') // eliminar acentos
+    .replaceAll(/[^a-z0-9\s-]/g, '')    // solo alfanuméricos, espacios y guiones
     .trim()
-    .replace(/\s+/g, '-')            // espacios → guiones
-    .replace(/-+/g, '-');            // múltiples guiones → uno
+    .replaceAll(/\s+/g, '-')            // espacios → guiones
+    .replaceAll(/-+/g, '-');            // múltiples guiones → uno
 }
 
 export default function AdminEditServicio({ params }: AdminEditServicioProps) {
@@ -204,9 +204,20 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
                     value={service.title}
                     onChange={(e) => {
                       const newTitle = e.target.value;
-                      // Auto-slug solo si el campo slug está vacío o si es un servicio nuevo
-                      const newSlug = (!service.slug || isNew) ? slugify(newTitle) : service.slug;
-                      setService(prev => prev ? { ...prev, title: newTitle, slug: newSlug } : null);
+                      setService(prev => {
+                        if (!prev) return null;
+                        // Auto-sync slug solo si:
+                        // 1. Es un servicio nuevo
+                        // 2. El slug actual coincide con el slugificado del titulo previo (no fue editado manualmente)
+                        const currentTitleSlug = slugify(prev.title);
+                        const shouldSyncSlug = isNew || prev.slug === currentTitleSlug || !prev.slug;
+                        
+                        return { 
+                          ...prev, 
+                          title: newTitle, 
+                          slug: shouldSyncSlug ? slugify(newTitle) : prev.slug 
+                        };
+                      });
                     }}
                     required
                     className="bg-white border-black/20"

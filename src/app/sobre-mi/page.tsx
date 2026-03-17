@@ -114,12 +114,12 @@ export default async function SobreMiPage() {
               ¿Querés saber más o agendar una sesión?
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/contacto" className={buttonVariants({ variant: "outline", size: "lg" })}>
+              <Link href="/contacto" className={cn(buttonVariants({ variant: "default", size: "lg" }), "btn-primary")}>
                 Contactar
               </Link>
               <Link href="/servicios" className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "text-[rgba(15,15,20,0.65)]"
+                "btn-outline"
               )}>
                 Ver Servicios
                 <ArrowRight className="w-4 h-4 ml-2" />

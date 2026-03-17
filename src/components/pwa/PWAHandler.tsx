@@ -17,10 +17,21 @@ const handleUpdatefound = (registration: ServiceWorkerRegistration) => {
 
 const registerSW = async () => {
   if (!('serviceWorker' in navigator)) return;
-  
+
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-    console.log('PWA: Service Worker registered');
+    // Limpiar SWs con scope incorrecto (versiones anteriores)
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    for (const reg of registrations) {
+      if (reg.scope !== `${location.origin}/admin/`) {
+        console.log('PWA: removing old SW with scope:', reg.scope);
+        await reg.unregister();
+      }
+    }
+
+    const registration = await navigator.serviceWorker.register('/sw.js', {
+      scope: '/admin/',
+    });
+    console.log('PWA: Service Worker registered with scope /admin/');
     registration.addEventListener('updatefound', () => handleUpdatefound(registration));
   } catch (error) {
     console.warn('PWA: registration failed:', error);

@@ -18,7 +18,7 @@ import {
 import { Input, Label } from '@/components/ui';
 import { Textarea } from '@/components/ui/TextArea';
 import { Button } from '@/components/ui/Button';
-import { Checkbox } from '@/components/ui/Checkbox';
+
 import Link from 'next/link';
 import {
   createAppointment,
@@ -76,7 +76,7 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
     </div>
     <h3 className="text-2xl md:text-3xl font-light text-[rgba(15,15,20,0.9)] tracking-tight mb-4">Agendar {serviceName}</h3>
     <p className="text-[rgba(15,15,20,0.5)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
-    <Button onClick={nextStep} variant="outline" className="rounded-full px-12 py-4 md:py-6 h-auto text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px active:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
+    <Button onClick={nextStep} variant="default" className="rounded-full px-12 py-4 md:py-6 h-auto text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px active:translate-y-0">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
   </div>
 );
 
@@ -115,7 +115,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors">Cancelar</button>
-      <Button onClick={nextStep} variant="outline" className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="default" className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -132,7 +132,7 @@ const StepDateSelection = ({ formData, handleChange, nextStep, prevStep, errors,
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} variant="outline" disabled={!formData.appointmentDate} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="default" disabled={!formData.appointmentDate} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -150,7 +150,7 @@ const StepTimeSelection = ({ formData, handleChange, nextStep, prevStep, errors,
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} variant="outline" disabled={!formData.appointmentTime} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="default" disabled={!formData.appointmentTime} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );

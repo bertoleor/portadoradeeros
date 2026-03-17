@@ -2,7 +2,7 @@
   "name": "Portadora de Eros - Admin",
   "short_name": "PA Admin",
   "description": "Panel de Administración - Portadora de Eros",
-  "start_url": "/admin?standalone=true",
+  "start_url": "/admin",
   "scope": "/admin",
   "display": "standalone",
   "orientation": "any",

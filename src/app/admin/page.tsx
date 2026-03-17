@@ -8,7 +8,6 @@ import {
   Calendar, 
   CheckCircle, 
   Clock, 
-  MessageSquare, 
   MoreHorizontal,
   Mail,
   X,
@@ -27,7 +26,7 @@ interface AppointmentRecord {
   appointment_date: string;
   status: string;
   notes: string | null;
-  services: { title: string } | null;
+  services: { title: string; price: number } | null;
 }
 
 interface ContactMessage {
@@ -213,6 +212,9 @@ export default function AdminDashboard() {
     };
   }, []);
 
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const handleConfirm = async (id: string) => {
     setIsConfirming(id);
     const result = await confirmAppointment(id);
@@ -233,15 +235,11 @@ export default function AdminDashboard() {
   };
 
   const getServicePopularity = () => {
-    const now = new Date();
-    const thisMonth = now.getMonth();
-    const thisYear = now.getFullYear();
-
     const counts: Record<string, number> = {};
     appointments
       .filter(app => {
         const d = new Date(app.appointment_date);
-        return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+        return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
       })
       .forEach(a => {
         const title = a.services?.title || 'Otros';
@@ -252,13 +250,30 @@ export default function AdminDashboard() {
       .slice(0, 3);
   };
 
-  const now = new Date();
-  const stats = [
-    { label: 'Servicio Popular', value: getServicePopularity()[0]?.[0] || 'Sin datos', icon: Sparkles, sublabel: now.toLocaleDateString('es-AR', { month: 'long' }) },
-    { label: 'Pendientes', value: appointments.filter(a => a.status === 'pending').length.toString(), icon: Clock, sublabel: 'Por confirmar' },
-    { label: 'Mensajes', value: messages.filter(m => m.status === 'unread').length.toString(), icon: MessageSquare, sublabel: 'Sin leer' },
-    { label: 'Total Turnos', value: appointments.length.toString(), icon: CheckCircle, sublabel: 'Histórico' },
+  const getEstimatedIncome = () => {
+    return appointments
+      .filter(app => {
+        const d = new Date(app.appointment_date);
+        return d.getMonth() === selectedMonth && 
+               d.getFullYear() === selectedYear && 
+               (app.status === 'confirmed' || app.status === 'completed');
+      })
+      .reduce((sum, app) => sum + (app.services?.price || 0), 0);
+  };
+
+  const monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
+
+  const stats = [
+    { label: 'Servicio Popular', value: getServicePopularity()[0]?.[0] || 'Sin datos', icon: Sparkles, sublabel: monthNames[selectedMonth] },
+    { label: 'Ingresos Est.', value: `$${getEstimatedIncome().toLocaleString('es-AR')}`, icon: CheckCircle, sublabel: 'Confirmados/OK' },
+    { label: 'Pendientes', value: appointments.filter(a => a.status === 'pending').length.toString(), icon: Clock, sublabel: 'Por confirmar' },
+    { label: 'Total Turnos', value: appointments.length.toString(), icon: Calendar, sublabel: 'Histórico' },
+  ];
+
+  const yearOptions = Array.from({ length: 3 }, (_, i) => new Date().getFullYear() - 1 + i);
 
   return (
     <div className="p-4 md:p-6 max-w-7xl mx-auto w-full">
@@ -273,11 +288,36 @@ export default function AdminDashboard() {
               Dashboard
             </h1>
             <p className="text-xs sm:text-sm text-gray-500">
-              Aquí tienes un resumen de tu actividad
+              Gestión de métricas y turnos próximos
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span className="w-2 h-2 rounded-full bg-green-500" />Sincronizado
+          
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center bg-white/50 backdrop-blur-sm border border-black/5 rounded-xl p-1">
+              <select 
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                className="bg-transparent text-xs font-medium px-2 py-1 focus:outline-none cursor-pointer"
+                aria-label="Seleccionar mes"
+              >
+                {monthNames.map((name, i) => (
+                  <option key={name} value={i}>{name}</option>
+                ))}
+              </select>
+              <select 
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                className="bg-transparent text-xs font-medium px-2 py-1 border-l border-black/5 focus:outline-none cursor-pointer"
+                aria-label="Seleccionar año"
+              >
+                {yearOptions.map(y => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium bg-white/30 px-3 py-1.5 rounded-full border border-white/50">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />Sincronizado
+            </div>
           </div>
         </div>
 
@@ -289,14 +329,20 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="bg-white/35 backdrop-blur-xl border border-white/50 p-4 md:p-5 rounded-lg"
+              className="bg-white/35 backdrop-blur-xl border border-white/50 p-4 md:p-5 rounded-lg group hover:bg-white/45 transition-all"
             >
               <div className="flex items-center gap-2 mb-3">
-                <stat.icon size={16} className="text-gray-400" />
+                <stat.icon size={16} className="text-gray-400 group-hover:text-black transition-colors" />
                 <p className="text-xs font-medium text-gray-500">{stat.label}</p>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 truncate">{stat.value}</h3>
-              <p className="text-[10px] text-gray-400 mt-1">{stat.sublabel}</p>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
+                {stat.value === 'Sin datos' ? (
+                  <span className="text-gray-400 font-normal italic text-sm">{stat.value}</span>
+                ) : (
+                  stat.value
+                )}
+              </h3>
+              <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">{stat.sublabel}</p>
             </motion.div>
           ))}
         </div>

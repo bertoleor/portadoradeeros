@@ -6,6 +6,13 @@ import { Download, Smartphone, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { BeforeInstallPromptEvent } from '@/types';
 
+// iOS detection
+// iOS detection
+function isIOS() {
+  if (globalThis.navigator === undefined) return false;
+  return /iPad|iPhone|iPod/.test(globalThis.navigator.userAgent) && !((globalThis as unknown as { MSStream?: unknown }).MSStream);
+}
+
 export default function InstalarAppPage() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(() => 
@@ -32,7 +39,6 @@ export default function InstalarAppPage() {
 
   const handleInstall = async () => {
     if (!deferredPrompt) {
-      // Don't redirect, just let the UI handle the "missing prompt" state
       return;
     }
 
@@ -95,47 +101,83 @@ export default function InstalarAppPage() {
               <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mx-auto mb-4">
                 <Smartphone size={32} className="text-blue-600" />
               </div>
-              <h2 className="text-xl font-medium text-black mb-2">Descargar Aplicación</h2>
-              <p className="text-sm text-black/50 mb-8 max-w-sm mx-auto">
-                Para una mejor experiencia, instala la aplicación en tu pantalla de inicio.
-              </p>
+              <h2 className="text-xl font-medium text-black mb-2">Instalar App</h2>
               
-              <Button
-                onClick={handleInstall}
-                disabled={isLoading}
-                className="rounded-xl px-10 h-12 bg-black text-white hover:bg-black/90 transition-all shadow-lg shadow-black/10"
-              >
-                {isLoading ? (
-                  <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                ) : (
-                  <>
-                    <Download size={18} className="mr-2" />
-                    Instalar Ahora
-                  </>
-                )}
-              </Button>
+              {(() => {
+                if (isIOS()) {
+                  return (
+                    <div className="mt-6 text-left max-w-sm mx-auto space-y-4">
+                      <p className="text-sm text-black/60 text-center mb-6">
+                        En iPhone/iPad la instalación es manual:
+                      </p>
+                      <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
+                        <span className="text-lg shrink-0">1</span>
+                        <p className="text-sm text-black/70">
+                          Tocá el botón <strong>Compartir</strong>{' '}
+                          <span className="inline-block mx-1">⎙</span>{' '}
+                          en la barra inferior de Safari
+                        </p>
+                      </div>
+                      <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
+                        <span className="text-lg shrink-0">2</span>
+                        <p className="text-sm text-black/70">
+                          Buscá y tocá <strong>&quot;Agregar a pantalla de inicio&quot;</strong>
+                        </p>
+                      </div>
+                      <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
+                        <span className="text-lg shrink-0">3</span>
+                        <p className="text-sm text-black/70">
+                          Tocá <strong>&quot;Agregar&quot;</strong> en la esquina superior derecha
+                        </p>
+                      </div>
+                      <p className="text-xs text-black/35 text-center mt-4 italic">
+                        Asegurate de estar en Safari — otros browsers en iOS no soportan instalación
+                      </p>
+                    </div>
+                  );
+                }
 
-              {!deferredPrompt && (
-                <div className="mt-8 pt-8 border-t border-black/5 text-left max-w-sm mx-auto">
-                  <h3 className="text-sm font-medium text-black mb-3 flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center text-[10px]">?</div>
-                    Guía de Instalación Manual
-                  </h3>
-                  <div className="space-y-4 text-xs text-black/60 leading-relaxed font-light">
-                    <div className="flex gap-3">
-                      <span className="font-medium text-black">Chrome / Brave:</span>
-                      <p>Toca los tres puntos <span className="font-bold">⋮</span> en la esquina superior y selecciona <span className="font-bold">&quot;Instalar Aplicación&quot;</span> o <span className="font-bold">&quot;Agregar a la pantalla de inicio&quot;</span>.</p>
-                    </div>
-                    <div className="flex gap-3">
-                      <span className="font-medium text-black">iPhone (Safari):</span>
-                      <p>Toca el botón <span className="font-bold">Compartir</span> y selecciona <span className="font-bold">&quot;Agregar a inicio&quot;</span>.</p>
-                    </div>
-                    <p className="italic text-[10px] text-black/40 pt-2 border-t border-black/[0.03]">
-                      Nota: Si ya la instalaste, búscala en tu cajón de aplicaciones.
+                if (deferredPrompt) {
+                  return (
+                    <>
+                      <p className="text-sm text-black/50 mb-8 max-w-sm mx-auto">
+                        Instalá la app en tu pantalla de inicio para acceso rápido.
+                      </p>
+                      <Button
+                        onClick={handleInstall}
+                        disabled={isLoading}
+                        className="rounded-xl px-10 h-12 bg-black text-white hover:bg-black/90 transition-all"
+                      >
+                        {isLoading ? (
+                          <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        ) : (
+                          <><Download size={18} className="mr-2" /> Instalar Ahora</>
+                        )}
+                      </Button>
+                    </>
+                  );
+                }
+
+                return (
+                  <div className="mt-6 text-left max-w-sm mx-auto space-y-4">
+                    <p className="text-sm text-black/60 text-center mb-4">
+                      Instalación manual desde el browser:
                     </p>
+                    <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-lg shrink-0">1</span>
+                      <p className="text-sm text-black/70">
+                        En Chrome: tocá los <strong>tres puntos ⋮</strong> arriba a la derecha
+                      </p>
+                    </div>
+                    <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
+                      <span className="text-lg shrink-0">2</span>
+                      <p className="text-sm text-black/70">
+                        Seleccioná <strong>&quot;Instalar aplicación&quot;</strong> o <strong>&quot;Agregar a pantalla de inicio&quot;</strong>
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
         </div>

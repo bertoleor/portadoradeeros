@@ -95,6 +95,65 @@ function getPairOpacities(globalTick: number, pairCount: number): number[] {
   return opacities;
 }
 
+// Animation helpers defined outside to avoid nesting issues
+function initCanvas(canvas: HTMLCanvasElement, speed: number) {
+  const w = globalThis.innerWidth;
+  const h = globalThis.innerHeight;
+  canvas.width = w;
+  canvas.height = h;
+  const p = COLOR_PAIRS.flatMap((pair) =>
+    pair.map((color) => createParticle(w, h, color, speed))
+  );
+  return { w, h, p };
+}
+
+function updateAndDrawParticle(
+  ctx: CanvasRenderingContext2D,
+  p: Particle,
+  color: RGB,
+  pairAlpha: number,
+  w: number,
+  h: number
+) {
+  p.tick += BREATH_SPEED;
+  p.size = p.baseSize + Math.sin(p.tick) * p.baseSize * BREATH_AMOUNT;
+  p.x += p.vx;
+  p.y += p.vy;
+  if (p.x < -p.size) p.x = w + p.size;
+  if (p.x > w + p.size) p.x = -p.size;
+  if (p.y < -p.size) p.y = h + p.size;
+  if (p.y > h + p.size) p.y = -p.size;
+
+  const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+  const { r, g, b } = color;
+  grad.addColorStop(0, `rgba(${r},${g},${b},${BASE_OPACITY * pairAlpha})`);
+  grad.addColorStop(0.5, `rgba(${r},${g},${b},${0.2 * pairAlpha})`);
+  grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+
+  ctx.beginPath();
+  ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+}
+
+function drawParticles(
+  ctx: CanvasRenderingContext2D,
+  particles: Particle[],
+  opacities: number[],
+  width: number,
+  height: number
+) {
+  COLOR_PAIRS.forEach((pair, pairIndex) => {
+    const pairAlpha = opacities[pairIndex];
+    if (pairAlpha >= 0.01) {
+      pair.forEach((color, colorIndex) => {
+        const p = particles[pairIndex * 2 + colorIndex];
+        updateAndDrawParticle(ctx, p, color, pairAlpha, width, height);
+      });
+    }
+  });
+}
+
 export default function BackgroundMesh(): React.JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -104,9 +163,7 @@ export default function BackgroundMesh(): React.JSX.Element {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const reducedMotion = globalThis.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
+    const reducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const speed = reducedMotion ? 0 : PARTICLE_SPEED;
 
     let width = 0;
@@ -116,77 +173,40 @@ export default function BackgroundMesh(): React.JSX.Element {
     let rafId = 0;
     let resizeTimeout: ReturnType<typeof setTimeout>;
 
-    function init() {
-      width  = canvas!.width  = globalThis.innerWidth;
-      height = canvas!.height = globalThis.innerHeight;
-      // 2 partículas por par (una por cada color)
-      particles = COLOR_PAIRS.flatMap((pair) =>
-        pair.map((color) => createParticle(width, height, color, speed))
-      );
-    }
-
-    function updateAndDrawParticle(p: Particle, color: RGB, pairAlpha: number) {
-      // Respiración
-      p.tick += BREATH_SPEED;
-      p.size = p.baseSize + Math.sin(p.tick) * p.baseSize * BREATH_AMOUNT;
-
-      // Movimiento con wrap en bordes
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < -p.size) p.x = width  + p.size;
-      if (p.x > width  + p.size) p.x = -p.size;
-      if (p.y < -p.size) p.y = height + p.size;
-      if (p.y > height + p.size) p.y = -p.size;
-
-      // Gradiente radial modulado por la opacidad del par
-      const grad = ctx!.createRadialGradient(
-        p.x, p.y, 0,
-        p.x, p.y, p.size
-      );
-      const { r, g, b } = color;
-      grad.addColorStop(0,    `rgba(${r},${g},${b},${BASE_OPACITY * pairAlpha})`);
-      grad.addColorStop(0.5,  `rgba(${r},${g},${b},${0.2 * pairAlpha})`);
-      grad.addColorStop(1,    `rgba(${r},${g},${b},0)`);
-
-      ctx!.beginPath();
-      ctx!.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx!.fillStyle = grad;
-      ctx!.fill();
-    }
-
-    function draw() {
-      // Fondo base
-      ctx!.fillStyle = BG_COLOR;
-      ctx!.fillRect(0, 0, width, height);
-
+    const drawFrame = () => {
+      if (!ctx) return;
+      ctx.fillStyle = BG_COLOR;
+      ctx.fillRect(0, 0, width, height);
       globalTick++;
       const opacities = getPairOpacities(globalTick, COLOR_PAIRS.length);
+      drawParticles(ctx, particles, opacities, width, height);
+      ctx.fillStyle = `rgba(248,249,251,${VEIL_OPACITY})`;
+      ctx.fillRect(0, 0, width, height);
+      rafId = requestAnimationFrame(drawFrame);
+    };
 
-      COLOR_PAIRS.forEach((pair, pairIndex) => {
-        const pairAlpha = opacities[pairIndex];
-        if (pairAlpha < 0.01) return; // par invisible, skip
+    const start = () => {
+      const res = initCanvas(canvas, speed);
+      width = res.w;
+      height = res.h;
+      particles = res.p;
+      drawFrame();
+    };
 
-        pair.forEach((color, colorIndex) => {
-          const p = particles[pairIndex * 2 + colorIndex];
-          updateAndDrawParticle(p, color, pairAlpha);
-        });
-      });
-
-      // Velo final — suaviza y evita saturación
-      ctx!.fillStyle = `rgba(248,249,251,${VEIL_OPACITY})`;
-      ctx!.fillRect(0, 0, width, height);
-
-      rafId = requestAnimationFrame(draw);
-    }
-
-    function handleResize() {
+    const handleResize = () => {
       clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(init, 200);
-    }
+      resizeTimeout = setTimeout(() => {
+        if (canvas) {
+          const res = initCanvas(canvas, speed);
+          width = res.w;
+          height = res.h;
+          particles = res.p;
+        }
+      }, 200);
+    };
 
     globalThis.addEventListener("resize", handleResize);
-    init();
-    draw();
+    start();
 
     return () => {
       cancelAnimationFrame(rafId);

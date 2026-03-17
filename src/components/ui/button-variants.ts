@@ -10,13 +10,13 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-[0.98]",
+        default: "bg-[rgba(255,145,70,0.32)] border-[rgba(230,120,50,0.40)] text-[rgba(15,15,20,0.82)] shadow-none hover:bg-[rgba(255,145,70,0.46)] hover:border-[rgba(230,120,50,0.56)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
         destructive: "bg-red-500/90 text-white shadow-sm hover:bg-red-500/80 active:scale-[0.98] rounded-full",
-        outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground active:scale-[0.98]",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 active:scale-[0.98]",
+        outline: "border border-[rgba(15,15,20,0.16)] bg-transparent text-[rgba(15,15,20,0.55)] hover:border-[rgba(15,15,20,0.30)] hover:text-[rgba(15,15,20,0.82)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
+        secondary: "bg-white/50 text-black shadow-sm hover:bg-white/70 active:scale-[0.98] rounded-full backdrop-blur-sm border border-white/50",
         ghost: "hover:bg-accent hover:text-accent-foreground active:scale-[0.98]",
         link: "text-primary underline-offset-4 hover:underline",
-        soft: "bg-[rgba(15,15,20,0.78)] text-white shadow-sm hover:bg-[rgba(15,15,20,0.92)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
+        soft: "bg-[rgba(255,145,70,0.32)] border-[rgba(230,120,50,0.40)] text-[rgba(15,15,20,0.82)] shadow-none hover:bg-[rgba(255,145,70,0.46)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
       },
       size: {
         default: "min-h-[2.5rem] md:min-h-[3rem] px-6 md:px-8 py-2 md:py-3 gap-2",
