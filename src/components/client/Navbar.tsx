@@ -51,10 +51,9 @@ export function Navbar() {
     });
   }, []);
 
-  // Close menu when pathname changes
-  useEffect(() => {
+  const handleLinkClick = () => {
     setIsMenuOpen(false);
-  }, [pathname]);
+  };
 
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -135,7 +134,7 @@ export function Navbar() {
                         ? 'text-[rgba(15,15,20,0.9)] font-normal'
                         : 'text-[rgba(15,15,20,0.5)]'
                     }`}
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={handleLinkClick}
                   >
                     {link.label}
                   </Link>
