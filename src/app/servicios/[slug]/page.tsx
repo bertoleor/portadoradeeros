@@ -168,15 +168,13 @@ export default async function ServicioDetalle({ params }: { readonly params: Pro
               <p className="text-sm sm:text-base text-[rgba(15,15,20,0.5)] mb-8 font-light">
                 Completá el formulario para agendar tu consulta o solicitar más información.
               </p>
-              <div className="max-w-xl">
-                <ServiceContactForm
-                  serviceName={service.title}
-                  serviceId={service.id}
-                  serviceDuration={service.duration}
-                  bankDetails={bankDetails}
-                  businessHours={settings?.businessHours as Record<string, { closed: boolean; start: string; end: string }>}
-                />
-              </div>
+              <ServiceContactForm
+                serviceName={service.title}
+                serviceId={service.id}
+                serviceDuration={service.duration}
+                bankDetails={bankDetails}
+                businessHours={settings?.businessHours as Record<string, { closed: boolean; start: string; end: string }>}
+              />
             </div>
           </div>
         </div>
