@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button-variants';
+import { cn } from '@/lib/utils';
 import { ArrowRight, Sparkles, Eye, Heart } from 'lucide-react';
 import { FadeIn } from '@/components/ui/FadeIn';
 import { getAdminSettings } from '@/lib/api/settings';
@@ -113,10 +114,13 @@ export default async function SobreMiPage() {
               ¿Querés saber más o agendar una sesión?
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/contacto" className="inline-flex items-center justify-center bg-[rgba(15,15,20,0.78)] text-white px-7 py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.92)] transition-all min-h-[48px]">
+              <Link href="/contacto" className={buttonVariants({ variant: "soft", size: "lg" })}>
                 Contactar
               </Link>
-              <Link href="/servicios" className="inline-flex items-center justify-center bg-transparent text-[rgba(15,15,20,0.6)] px-7 py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30 border border-[rgba(15,15,20,0.15)] transition-all min-h-[48px]">
+              <Link href="/servicios" className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.65)] hover:border-[rgba(15,15,20,0.40)] hover:bg-transparent hover:text-[rgba(15,15,20,0.90)]"
+              )}>
                 Ver Servicios
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>

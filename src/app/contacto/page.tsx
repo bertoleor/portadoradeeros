@@ -226,7 +226,8 @@ export default function ContactPage() {
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       aria-invalid={!!errors.name}
-                      className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
+                      variant="underline"
+                      className="w-full"
                     />
                     {errors.name && <p className="text-[11px] text-red-500">{errors.name}</p>}
                   </div>
@@ -240,7 +241,8 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
                       aria-invalid={!!errors.email}
-                      className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
+                      variant="underline"
+                      className="w-full"
                     />
                     {errors.email && <p className="text-[11px] text-red-500">{errors.email}</p>}
                   </div>
@@ -254,7 +256,8 @@ export default function ContactPage() {
                     placeholder="+54 9 11 1234 5678"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
-                    className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200 h-auto"
+                    variant="underline"
+                    className="w-full"
                   />
                 </div>
 
@@ -267,15 +270,17 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     aria-invalid={!!errors.message}
-                    className="w-full bg-transparent border-0 border-b border-[rgba(15,15,20,0.14)] rounded-none px-0 py-3 resize-none text-[15px] text-[rgba(15,15,20,0.88)] placeholder:text-[rgba(15,15,20,0.28)] focus:outline-none focus:border-[rgba(15,15,20,0.50)] transition-colors duration-200"
+                    variant="underline"
+                    className="w-full"
                   />
                   {errors.message && <p className="text-[11px] text-red-500">{errors.message}</p>}
                 </div>
 
                 <Button
                   type="submit"
+                  variant="soft"
                   disabled={isLoading}
-                  className="w-full bg-[rgba(15,15,20,0.78)] text-white rounded-full py-4 text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:bg-[rgba(15,15,20,0.92)] hover:-translate-y-px flex items-center justify-center gap-2 mt-4"
+                  className="w-full rounded-full py-4 text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px flex items-center justify-center gap-2 mt-4"
                 >
                   {!isLoading && <Send className="w-4 h-4" />}
                   {isLoading ? 'Enviando...' : 'Enviar Mensaje'}

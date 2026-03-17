@@ -15,7 +15,7 @@ function ServiceMobileCard({ service, index }: { readonly service: Service; read
     <Link
       href={`/servicios/${service.slug}`}
       draggable={false}
-      className="group relative flex flex-col min-h-[260px] sm:min-h-[320px] rounded-2xl border border-black/10 bg-white text-black transition-all duration-300 hover:bg-black hover:text-white hover:border-black overflow-hidden"
+      className="group relative flex flex-col min-h-[260px] sm:min-h-[320px] rounded-2xl border border-black/10 bg-white text-black transition-all duration-300 hover:bg-white/60 hover:border-[rgba(15,15,20,0.15)] hover:shadow-sm overflow-hidden"
     >
       <span className="absolute top-5 right-5 text-[10px] font-mono tracking-widest text-black/15 group-hover:text-white/15 transition-colors duration-300 select-none">
         {String(index + 1).padStart(2, '0')}
@@ -25,11 +25,11 @@ function ServiceMobileCard({ service, index }: { readonly service: Service; read
           <ServiceIcon type={service.icon} size={26} className="transition-colors duration-300" />
         </div>
         <h3 className="text-2xl font-light tracking-tight leading-tight mb-3">{service.title}</h3>
-        <p className="text-sm text-black/50 group-hover:text-white/50 leading-relaxed font-light flex-1 line-clamp-3">
+        <p className="text-sm text-[rgba(15,15,20,0.55)] group-hover:text-[rgba(15,15,20,0.75)] leading-relaxed font-light flex-1 line-clamp-3">
           {service.shortDescription}
         </p>
         <div className="flex items-center justify-between gap-3 mt-6 pt-5 border-t border-black/8 group-hover:border-white/10">
-          <span className="text-[10px] uppercase tracking-widest font-medium text-black/30 group-hover:text-white/30">
+          <span className="text-[10px] uppercase tracking-widest font-medium text-[rgba(15,15,20,0.35)] group-hover:text-[rgba(15,15,20,0.55)]">
             {service.duration}&nbsp;min
           </span>
           <span className="text-[10px] font-bold uppercase tracking-wider px-4 py-2 rounded-full border border-current">
