@@ -169,7 +169,7 @@ export default function BackgroundMesh(): React.JSX.Element {
     let width = 0;
     let height = 0;
     let particles: Particle[] = [];
-    let globalTick = 0;
+    let globalTick = FRAMES_PER_PAIR / 2; // Empezar en el medio para evitar flash blanco inicial
     let rafId = 0;
     let resizeTimeout: ReturnType<typeof setTimeout>;
 

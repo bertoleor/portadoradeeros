@@ -2,136 +2,91 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
-const SPLASH_MS = 4000;
+const SPLASH_MS = 6000;
+const FADE_OUT_MS = 800;
 
 export default function BienvenidaPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [phase, setPhase] = useState<'enter' | 'idle' | 'exit'>('enter');
 
   useEffect(() => {
-    // Navigate after splash time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      setTimeout(() => router.replace('/admin'), 800);
-    }, SPLASH_MS);
+    // enter → idle después de la animación inicial
+    const t1 = setTimeout(() => setPhase('idle'), 1200);
 
-    return () => clearTimeout(timer);
+    // idle → exit antes de navegar
+    const t2 = setTimeout(() => setPhase('exit'), SPLASH_MS - FADE_OUT_MS);
+
+    // navegar al dashboard
+    const t3 = setTimeout(() => router.replace('/admin'), SPLASH_MS);
+
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [router]);
 
   return (
-    <div className="fixed inset-0 bg-white overflow-hidden flex flex-col">
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <motion.div
-            key="splash"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.5 }}
-            className="flex-1 flex flex-col items-center justify-center"
-          >
-            {/* Logo/Text that fades in */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="mb-16"
-            >
-              <motion.h1 
-                className="text-6xl md:text-8xl font-light text-black tracking-tight"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.3 }}
-              >
-                Jacque
-              </motion.h1>
-              <motion.p 
-                className="text-black/40 text-sm mt-4 font-light tracking-widest uppercase"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.8 }}
-              >
-                Portadora de Eros
-              </motion.p>
-            </motion.div>
+    <motion.div
+      className="fixed inset-0 overflow-hidden flex flex-col items-center justify-center"
+      animate={{ opacity: phase === 'exit' ? 0 : 1 }}
+      transition={{ duration: FADE_OUT_MS / 1000, ease: 'easeInOut' }}
+    >
+      {/* Fondo que hereda el aurora mesh del layout */}
+      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm" />
 
-            {/* Pulsing dot animation */}
+      <div className="relative z-10 flex flex-col items-center gap-8 text-center px-8">
+
+        {/* Logo / nombre */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[rgba(15,15,20,0.40)] font-medium">
+            Panel de administración
+          </span>
+          <h1 className="text-5xl md:text-6xl font-light text-[rgba(15,15,20,0.85)] tracking-tight">
+            Jacque
+          </h1>
+          <span className="text-xs uppercase tracking-[0.2em] text-[rgba(15,15,20,0.35)] font-light">
+            Portadora de Eros
+          </span>
+        </motion.div>
+
+        {/* Separador animado */}
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: 'easeOut' }}
+          className="w-12 h-px bg-[rgba(15,15,20,0.15)] origin-center"
+        />
+
+        {/* Dots loader */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+          className="flex items-center gap-2"
+        >
+          {[0, 1, 2].map((i) => (
             <motion.div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-              initial={{ scale: 0.8, opacity: 0.5 }}
-              animate={{ 
-                scale: [0.8, 1.2, 0.8],
-                opacity: [0.3, 0.8, 0.3]
+              key={i}
+              className="w-1.5 h-1.5 rounded-full bg-[rgba(15,15,20,0.25)]"
+              animate={{
+                opacity: [0.25, 0.75, 0.25],
+                scale: [0.8, 1.1, 0.8],
               }}
               transition={{
-                duration: 2,
+                duration: 1.2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                delay: i * 0.2,
+                ease: 'easeInOut',
               }}
-            >
-              <div className="w-2 h-2 bg-black rounded-full" />
-            </motion.div>
+            />
+          ))}
+        </motion.div>
 
-            {/* iOS-style loading indicator at bottom */}
-            <motion.div 
-              className="absolute bottom-12 left-1/2 -translate-x-1/2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-            >
-              <div className="flex flex-col items-center gap-3">
-                {/* iOS dots loader */}
-                <div className="flex gap-2">
-                  {[0, 1, 2].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-2 h-2 bg-black rounded-full"
-                      animate={{
-                        y: [0, -8, 0],
-                        opacity: [0.3, 1, 0.3]
-                      }}
-                      transition={{
-                        duration: 0.6,
-                        repeat: Infinity,
-                        delay: i * 0.15,
-                        ease: "easeInOut"
-                      }}
-                    />
-                  ))}
-                </div>
-                
-                {/* Loading text */}
-                <motion.p 
-                  className="text-xs text-black/50 font-light"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5 }}
-                >
-                  Cargando...
-                </motion.p>
-              </div>
-            </motion.div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="fadeout"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-white flex items-center justify-center"
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              className="text-black text-xl font-light"
-            >
-              Entrando...
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+      </div>
+    </motion.div>
   );
 }
