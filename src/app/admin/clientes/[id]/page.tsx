@@ -197,7 +197,7 @@ export default function ClientDetailPage() {
       </div>
 
       {/* Client Info Card */}
-      <div className="bg-white border border-black/5 rounded-2xl p-6 mb-6">
+      <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl p-6 mb-6">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h2 className="text-xl font-medium">
@@ -283,7 +283,7 @@ export default function ClientDetailPage() {
       </div>
 
       {/* Appointments List */}
-      <div className="bg-white border border-black/5 rounded-2xl overflow-hidden">
+      <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl overflow-hidden">
         {appointments.length === 0 ? (
           <div className="p-8 text-center text-black/40">
             <Calendar size={32} className="mx-auto mb-2 opacity-50" />

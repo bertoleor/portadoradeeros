@@ -173,7 +173,7 @@ export default function AdminServicios() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-4">
         {servicios.map((s) => (
-          <div key={s.id} className="bg-white p-5 rounded-2xl border border-black/5 shadow-sm space-y-4">
+          <div key={s.id} className="bg-white/60 backdrop-blur-sm p-5 rounded-2xl border border-white/50 shadow-sm space-y-4">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
@@ -248,7 +248,7 @@ export default function AdminServicios() {
           </div>
         </div>
 
-        <div className="bg-white border border-black/5 rounded-2xl shadow-sm overflow-hidden text-black">
+        <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm overflow-hidden text-black">
           <div className="hidden lg:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>

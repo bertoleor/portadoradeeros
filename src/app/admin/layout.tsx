@@ -93,8 +93,8 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
   }
 
   return (
-    <div className="flex bg-gray-50 min-h-screen text-black">
-      <aside className="hidden lg:flex w-56 flex-col fixed inset-y-0 z-50 bg-white border-r border-gray-100">
+    <div className="flex min-h-screen text-white">
+      <aside className="hidden lg:flex w-56 flex-col fixed inset-y-0 z-50 bg-[rgba(15,15,20,0.75)] backdrop-blur-2xl border-r border-white/10">
         <SidebarContent 
           setIsMobileMenuOpen={setIsMobileMenuOpen} 
           newCount={newAppointmentCount} 
@@ -102,9 +102,9 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
         />
       </aside>
 
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 z-40 flex items-center justify-between px-4">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[rgba(15,15,20,0.75)] backdrop-blur-2xl border-b border-white/10 z-40 flex items-center justify-between px-4">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center text-black">
+          <div className="w-8 h-8 flex items-center justify-center text-white">
             <svg width="22" height="22" viewBox="0 0 100 100" fill="currentColor">
               <polygon points="50,0 68,32 100,50 68,68 50,100 32,68 0,50 32,32" />
             </svg>
@@ -112,7 +112,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 -mr-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
+          className="p-2 -mr-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
         >
           {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -133,7 +133,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.25 }}
-              className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-white border-r border-gray-200"
+              className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-[rgba(15,15,20,0.85)] backdrop-blur-2xl border-r border-white/10"
             >
               <SidebarContent 
                 setIsMobileMenuOpen={setIsMobileMenuOpen} 
@@ -145,7 +145,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
         )}
       </AnimatePresence>
 
-      <main className="flex-1 lg:pl-56 flex flex-col min-h-screen pt-14 lg:pt-0 overflow-x-hidden">
+      <main className="flex-1 lg:pl-56 flex flex-col min-h-screen pt-14 lg:pt-0 overflow-x-hidden text-black">
         <ToastProvider>
           <div className="flex-1 w-full">
             {children}
@@ -190,8 +190,8 @@ function SidebarContent({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      <div className="px-6 py-8 flex flex-col items-center border-b border-gray-50 mb-4">
+    <div className="flex flex-col h-full bg-transparent">
+      <div className="px-6 py-8 flex flex-col items-center border-b border-white/10 mb-4">
         <div className="relative group mb-3">
           {settings?.avatar ? (
             <motion.img 
@@ -199,10 +199,10 @@ function SidebarContent({
               animate={{ opacity: 1 }}
               src={settings.avatar} 
               alt="Admin" 
-              className="w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-50 grayscale hover:grayscale-0 transition-all duration-500"
+              className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/20 grayscale hover:grayscale-0 transition-all duration-500"
             />
           ) : (
-            <div className="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center text-black/20 ring-2 ring-gray-50">
+            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-white/30 ring-2 ring-white/20">
               <svg width="24" height="24" viewBox="0 0 100 100" fill="currentColor">
                 <polygon points="50,0 68,32 100,50 68,68 50,100 32,68 0,50 32,32" />
               </svg>
@@ -211,10 +211,10 @@ function SidebarContent({
           <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" />
         </div>
         <div className="text-center">
-          <span className="block font-medium text-sm text-gray-900 leading-tight">
+          <span className="block font-medium text-sm text-white/90 leading-tight">
             {settings?.name || 'Jacque'}
           </span>
-          <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest mt-1 block">
+          <span className="text-[10px] text-white/40 font-medium uppercase tracking-widest mt-1 block">
             Administrador
           </span>
         </div>
@@ -229,16 +229,16 @@ function SidebarContent({
               key={link.href}
               href={link.href}
               onClick={() => { setIsMobileMenuOpen(false); if (hasNewBadge) onRead?.(); }}
-              className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
-                  ? 'bg-black text-white'
-                  : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                  ? 'bg-white/15 text-white shadow-lg shadow-black/10'
+                  : 'text-white/50 hover:text-white hover:bg-white/10'
               }`}
             >
-              <link.icon size={18} className={isActive ? 'text-white' : 'text-gray-400'} />
+              <link.icon size={18} className={isActive ? 'text-white' : 'text-white/40'} />
               {link.label}
               {hasNewBadge && (
-                <span className={`ml-auto w-5 h-5 rounded-full ${isActive ? 'bg-white text-black' : 'bg-red-500 text-white'} text-[9px] font-bold flex items-center justify-center`}>
+                <span className={`ml-auto w-5 h-5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-red-500/80 text-white'} text-[9px] font-bold flex items-center justify-center`}>
                   {newCount > 9 ? '9+' : newCount}
                 </span>
               )}
@@ -247,10 +247,10 @@ function SidebarContent({
         })}
       </nav>
 
-      <div className="p-4 border-t border-gray-50">
+      <div className="p-4 border-t border-white/10">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors outline-none"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-white/50 hover:bg-red-500/20 hover:text-red-400 transition-colors outline-none"
         >
           <LogOut size={18} />
           Cerrar Sesión

@@ -71,7 +71,7 @@ export default function AdminDashboard() {
       return (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-gray-50">
+            <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/30 backdrop-blur-sm">
               <div className="w-10 h-10 rounded-lg bg-gray-200 animate-pulse" />
               <div className="flex-1 space-y-2">
                 <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-3">
         {appointments.slice(0, 5).map((app) => (
-          <div key={app.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-gray-50/50 hover:bg-gray-100 transition-colors gap-4">
+          <div key={app.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-all gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-gray-200 flex flex-col items-center justify-center shrink-0">
                 <span className="text-[8px] font-medium text-gray-500 uppercase">{new Date(app.appointment_date).toLocaleDateString('es-AR', { month: 'short' })}</span>
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
       return (
         <div className="space-y-3">
           {[1, 2].map(i => (
-            <div key={i} className="h-20 bg-gray-50 rounded-xl animate-pulse" />
+            <div key={i} className="h-20 bg-white/30 backdrop-blur-sm rounded-xl animate-pulse" />
           ))}
         </div>
       );
@@ -156,8 +156,8 @@ export default function AdminDashboard() {
             onClick={() => markAsRead(msg.id)}
             className={`p-4 rounded-xl border cursor-pointer transition-all ${
               msg.status === 'unread'
-                ? 'bg-gray-50 border-gray-200'
-                : 'bg-white border-gray-100'
+                ? 'bg-white/50 border-white/60 backdrop-blur-sm'
+                : 'bg-white/30 border-white/40 backdrop-blur-sm'
             }`}
           >
             <div className="flex items-center justify-between mb-2">
@@ -289,7 +289,7 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="bg-gray-50/50 p-4 md:p-5 rounded-lg border border-gray-100"
+              className="bg-white/35 backdrop-blur-xl border border-white/50 p-4 md:p-5 rounded-lg"
             >
               <div className="flex items-center gap-2 mb-3">
                 <stat.icon size={16} className="text-gray-400" />
@@ -304,7 +304,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Main Area: Appointments */}
           <div className="xl:col-span-2 space-y-6">
-            <section className="bg-gray-50/50 rounded-lg p-5 md:p-6 border border-gray-100">
+            <section className="bg-white/35 backdrop-blur-xl border border-white/50 rounded-lg p-5 md:p-6">
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-base font-medium text-gray-900 flex items-center gap-2">
                   <Calendar size={18} className="text-gray-400" />
@@ -319,7 +319,7 @@ export default function AdminDashboard() {
 
           {/* Sidebar: Unread Messages */}
           <div className="space-y-6">
-            <section className="bg-gray-50/50 rounded-lg p-5 md:p-6">
+            <section className="bg-white/35 backdrop-blur-xl rounded-lg p-5 md:p-6">
               <h2 className="text-base font-medium text-gray-900 mb-5 flex items-center gap-2">
                 <Mail size={18} className="text-gray-400" />
                 Mensajes
@@ -364,9 +364,9 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[60] overflow-hidden border border-gray-200"
+              className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-2xl z-[60] overflow-hidden border border-white/60"
             >
-              <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="p-4 border-b border-[rgba(15,15,20,0.08)] flex items-center justify-between">
                 <h3 className="font-medium text-gray-900">Detalles del Turno</h3>
                 <button 
                   onClick={() => setSelectedAppointment(null)} 

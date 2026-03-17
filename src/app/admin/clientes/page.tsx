@@ -104,7 +104,7 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
         onClick={onClose} className="fixed inset-0 bg-black/30 z-[60]" />
       <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[70] border border-gray-200 overflow-hidden">
+        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] border border-white/60 overflow-hidden">
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Nuevo Turno</h3>
           <button onClick={onClose} aria-label="Cerrar" className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
@@ -224,7 +224,7 @@ function ClientModal({ client, onClose, onNewAppt }: ClientModalProps) {
         onClick={onClose} className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]" />
       <motion.div initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 16 }}
-        className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-white rounded-3xl shadow-2xl z-[70] border border-black/5 overflow-hidden flex flex-col">
+        className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-white/85 backdrop-blur-2xl rounded-3xl shadow-2xl z-[70] border border-white/60 overflow-hidden flex flex-col">
         <div className="p-6 border-b border-black/5 flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-medium text-black">{client.name}</h3>
@@ -393,7 +393,7 @@ export default function AdminClientesPage() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   onClick={() => setSelectedClient(client)}
-                  className="flex items-center justify-between p-5 bg-white border border-black/5 rounded-2xl hover:border-black/15 hover:shadow-sm transition-all cursor-pointer group"
+                  className="flex items-center justify-between p-5 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl hover:border-white/70 hover:shadow-sm transition-all cursor-pointer group"
                 >
                   <div className="flex items-center gap-4 min-w-0">
                     <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 font-medium text-sm shrink-0">
