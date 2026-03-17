@@ -10,7 +10,7 @@ export function Shell({ children }: { readonly children: ReactNode }) {
   const isAdmin = pathname?.startsWith('/admin') || false;
 
   if (isAdmin) {
-    return <main className="flex-grow flex flex-col min-h-screen bg-gray-50">{children}</main>;
+    return <main className="flex-grow flex flex-col min-h-screen">{children}</main>;
   }
 
   return (

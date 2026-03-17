@@ -76,7 +76,7 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
     </div>
     <h3 className="text-2xl md:text-3xl font-light text-[rgba(15,15,20,0.9)] tracking-tight mb-4">Agendar {serviceName}</h3>
     <p className="text-[rgba(15,15,20,0.5)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">Inicia el proceso para reservar tu sesión personalizada en simples pasos.</p>
-    <Button onClick={nextStep} variant="soft" className="rounded-full px-12 py-4 md:py-6 h-auto text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px active:translate-y-0">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
+    <Button onClick={nextStep} variant="outline" className="rounded-full px-12 py-4 md:py-6 h-auto text-[13px] font-medium uppercase tracking-[0.15em] transition-all duration-200 hover:-translate-y-px active:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Comenzar Reserva <ChevronRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" /></Button>
   </div>
 );
 
@@ -115,7 +115,7 @@ const StepClientInfo = ({ formData, handleChange, nextStep, prevStep, errors }: 
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors">Cancelar</button>
-      <Button onClick={nextStep} variant="soft" className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="outline" className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -132,7 +132,7 @@ const StepDateSelection = ({ formData, handleChange, nextStep, prevStep, errors,
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} variant="soft" disabled={!formData.appointmentDate} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="outline" disabled={!formData.appointmentDate} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Elegir Hora <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -150,7 +150,7 @@ const StepTimeSelection = ({ formData, handleChange, nextStep, prevStep, errors,
     </div>
     <div className="pt-8 flex justify-between items-center">
       <button onClick={prevStep} className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"><ChevronLeft size={14} className="mr-1" /> Atrás</button>
-      <Button onClick={nextStep} variant="soft" disabled={!formData.appointmentTime} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0">Continuar <ChevronRight size={16} className="ml-2" /></Button>
+      <Button onClick={nextStep} variant="outline" disabled={!formData.appointmentTime} className="rounded-full px-10 py-3.5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px disabled:opacity-40 disabled:hover:translate-y-0 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Continuar <ChevronRight size={16} className="ml-2" /></Button>
     </div>
   </div>
 );
@@ -256,9 +256,9 @@ const StepFinal = ({ formData, onSubmit, prevStep, errors, serviceName, bankDeta
         <div className="flex flex-col items-center">
           <Button
             onClick={onSubmit}
-            variant="soft"
+            variant="outline"
             disabled={isLoading || !acceptedLegal}
-            className="w-full max-w-sm rounded-full py-5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px active:translate-y-0 disabled:opacity-40"
+            className="w-full max-w-sm rounded-full py-5 h-auto font-medium uppercase tracking-[0.15em] text-[12px] transition-all duration-200 hover:-translate-y-px active:translate-y-0 disabled:opacity-40 border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40"
           >
             {isLoading ? (
               <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
@@ -361,7 +361,7 @@ export function ServiceContactForm({ serviceName, serviceId, serviceDuration = 6
         <div className="w-20 h-20 rounded-full bg-[rgba(15,15,20,0.06)] flex items-center justify-center mb-8"><CheckCircle2 size={40} className="text-[rgba(15,15,20,0.7)]" /></div>
         <h3 className="text-3xl font-light text-[rgba(15,15,20,0.9)] mb-4 tracking-tight">Turno Solicitado</h3>
         <p className="text-[rgba(15,15,20,0.6)] text-base max-w-sm mx-auto mb-10 font-light leading-relaxed">Tu pedido para <span className="text-[rgba(15,15,20,0.9)] font-medium">{serviceName}</span> ha sido enviado. Revisá tu email para los detalles del pago.</p>
-        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} variant="soft" className="rounded-full px-10 py-4 h-auto font-medium uppercase tracking-[0.12em] text-[13px] transition-all duration-200 hover:-translate-y-px">Finalizar</Button>
+        <Button onClick={() => { setIsSubmitted(false); setStep(0); setFormData({ name: '', surname: '', email: '', phone: '', message: '', appointmentDate: '', appointmentTime: '' }); }} variant="outline" className="rounded-full px-10 py-4 h-auto font-medium uppercase tracking-[0.12em] text-[13px] transition-all duration-200 hover:-translate-y-px border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] hover:bg-white/40">Finalizar</Button>
       </motion.div>
     );
   }

@@ -46,14 +46,14 @@ export function Hero() {
         >
           <Link 
             href="/servicios" 
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-[rgba(15,15,20,0.78)] text-white px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.92)] transition-all min-h-[48px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center border border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:border-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.90)] hover:bg-white/40 transition-all min-h-[48px]"
           >
             <Calendar className="w-4 h-4 mr-2 shrink-0" />
             Agendar Consulta
           </Link>
           <Link 
             href="/servicios" 
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-transparent text-[rgba(15,15,20,0.6)] px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30 transition-all min-h-[48px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center text-[rgba(15,15,20,0.5)] px-6 py-4 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:text-[rgba(15,15,20,0.85)] transition-all min-h-[48px]"
           >
             Ver Servicios
             <ArrowRight className="w-4 h-4 ml-2 shrink-0" />
@@ -107,7 +107,7 @@ export function AboutPreview() {
             </Link>
             <Link 
               href="/servicios" 
-              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full bg-[rgba(15,15,20,0.78)] text-white text-xs uppercase tracking-widest hover:bg-[rgba(15,15,20,0.92)] transition-all flex items-center justify-center min-h-[48px]"
+              className="w-full sm:w-auto px-6 md:px-7 py-3.5 rounded-full border border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.65)] text-xs uppercase tracking-widest hover:border-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.90)] hover:bg-white/40 transition-all duration-200 flex items-center justify-center min-h-[48px]"
             >
               <Calendar className="w-4 h-4 mr-2" />
               Agendar Consulta
@@ -141,7 +141,7 @@ export function ContactCTA() {
           </p>
           <Link
             href="/servicios"
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-[rgba(15,15,20,0.78)] text-white px-6 md:px-7 py-3.5 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:bg-[rgba(15,15,20,0.92)] transition-all min-h-[48px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center border border-[rgba(15,15,20,0.18)] text-[rgba(15,15,20,0.75)] px-6 md:px-7 py-3.5 md:py-4 rounded-full text-xs font-medium tracking-[0.15em] uppercase hover:border-[rgba(15,15,20,0.35)] hover:text-[rgba(15,15,20,0.90)] hover:bg-white/40 transition-all min-h-[48px]"
           >
             <Calendar className="w-4 h-4 mr-2" />
             Agendar Consulta
