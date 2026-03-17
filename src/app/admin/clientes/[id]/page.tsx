@@ -265,8 +265,8 @@ export default function ClientDetailPage() {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === tab 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-black/60 hover:bg-gray-200'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+                : 'bg-white/20 text-[rgba(15,15,20,0.55)] hover:bg-white/35 border border-[rgba(15,15,20,0.08)]'
             }`}
           >
             {tab === 'upcoming' && `Próximos (${client.upcoming.length})`}
@@ -276,7 +276,7 @@ export default function ClientDetailPage() {
         ))}
         <button 
           onClick={() => setShowNewAppt(true)}
-          className="ml-auto px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-black/80 transition-colors flex items-center gap-2"
+          className="btn-primary ml-auto px-4 py-2 text-sm min-h-0 flex items-center gap-2"
         >
           <Plus size={16} /> Nuevo Turno
         </button>

@@ -79,7 +79,7 @@ export default function PerfilConfiguracion() {
         <button 
           onClick={handleSave}
           disabled={isSaving || isLoading}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-black text-white rounded-xl font-medium text-sm hover:bg-black/90 active:scale-95 disabled:opacity-70 transition-all shadow-md shadow-black/10"
+          className="w-full sm:w-auto btn-primary inline-flex items-center justify-center gap-2 px-6 py-2.5"
         >
           {isSaving ? (
             <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

@@ -176,7 +176,7 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
             <button 
               onClick={() => void saveService()}
               disabled={isSaving}
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-black text-white rounded-xl font-medium text-sm hover:bg-black/90 active:scale-95 disabled:opacity-70 transition-all shadow-md shadow-black/10"
+              className="btn-primary inline-flex items-center gap-2 px-6 py-2.5"
             >
               {isSaving ? (
                 <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -254,8 +254,8 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
                       onClick={() => updateField('icon', key)}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border transition-all ${
                         service.icon === key 
-                          ? 'border-black bg-black text-white shadow-md' 
-                          : 'border-black/5 bg-black/[0.02] text-black/40 hover:border-black/20 hover:bg-black/[0.04]'
+                          ? 'bg-white/55 backdrop-blur-md border border-white/60 text-[rgba(15,15,20,0.85)] shadow-sm' 
+                          : 'border-[rgba(15,15,20,0.08)] bg-white/20 text-[rgba(15,15,20,0.40)] hover:border-[rgba(15,15,20,0.20)] hover:bg-white/35'
                       }`}
                       title={info.label}
                       aria-label={info.label}
@@ -311,7 +311,7 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
                         onChange={(e) => updateField('isVisible', e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-black/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-black/20 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                      <div className="w-11 h-6 bg-[rgba(15,15,20,0.08)] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-[rgba(15,15,20,0.15)] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[rgba(15,15,20,0.55)]"></div>
                     </div>
                     <span className="text-sm font-medium text-black/70 group-hover:text-black">
                       Visible (Público)

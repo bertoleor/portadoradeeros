@@ -241,7 +241,7 @@ export default function AdminServicios() {
                 </motion.button>
               )}
             </AnimatePresence>
-            <Link href="/admin/servicios/nuevo" className="inline-flex items-center justify-center gap-2 bg-black text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-black/90 active:scale-95 transition-all shadow-md shadow-black/10">
+            <Link href="/admin/servicios/nuevo" className="btn-primary inline-flex items-center justify-center gap-2 px-5 py-2.5">
               <Plus size={16} />
               Nuevo Servicio
             </Link>

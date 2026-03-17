@@ -129,8 +129,8 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
         onClick={onClose} className="fixed inset-0 bg-black/30 z-[60]" />
       <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[70] border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-3xl z-[70] border border-white/60 overflow-hidden">
+        <div className="p-4 border-b border-[rgba(15,15,20,0.08)] flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Nuevo Turno</h3>
           <button onClick={onClose} aria-label="Cerrar" className="p-1.5 hover:bg-gray-100 rounded-lg">
             <X size={16} className="text-gray-500" />
@@ -142,13 +142,13 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
               <label htmlFor="cal-name" className="text-xs font-medium text-gray-600 block mb-1.5">Nombre *</label>
               <input id="cal-name" type="text" value={form.clientName}
                 onChange={e => setForm(f => ({ ...f, clientName: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400" placeholder="Juan" />
+                className="w-full px-3 py-2 text-sm border border-[rgba(15,15,20,0.12)] rounded-xl bg-white/60 focus:outline-none focus:border-[rgba(15,15,20,0.35)] transition-colors" placeholder="Juan" />
             </div>
             <div>
               <label htmlFor="cal-surname" className="text-xs font-medium text-gray-600 block mb-1.5">Apellido *</label>
               <input id="cal-surname" type="text" value={form.clientSurname}
                 onChange={e => setForm(f => ({ ...f, clientSurname: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400" placeholder="Pérez" />
+                className="w-full px-3 py-2 text-sm border border-[rgba(15,15,20,0.12)] rounded-xl bg-white/60 focus:outline-none focus:border-[rgba(15,15,20,0.35)] transition-colors" placeholder="Pérez" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -156,13 +156,13 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
               <label htmlFor="cal-phone" className="text-xs font-medium text-gray-600 block mb-1.5">Teléfono *</label>
               <input id="cal-phone" type="tel" value={form.clientPhone}
                 onChange={e => setForm(f => ({ ...f, clientPhone: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400" placeholder="+54 11..." />
+                className="w-full px-3 py-2 text-sm border border-[rgba(15,15,20,0.12)] rounded-xl bg-white/60 focus:outline-none focus:border-[rgba(15,15,20,0.35)] transition-colors" placeholder="+54 11..." />
             </div>
             <div>
               <label htmlFor="cal-email" className="text-xs font-medium text-gray-600 block mb-1.5">Email *</label>
               <input id="cal-email" type="email" value={form.clientEmail}
                 onChange={e => setForm(f => ({ ...f, clientEmail: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400" placeholder="juan@email.com" />
+                className="w-full px-3 py-2 text-sm border border-[rgba(15,15,20,0.12)] rounded-xl bg-white/60 focus:outline-none focus:border-[rgba(15,15,20,0.35)] transition-colors" placeholder="juan@email.com" />
             </div>
           </div>
           <div>
@@ -201,11 +201,11 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
               className="w-full px-3 py-2.5 text-sm border border-black/10 rounded-xl focus:outline-none focus:border-black resize-none" />
           </div>
         </div>
-        <div className="p-6 border-t border-black/5 flex gap-3">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-black/10 text-sm text-black/60 hover:bg-gray-50">
+        <div className="p-6 border-t border-[rgba(15,15,20,0.08)] flex gap-3">
+          <button onClick={onClose} className="btn-outline flex-1 py-3 text-sm min-h-0">
             Cancelar
           </button>
-          <Button onClick={handleSubmit} disabled={saving} className="flex-1 bg-black text-white rounded-xl h-12 text-sm">
+          <Button onClick={handleSubmit} disabled={saving} className="btn-primary flex-1 h-12 text-sm min-h-0">
             {saving ? 'Guardando...' : 'Crear Turno'}
           </Button>
         </div>
@@ -273,8 +273,8 @@ function BlockModal({ selectedDate, onClose, onCreated }: BlockModalProps) {
         onClick={onClose} className="fixed inset-0 bg-black/30 z-[60]" />
       <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[70] border border-gray-200 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-3xl z-[70] border border-white/60 overflow-hidden">
+        <div className="p-4 border-b border-[rgba(15,15,20,0.08)] flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Bloquear Fecha</h3>
           <button onClick={onClose} aria-label="Cerrar" className="p-1.5 hover:bg-gray-100 rounded-lg">
             <X size={16} className="text-gray-500" />
@@ -339,11 +339,11 @@ function BlockModal({ selectedDate, onClose, onCreated }: BlockModalProps) {
             </div>
           )}
         </div>
-        <div className="p-6 border-t border-black/5 flex gap-3">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-black/10 text-sm text-black/60 hover:bg-gray-50">
+        <div className="p-6 border-t border-[rgba(15,15,20,0.08)] flex gap-3">
+          <button onClick={onClose} className="btn-outline flex-1 py-3 text-sm min-h-0">
             Cancelar
           </button>
-          <Button onClick={handleSubmit} disabled={saving} className="flex-1 bg-red-600 text-white rounded-xl h-12 text-sm">
+          <Button onClick={handleSubmit} disabled={saving} className="flex-1 bg-red-500/20 border border-red-300/40 text-red-600 rounded-full h-12 text-sm hover:bg-red-500/30 transition-all">
             {saving ? 'Guardando...' : 'Bloquear'}
           </Button>
         </div>
@@ -583,7 +583,7 @@ export default function AdminCalendario() {
             </div>
             <Button
               onClick={() => setShowNewAppt(true)}
-              className="bg-black text-white rounded-xl h-9 px-4 text-xs flex items-center gap-1.5"
+              className="btn-primary h-9 px-4 text-xs min-h-0 py-0 flex items-center gap-1.5"
             >
               <Plus size={14} /> Nuevo Turno
             </Button>
@@ -594,7 +594,7 @@ export default function AdminCalendario() {
                 setShowBlockModal(true);
               }}
               variant="outline"
-              className="border-red-200 text-red-600 hover:bg-red-50 rounded-xl h-9 px-3 text-xs flex items-center gap-1.5"
+              className="border border-red-300/40 text-red-500 hover:bg-red-50/50 rounded-full h-9 px-3 text-xs flex items-center gap-1.5 transition-all bg-red-500/10"
             >
               <Ban size={14} /> Bloquear
             </Button>
@@ -622,7 +622,7 @@ export default function AdminCalendario() {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Calendar Grid */}
-          <div className="lg:col-span-3 bg-white border border-black/5 rounded-2xl shadow-sm p-6 overflow-hidden">
+          <div className="lg:col-span-3 bg-white/35 backdrop-blur-xl border border-white/50 rounded-2xl p-6 overflow-hidden">
             {/* Month View */}
             {viewMode === 'month' && (
               <div className="grid grid-cols-7 gap-px bg-black/5 border border-black/5 rounded-xl overflow-hidden shadow-inner">
@@ -652,7 +652,7 @@ export default function AdminCalendario() {
                     >
                       <span className={`text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full mb-1 transition-colors ${
                         (() => {
-                          if (isToday) return 'bg-black text-white';
+                          if (isToday) return 'bg-[rgba(15,15,20,0.55)] text-white backdrop-blur-sm';
                           if (isCurrentMonth) return 'text-black/60';
                           return 'text-black/20';
                         })()
@@ -709,7 +709,7 @@ export default function AdminCalendario() {
                   <div className="grid grid-cols-8 gap-2 mb-4">
                     <div className="p-2"></div>
                     {getWeekDays().map((day) => (
-                      <div key={day.toISOString()} className={`text-center p-2 rounded-lg ${day.toDateString() === new Date().toDateString() ? 'bg-black text-white' : 'bg-gray-50'}`}>
+                      <div key={day.toISOString()} className={`text-center p-2 rounded-lg ${day.toDateString() === new Date().toDateString() ? 'bg-white/55 backdrop-blur-md border border-white/50 text-[rgba(15,15,20,0.88)]' : 'bg-white/20 backdrop-blur-sm'}`}>
                         <div className="text-xs font-medium">{dayLabels[day.getDay()]}</div>
                         <div className="text-lg font-bold">{day.getDate()}</div>
                       </div>
@@ -1004,14 +1004,14 @@ export default function AdminCalendario() {
                   {selectedAppointment.status === 'confirmed' ? (
                     <Button 
                       onClick={() => handleComplete(selectedAppointment.id)}
-                      className="flex-1 bg-green-600 text-white rounded-xl h-12 text-sm"
+                      className="flex-1 bg-green-500/20 border border-green-300/40 text-green-700 rounded-full h-12 text-sm hover:bg-green-500/30 transition-all"
                     >
                       <CheckCircle2 size={18} className="mr-2" /> Marcar como Completado
                     </Button>
                   ) : (
                     <Button 
                       onClick={() => handleConfirm(selectedAppointment.id)}
-                      className="flex-1 bg-black text-white rounded-xl h-12 text-sm"
+                      className="btn-primary flex-1 h-12 text-sm min-h-0"
                     >
                       <CheckCircle2 size={18} className="mr-2" /> Confirmar Pago y Turno
                     </Button>

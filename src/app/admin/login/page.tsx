@@ -172,7 +172,7 @@ export default function AdminLogin() {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full mt-2 rounded-xl bg-black hover:bg-black/85 text-white font-bold uppercase tracking-[0.2em] text-[11px] py-6 h-auto transition-all active:scale-[0.98]"
+            className="btn-primary w-full mt-2"
           >
             {isPending ? 'Ingresando…' : 'Ingresar'}
           </Button>

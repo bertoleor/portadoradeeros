@@ -108,7 +108,7 @@ export default function AdminConfigPage() {
                   type="submit"
                   variant="default"
                   disabled={isSaving}
-                  className="w-full sm:w-auto px-10 py-4 h-auto rounded-xl font-bold uppercase tracking-widest text-[11px] bg-black text-white hover:bg-black/90 shadow-lg shadow-black/10 transition-all active:scale-95"
+                  className="w-full sm:w-auto btn-primary px-10 py-4 h-auto"
                 >
                   {isSaving ? (
                     <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin mr-2" />

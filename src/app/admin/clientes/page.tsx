@@ -199,7 +199,7 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
           <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-black/10 text-sm text-black/60 hover:bg-gray-50 transition-colors">
             Cancelar
           </button>
-          <Button onClick={handleSubmit} disabled={saving} className="flex-1 bg-black text-white rounded-xl h-12 text-sm">
+          <Button onClick={handleSubmit} disabled={saving} className="btn-primary flex-1 h-12 text-sm min-h-0">
             {saving ? 'Guardando...' : 'Crear Turno'}
           </Button>
         </div>
@@ -273,7 +273,7 @@ function ClientModal({ client, onClose, onNewAppt }: ClientModalProps) {
         </div>
 
         <div className="p-6 border-t border-black/5 shrink-0">
-          <Button onClick={onNewAppt} className="w-full bg-black text-white rounded-xl h-11 text-sm flex items-center justify-center gap-2">
+          <Button onClick={onNewAppt} className="btn-primary w-full h-11 text-sm min-h-0 flex items-center justify-center gap-2">
             <Plus size={16} /> Agendar nuevo turno
           </Button>
         </div>
@@ -343,7 +343,7 @@ export default function AdminClientesPage() {
           </div>
           <Button
             onClick={() => { setNewApptDefaults({ name: '', email: '' }); setShowNewAppt(true); }}
-            className="bg-black text-white rounded-xl h-10 px-5 text-xs flex items-center gap-2 shrink-0"
+            className="btn-primary rounded-xl h-10 px-5 text-xs min-h-0 flex items-center gap-2 shrink-0"
           >
             <Plus size={15} /> Nuevo Turno
           </Button>

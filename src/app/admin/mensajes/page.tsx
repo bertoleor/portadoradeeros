@@ -152,8 +152,8 @@ export default function AdminMensajes() {
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               filter === 'all' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-black/60 hover:bg-gray-200'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+                : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
             Todos ({messages.length})
@@ -162,8 +162,8 @@ export default function AdminMensajes() {
             onClick={() => setFilter('unread')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               filter === 'unread' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-black/60 hover:bg-gray-200'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+                : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
             No leídos ({unreadCount})
@@ -172,8 +172,8 @@ export default function AdminMensajes() {
             onClick={() => setFilter('read')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               filter === 'read' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-black/60 hover:bg-gray-200'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+                : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
             Leídos
@@ -182,8 +182,8 @@ export default function AdminMensajes() {
             onClick={() => setFilter('archived')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
               filter === 'archived' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-black/60 hover:bg-gray-200'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+                : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
             Archivados ({archivedCount})
@@ -261,7 +261,7 @@ export default function AdminMensajes() {
                 <div className="flex flex-wrap gap-3 pt-4">
                   <a
                     href={`mailto:${selectedMessage.email}?subject=Re: Tu mensaje desde Portadora de Eros`}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-sm font-medium hover:bg-black/90 transition-all"
+                    className="btn-primary inline-flex items-center gap-2 px-4 py-2 text-sm min-h-0"
                   >
                     <Send size={16} />
                     Responder por email
@@ -270,7 +270,7 @@ export default function AdminMensajes() {
                   {selectedMessage.status !== 'read' && (
                     <button
                       onClick={() => handleStatusChange(selectedMessage.id, 'read')}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-xl text-sm font-medium hover:bg-gray-200 transition-all"
+                      className="btn-outline inline-flex items-center gap-2 px-4 py-2 text-sm min-h-0"
                     >
                       <Check size={16} />
                       Marcar como leído
@@ -280,7 +280,7 @@ export default function AdminMensajes() {
                   {selectedMessage.status !== 'archived' && (
                     <button
                       onClick={() => handleStatusChange(selectedMessage.id, 'archived')}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-black rounded-xl text-sm font-medium hover:bg-gray-200 transition-all"
+                      className="btn-outline inline-flex items-center gap-2 px-4 py-2 text-sm min-h-0"
                     >
                       <Archive size={16} />
                       Archivar

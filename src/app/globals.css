@@ -237,7 +237,16 @@
   }
 }
 
-/* ── Sistema de botones ────────────────────────────────── */
+/* ── Sistema de botones glass (sin tinte) ───────────────────────────── */
+
+/* Scrollbar invisible global */
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
 
 .btn-primary {
   display: inline-flex;
@@ -246,15 +255,20 @@
   gap: 8px;
   padding: 13px 28px;
   border-radius: 999px;
-  border: 1px solid rgba(230, 120, 50, 0.40);
-  background: rgba(255, 145, 70, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.13em;
   text-transform: uppercase;
   color: rgba(15, 15, 20, 0.82);
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
   position: relative;
   overflow: hidden;
   min-height: 46px;
@@ -263,7 +277,7 @@
 }
 
 .btn-primary::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
@@ -275,14 +289,14 @@
 }
 
 .btn-primary:hover {
-  background: rgba(255, 145, 70, 0.46);
-  border-color: rgba(230, 120, 50, 0.56);
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.8);
   transform: translateY(-1px);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  background: rgba(255, 145, 70, 0.24);
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .btn-primary:disabled {
@@ -312,7 +326,7 @@
 }
 
 .btn-outline:hover {
-  border-color: rgba(15, 15, 20, 0.30);
+  border-color: rgba(15, 15, 20, 0.3);
   color: rgba(15, 15, 20, 0.82);
   transform: translateY(-1px);
 }

@@ -146,7 +146,7 @@ export default function InstalarAppPage() {
                       <Button
                         onClick={handleInstall}
                         disabled={isLoading}
-                        className="rounded-xl px-10 h-12 bg-black text-white hover:bg-black/90 transition-all"
+                        className="btn-primary rounded-xl px-10 h-12"
                       >
                         {isLoading ? (
                           <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />

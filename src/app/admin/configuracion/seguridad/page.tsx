@@ -108,7 +108,7 @@ export default function SeguridadConfiguracion() {
         <button 
           onClick={handleSave}
           disabled={isSaving || isLoading || !seguridad.currentPassword}
-          className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-black text-white rounded-xl font-bold uppercase tracking-widest text-[11px] hover:bg-black/90 active:scale-95 disabled:opacity-50 transition-all shadow-md shadow-black/10 w-full sm:w-auto"
+          className="btn-primary inline-flex items-center justify-center gap-2 px-8 py-3 w-full sm:w-auto"
         >
           {isSaving ? (
             <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

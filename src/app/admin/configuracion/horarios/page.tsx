@@ -94,7 +94,7 @@ export default function HorariosConfiguracion() {
           <button 
             type="submit"
             disabled={isSaving || isLoading}
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-black text-white rounded-xl font-medium text-sm hover:bg-black/90 active:scale-95 disabled:opacity-70 transition-all shadow-md shadow-black/10"
+            className="btn-primary inline-flex items-center justify-center gap-2 px-6 py-2.5"
           >
             {isSaving ? (
               <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

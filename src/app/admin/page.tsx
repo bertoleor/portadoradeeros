@@ -113,7 +113,8 @@ export default function AdminDashboard() {
                     onClick={() => handleConfirm(app.id)}
                     disabled={isConfirming === app.id}
                     size="sm"
-                    className="h-8 px-3 text-xs"
+                    variant="default"
+                    className="h-8 px-3 text-xs min-h-0"
                   >
                     Confirmar
                   </Button>
@@ -374,19 +375,19 @@ export default function AdminDashboard() {
               {renderMessages()}
             </section>
 
-            <section className="bg-gray-900 rounded-xl p-5 md:p-6 text-white">
-              <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
+            <section className="bg-white/35 backdrop-blur-xl border border-white/50 rounded-2xl p-5 md:p-6">
+              <h3 className="text-sm font-medium mb-3 flex items-center gap-2 text-[rgba(15,15,20,0.85)]">
                 Soporte
-                <Sparkles size={14} className="text-gray-500" />
+                <Sparkles size={14} className="text-[rgba(15,15,20,0.30)]" />
               </h3>
-              <p className="text-xs text-gray-400 leading-relaxed mb-4">
+              <p className="text-xs text-[rgba(15,15,20,0.50)] leading-relaxed mb-4">
                 ¿Necesitas ayuda? Escríbenos y te orientamos.
               </p>
               <a 
                 href="https://wa.me/5491173643504" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full bg-white text-gray-900 hover:bg-gray-100 text-xs py-2.5 rounded-lg text-center font-medium"
+                className="btn-primary w-full text-center block text-xs py-2.5"
               >
                 Contactar
               </a>

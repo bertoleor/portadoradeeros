@@ -35,8 +35,8 @@ const ToolbarButton = ({ onClick, isActive, disabled = false, children, title }:
     title={title}
     className={`p-1.5 rounded-lg transition-all duration-200 ${
       isActive 
-        ? 'bg-black text-white shadow-sm' 
-        : 'text-black/50 hover:text-black hover:bg-black/5'
+        ? 'bg-white/60 backdrop-blur-sm text-[rgba(15,15,20,0.85)] shadow-sm border border-white/50' 
+        : 'text-[rgba(15,15,20,0.45)] hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30'
     } ${disabled ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}`}
   >
     {children}
@@ -128,7 +128,7 @@ export function RichTextEditor({
       
       {/* Toolbar */}
       {editable && (
-        <div className="flex flex-wrap items-center gap-1 p-2 border-b border-black/5 bg-gray-50/50">
+        <div className="flex flex-wrap items-center gap-1 p-2 border-b border-[rgba(15,15,20,0.08)] bg-white/20 backdrop-blur-sm">
           <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Negrita">
             <Bold size={16} strokeWidth={editor.isActive('bold') ? 2.5 : 2} />
           </ToolbarButton>
