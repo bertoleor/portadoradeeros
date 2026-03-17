@@ -14,9 +14,9 @@ export function SettingsCard({ title, description, icon: Icon, href }: SettingsC
   return (
     <Link
       href={href}
-      className="group flex flex-col p-5 rounded-2xl border border-black/5 bg-white hover:border-black/10 hover:shadow-md hover:shadow-black/5 transition-all cursor-pointer"
+      className="group flex flex-col p-5 rounded-2xl border border-white/50 bg-white/60 backdrop-blur-sm hover:border-white/70 hover:shadow-md hover:shadow-black/5 transition-all cursor-pointer"
     >
-      <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-gray-100 transition-colors">
+      <div className="w-10 h-10 rounded-xl bg-white/50 backdrop-blur-sm flex items-center justify-center mb-3 group-hover:bg-white/70 transition-colors">
         <Icon size={20} className="text-black/70" strokeWidth={1.5} />
       </div>
       

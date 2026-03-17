@@ -66,7 +66,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-8">
+    <div className="min-h-screen flex flex-col items-center justify-center px-8">
       <AnimatePresence mode="wait">
         {isPending ? (
           <motion.div
@@ -115,7 +115,7 @@ export default function AdminLogin() {
               required
               autoComplete="email"
               placeholder="usuario@gmail.com"
-              className="bg-white border-black/15 focus:border-black placeholder:text-black/20 rounded-xl py-5 text-sm"
+              className="bg-white/60 border-[rgba(15,15,20,0.15)] focus:border-[rgba(15,15,20,0.4)] placeholder:text-black/20 rounded-xl py-5 text-sm backdrop-blur-sm"
             />
           </div>
 
@@ -131,7 +131,7 @@ export default function AdminLogin() {
                 required
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="bg-white border-black/15 focus:border-black placeholder:text-black/20 rounded-xl py-5 text-sm pr-10"
+                className="bg-white/60 border-[rgba(15,15,20,0.15)] focus:border-[rgba(15,15,20,0.4)] placeholder:text-black/20 rounded-xl py-5 text-sm pr-10 backdrop-blur-sm"
               />
               <button
                 type="button"

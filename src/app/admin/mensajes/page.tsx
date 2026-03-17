@@ -79,8 +79,8 @@ export default function AdminMensajes() {
             onClick={() => setSelectedMessage(msg)}
             className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all group ${
               msg.status === 'unread' 
-                ? 'border-gray-200 bg-gray-50' 
-                : 'border-gray-100 text-gray-600 hover:bg-gray-50'
+                ? 'border-white/60 bg-white/50 backdrop-blur-sm' 
+                : 'border-white/40 text-gray-600 hover:bg-white/30 backdrop-blur-sm'
             }`}
           >
             <div className="flex items-center gap-3 min-w-0">
@@ -208,7 +208,7 @@ export default function AdminMensajes() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="fixed inset-0 m-auto w-full max-w-2xl h-fit bg-white rounded-3xl shadow-2xl z-[60] overflow-hidden"
+              className="fixed inset-0 m-auto w-full max-w-2xl h-fit bg-white/85 backdrop-blur-2xl rounded-3xl shadow-2xl z-[60] border border-white/60 overflow-hidden"
             >
               <div className="p-6 border-b border-black/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">

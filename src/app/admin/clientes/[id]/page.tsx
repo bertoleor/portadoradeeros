@@ -320,7 +320,7 @@ export default function ClientDetailPage() {
             onClick={() => setShowEdit(false)} 
             aria-hidden="true"
           />
-          <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[70] p-6">
+          <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] p-6 border border-white/60">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium">Editar Cliente</h3>
               <button 
@@ -411,7 +411,7 @@ export default function ClientDetailPage() {
             onClick={() => setShowNewAppt(false)} 
             aria-hidden="true"
           />
-          <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white rounded-xl z-[70] p-6">
+          <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] p-6 border border-white/60">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium">Nuevo Turno</h3>
               <button 

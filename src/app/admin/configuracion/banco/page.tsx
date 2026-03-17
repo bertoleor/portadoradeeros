@@ -100,7 +100,7 @@ export default function BankConfigPage() {
   }
 
   return (
-    <div className="w-full bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-black/5 shadow-sm overflow-hidden">
+    <div className="w-full bg-white/60 backdrop-blur-sm rounded-2xl p-4 sm:p-6 md:p-8 border border-white/50 shadow-sm overflow-hidden">
       <h2 className="text-xl font-medium tracking-tight mb-1">Datos de Transferencia</h2>
       <p className="text-xs sm:text-sm text-black/50 mb-8">
         Configurá la cuenta bancaria donde los clientes depositarán para confirmar sus turnos.

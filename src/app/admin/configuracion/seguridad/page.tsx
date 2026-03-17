@@ -130,7 +130,7 @@ export default function SeguridadConfiguracion() {
           <div className="w-6 h-6 rounded-full border-2 border-black/20 border-t-black animate-spin" />
         </div>
       ) : (
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 bg-white border border-black/5 rounded-2xl p-6 md:p-8" onSubmit={(e) => e.preventDefault()}>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl p-6 md:p-8" onSubmit={(e) => e.preventDefault()}>
           <div className="md:col-span-2 space-y-6">
             <h3 className="text-[10px] font-bold text-black/40 uppercase tracking-[0.2em] flex items-center gap-2 border-b border-black/5 pb-2">
               <Mail size={14} /> Acceso (Email)

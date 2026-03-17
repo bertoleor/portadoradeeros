@@ -78,7 +78,7 @@ export default function AdminConfigPage() {
             <div className="w-6 h-6 rounded-full border-2 border-black/20 border-t-black animate-spin" />
           </div>
         ) : (
-          <div className="bg-white border border-black/5 rounded-2xl shadow-sm p-6 md:p-8">
+          <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-1.5">
                 <Label htmlFor="nombre" className="text-[10px] font-bold text-black/40 uppercase tracking-widest">Nombre del Administrador</Label>

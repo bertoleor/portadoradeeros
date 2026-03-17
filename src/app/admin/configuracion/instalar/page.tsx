@@ -72,7 +72,7 @@ export default function InstalarAppPage() {
           </p>
         </div>
 
-        <div className="bg-white border border-black/5 rounded-2xl shadow-sm p-6 md:p-8">
+        <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm p-6 md:p-8">
           {isInstalled ? (
             <div className="text-center py-10">
               <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
