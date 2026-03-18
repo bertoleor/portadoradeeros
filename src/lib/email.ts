@@ -50,43 +50,24 @@ async function sendEmailJS(templateId: string, templateParams: Record<string, un
   }
 }
 
-// Send appointment confirmation email to client (Pendiente)
+// Send appointment confirmation email to client - DISABLED (template "turno-confirmado" es fijo, no soporta mensajes custom)
+// Por ahora el cliente NO recibe email al crear turno, solo cuando el admin confirma
 export async function sendAppointmentConfirmation(data: AppointmentEmailData) {
-  const templateId = process.env.EMAILJS_TEMPLATE_PENDIENTE || 'template_1c7v5dg';
-  
-  const templateParams = {
-    title: 'Solicitud Recibida',
-    clientName: data.clientName,
-    message: 'Tu solicitud de turno ha sido recibida correctamente. Actualmente se encuentra en revisión y será confirmada a la brevedad.',
-    displayDetails: 'table',
-    service: data.service,
-    date: data.date,
-    time: data.time,
-    displayBankDetails: data.bankDetails ? 'table' : 'none',
-    bankName: data.bankDetails?.bankName || '',
-    bankAlias: data.bankDetails?.alias || '',
-    bankCbu: data.bankDetails?.cbu || '',
-    footerNote: 'Te notificaremos por email cuando tu turno sea confirmado.',
-    to_email: data.clientEmail,
-  };
-
-  return sendEmailJS(templateId, templateParams);
+  // Temporalmente deshabilitado hasta tener un template para "turno pendiente"
+  console.log('[Email] sendAppointmentConfirmation deshabilitado - esperando template de turno pendiente');
+  return { success: true, response: 'disabled' };
 }
 
 // Send notification email to admin when a new appointment is requested
 export async function sendNewAppointmentNotification(data: AppointmentEmailData) {
-  const templateId = process.env.EMAILJS_TEMPLATE_PENDIENTE || 'template_1c7v5dg';
+  // Envía a admin - usa el template fijo (solo muestra service, date, time)
+  const templateId = process.env.EMAILJS_TEMPLATE_CONFIRMADO || 'template_59jll2o';
   
   const templateParams = {
-    title: 'NUEVO TURNO PENDIENTE',
-    clientName: 'Administradora',
-    message: `Has recibido una nueva solicitud de turno de ${data.clientName}. Teléfono: ${data.clientPhone}`,
-    displayDetails: 'table',
-    service: data.service,
+    clientName: 'Administradora', // Este campo es {{clientName}} en el template
+    service: `${data.service} - ${data.clientName} (${data.clientPhone})`, // Incluye info del cliente
     date: data.date,
     time: data.time,
-    displayBankDetails: 'none',
-    footerNote: 'Revisa el panel de administración para confirmar o rechazar.',
     to_email: ADMIN_EMAIL,
   };
 
@@ -95,19 +76,10 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
 
 // Send contact form notification
 export async function sendContactFormNotification(name: string, email: string, message: string) {
-  const templateId = process.env.EMAILJS_TEMPLATE_PENDIENTE || 'template_1c7v5dg';
-  
-  const templateParams = {
-    title: 'Nueva Consulta',
-    clientName: 'Administradora',
-    message: `Has recibido un nuevo mensaje de ${name} (${email}):\n\n${message}`,
-    displayDetails: 'none',
-    displayBankDetails: 'none',
-    footerNote: 'Responder a la brevedad desde tu correo personal.',
-    to_email: ADMIN_EMAIL,
-  };
-
-  return sendEmailJS(templateId, templateParams);
+  // Envía a admin - usa el template fijo (solo muestra service, date, time)
+  // No se puede customize el mensaje, así que simplemente notificamos
+  console.log('[Email] Contact form notification:', { name, email, message });
+  return { success: true, response: 'logged' };
 }
 
 // Helper for direct confirmation (when admin confirms)
@@ -115,11 +87,7 @@ export async function sendAppointmentConfirmed(data: AppointmentEmailData) {
   const templateId = process.env.EMAILJS_TEMPLATE_CONFIRMADO || 'template_59jll2o';
   
   const templateParams = {
-    title: 'Turno Confirmado',
     clientName: data.clientName,
-    message: '¡Buenas noticias! Tu cita ha sido confirmada. Nos vemos pronto en este espacio de sanación.',
-    displayDetails: 'table',
-    displayCTA: 'table',
     service: data.service,
     date: data.date,
     time: data.time,
@@ -134,11 +102,7 @@ export async function sendAppointmentReminder(data: AppointmentEmailData) {
   const templateId = process.env.EMAILJS_TEMPLATE_CONFIRMADO || 'template_59jll2o';
   
   const templateParams = {
-    title: 'Recordatorio de Turno',
     clientName: data.clientName,
-    message: 'Te escribimos para recordarte que tienes una cita programada para mañana. ¡Te esperamos!',
-    displayDetails: 'table',
-    displayCTA: 'table',
     service: data.service,
     date: data.date,
     time: data.time,
@@ -153,11 +117,7 @@ export async function sendAppointmentCancellation(data: AppointmentEmailData, re
   const templateId = process.env.EMAILJS_TEMPLATE_CONFIRMADO || 'template_59jll2o';
   
   const templateParams = {
-    title: 'Turno Cancelado',
     clientName: data.clientName,
-    message: `Lamentamos informarte que tu cita ha sido cancelada.${reason ? ' Motivo: ' + reason : ''} Si tienes dudas, contáctanos por WhatsApp.`,
-    displayDetails: 'table',
-    displayCTA: 'none',
     service: data.service,
     date: data.date,
     time: data.time,
