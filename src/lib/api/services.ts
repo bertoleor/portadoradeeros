@@ -1,29 +1,57 @@
 'use server';
 
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import { createReadClient } from '@/lib/supabase/readonly';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 import { Service } from '@/types';
+import { mapServiceRow } from '@/lib/api/mappers';
+
+const SERVICES_CACHE_TAG = 'public-services';
+
+const fetchVisibleServices = unstable_cache(
+  async (): Promise<Service[]> => {
+    // Cookie-free anon read (RLS is_visible = true) — role-independent, so a
+    // shared cache key is safe: it can never leak hidden services because RLS
+    // already filters to visible ones for the anon role.
+    const supabase = createReadClient();
+    const { data, error } = await supabase
+      .from('services')
+      .select('*')
+      .eq('is_visible', true)
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching visible services:', error.message);
+      return [];
+    }
+
+    return (data || []).map(mapServiceRow);
+  },
+  ['public-services'],
+  { tags: [SERVICES_CACHE_TAG], revalidate: 300 }
+);
 
 /**
- * Helper to map DB snake_case columns to frontend camelCase properties
+ * FETCH VISIBLE SERVICES (public/cacheable)
+ *
+ * Returns only `is_visible = true` services for anonymous visitors. Uses the
+ * cookie-free anon read client so it can be safely cached under one key —
+ * RLS guarantees the result is always the public view.
  */
-function mapDBToService(dbRow: Record<string, unknown>): Service {
-  return {
-    id: dbRow.id as string,
-    slug: dbRow.slug as string,
-    title: dbRow.title as string,
-    shortDescription: dbRow.short_description as string,
-    description: (dbRow.description as string) || '',
-    price: dbRow.price as number,
-    duration: dbRow.duration as number,
-    isVisible: dbRow.is_visible as boolean,
-    icon: dbRow.icon as string,
-    images: (dbRow.images as string[]) || [],
-  };
+export async function getVisibleServices(): Promise<Service[]> {
+  return fetchVisibleServices();
 }
 
 /**
- * FETCH ALL SERVICES
- * Retrieves all services from Supabase.
+ * FETCH ALL SERVICES (admin, RLS-dependent — NOT cached)
+ *
+ * Uses the cookie-aware server client so RLS resolves the admin view: an
+ * authenticated admin sees every service (hidden ones included), which the
+ * admin calendar and service editor need. This function is intentionally NOT
+ * wrapped in `unstable_cache`: a shared cache key would collapse the two
+ * authorization views into one stale result. Stale admin data is instead
+ * cleared by revalidatePath/revalidateTag on mutation.
  */
 export async function getServices(): Promise<Service[]> {
   const supabase = await createClient();
@@ -37,7 +65,7 @@ export async function getServices(): Promise<Service[]> {
     return [];
   }
 
-  return (data || []).map(mapDBToService);
+  return (data || []).map(mapServiceRow);
 }
 
 /**
@@ -56,15 +84,17 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
     return null;
   }
 
-  return mapDBToService(data);
+  return mapServiceRow(data);
 }
 
 /**
  * CREATE SERVICE
  */
 export async function createService(data: Omit<Service, 'id'>): Promise<Service> {
+  await requireAdmin();
+
   const supabase = await createClient();
-  
+
   // Transform camelCase keys to backend snake_case
   const dbPayload = {
     slug: data.slug,
@@ -88,13 +118,17 @@ export async function createService(data: Omit<Service, 'id'>): Promise<Service>
     throw new Error(`Failed to create service: ${error.message}`);
   }
 
-  return mapDBToService(newRow);
+  revalidateTag(SERVICES_CACHE_TAG, { expire: 0 });
+  revalidatePath('/', 'layout');
+  return mapServiceRow(newRow);
 }
 
 /**
  * UPDATE SERVICE
  */
 export async function updateService(id: string, updates: Partial<Service>): Promise<Service> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   const dbPayload: Record<string, unknown> = {};
@@ -119,17 +153,24 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
     throw new Error(`Failed to update service: ${error.message}`);
   }
 
-  return mapDBToService(updatedRow);
+  revalidateTag(SERVICES_CACHE_TAG, { expire: 0 });
+  revalidatePath('/', 'layout');
+  return mapServiceRow(updatedRow);
 }
 
 /**
  * DELETE SERVICE
  */
 export async function deleteService(id: string): Promise<void> {
+  await requireAdmin();
+
   const supabase = await createClient();
   const { error } = await supabase.from('services').delete().eq('id', id);
 
   if (error) {
     throw new Error(`Failed to delete service: ${error.message}`);
   }
+
+  revalidateTag(SERVICES_CACHE_TAG, { expire: 0 });
+  revalidatePath('/', 'layout');
 }

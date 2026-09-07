@@ -39,13 +39,17 @@ export default function AdminMensajes() {
   });
 
   const handleStatusChange = async (id: string, newStatus: 'read' | 'archived') => {
-    const res = await updateContactStatus(id, newStatus);
-    if (res.success) {
-      setMessages(prev => prev.map(m => m.id === id ? { ...m, status: newStatus } : m));
-      if (selectedMessage?.id === id) {
-        setSelectedMessage({ ...selectedMessage, status: newStatus });
+    try {
+      const res = await updateContactStatus(id, newStatus);
+      if (res.ok) {
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, status: newStatus } : m));
+        if (selectedMessage?.id === id) {
+          setSelectedMessage({ ...selectedMessage, status: newStatus });
+        }
+        success(`Mensaje movido a ${newStatus === 'read' ? 'leídos' : 'archivados'}.`);
       }
-      success(`Mensaje movido a ${newStatus === 'read' ? 'leídos' : 'archivados'}.`);
+    } catch {
+      // best-effort: ignore failures moving message status
     }
   };
 

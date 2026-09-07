@@ -1,51 +1,40 @@
 'use server';
 
+import { unstable_cache, revalidateTag } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import { createReadClient } from '@/lib/supabase/readonly';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 import { BusinessSettings } from '@/types';
+import { mapSettingsRow } from '@/lib/api/mappers';
+import { AppError, ok, type Result } from '@/lib/api/error';
 
-// Map DB row to Frontend Shape
-function mapDBToSettings(dbRow: Record<string, unknown>): BusinessSettings {
-  return {
-    contactEmail: (dbRow.contact_email as string) || '',
-    siteUrl: (dbRow.site_url as string) || '',
-    socialLinks: {
-      instagram: (dbRow.instagram_url as string) || '',
-      whatsapp: (dbRow.whatsapp_url as string) || '',
-      tiktok: (dbRow.tiktok_url as string) || '',
-    },
-    bankDetails: {
-      bankOwner: (dbRow.bank_owner as string) || '',
-      bankName: (dbRow.bank_name as string) || '',
-      cbu: (dbRow.bank_cbu as string) || '',
-      alias: (dbRow.bank_alias as string) || '',
-    },
-    bioContent: (dbRow.bio_content as string) || '',
-    profileImageUrl: (dbRow.profile_image_url as string) || '',
-    businessHours: typeof dbRow.business_hours === 'string'
-      ? JSON.parse(dbRow.business_hours)
-      : dbRow.business_hours || {},
-    appointmentDuration: 60,
-    adminName: (dbRow.admin_name as string) || 'Jacque',
-    adminAvatarUrl: (dbRow.admin_avatar_url as string) || '',
-  };
-}
+const SETTINGS_CACHE_TAG = 'admin-settings';
+
+const fetchAdminSettings = unstable_cache(
+  async (): Promise<BusinessSettings | null> => {
+    // Cookie-free anon read (RLS public-read): safe to cache and role-independent.
+    const supabase = createReadClient();
+    const { data, error } = await supabase
+      .from('admin_settings')
+      .select('*')
+      .eq('id', 1)
+      .single();
+
+    if (error || !data) {
+      if (error && error.code !== 'PGRST116') { // PGRST116 is 'no rows' which we handle
+        console.error('Error fetching admin settings:', error.message, error.details);
+      }
+      return null;
+    }
+
+    return mapSettingsRow(data);
+  },
+  ['admin-settings'],
+  { tags: [SETTINGS_CACHE_TAG], revalidate: 300 }
+);
 
 export async function getAdminSettings(): Promise<BusinessSettings | null> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('admin_settings')
-    .select('*')
-    .eq('id', 1)
-    .single();
-
-  if (error || !data) {
-    if (error && error.code !== 'PGRST116') { // PGRST116 is 'no rows' which we handle
-      console.error('Error fetching admin settings:', error.message, error.details);
-    }
-    return null;
-  }
-
-  return mapDBToSettings(data);
+  return fetchAdminSettings();
 }
 
 export async function updateAdminSettings(
@@ -65,7 +54,9 @@ export async function updateAdminSettings(
     adminName?: string;
     adminAvatarUrl?: string;
   }>
-) {
+): Promise<Result<{ id: number }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   const dbPayload: Record<string, unknown> = {};
@@ -82,7 +73,7 @@ export async function updateAdminSettings(
   if (updates.bankAlias !== undefined) dbPayload.bank_alias = updates.bankAlias;
   if (updates.adminName !== undefined) dbPayload.admin_name = updates.adminName;
   if (updates.adminAvatarUrl !== undefined) dbPayload.admin_avatar_url = updates.adminAvatarUrl;
-  
+
   // Supabase JSONB column handles objects directly
   if (updates.businessHours !== undefined) {
     dbPayload.business_hours = updates.businessHours;
@@ -94,8 +85,9 @@ export async function updateAdminSettings(
 
   if (error) {
     console.error('Error updating admin settings:', error.message, error.details, error.hint);
-    return { success: false, error: error.message };
+    throw new AppError('DB', error.message);
   }
 
-  return { success: true };
+  revalidateTag(SETTINGS_CACHE_TAG, { expire: 0 });
+  return ok({ id: 1 });
 }

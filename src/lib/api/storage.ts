@@ -1,8 +1,13 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 
 export async function uploadImage(formData: FormData) {
+  // Defense-in-depth guard (D-SEC-3): only allowlisted admins may upload. This
+  // rejects any non-allowlist user at the guard, not just at the session check.
+  await requireAdmin();
+
   const file = formData.get('file') as File | null;
 
   if (!file) {
@@ -10,16 +15,6 @@ export async function uploadImage(formData: FormData) {
   }
 
   const supabase = await createClient();
-
-  // Get current session to verify auth
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  if (sessionError) {
-    console.error('Session error:', sessionError);
-  }
-  
-  if (!session) {
-    return { success: false, error: 'No autorizado. Debes iniciar sesión como administrador.' };
-  }
 
   // Create a unique file name
   const fileExt = file.name.split('.').pop();

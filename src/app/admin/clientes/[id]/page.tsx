@@ -92,20 +92,23 @@ export default function ClientDetailPage() {
   }, [loadData]);
 
   const handleSaveEdit = async () => {
-    const result = await updateClient(clientId, {
-      name: editForm.name,
-      surname: editForm.surname || undefined,
-      email: editForm.email || undefined,
-      phone: editForm.phone || undefined,
-      notes: editForm.notes || undefined,
-    });
-    
-    if (result.success) {
-      success('Datos actualizados correctamente');
-      setShowEdit(false);
-      loadData();
-    } else {
-      toastError(result.error || 'Error al actualizar');
+    try {
+      const result = await updateClient(clientId, {
+        name: editForm.name,
+        surname: editForm.surname || undefined,
+        email: editForm.email || undefined,
+        phone: editForm.phone || undefined,
+        notes: editForm.notes || undefined,
+      });
+      if (result.ok) {
+        success('Datos actualizados correctamente');
+        setShowEdit(false);
+        loadData();
+      } else {
+        toastError(result.error.message || 'Error al actualizar');
+      }
+    } catch (err) {
+      toastError((err as Error)?.message || 'Error al actualizar');
     }
   };
 
@@ -118,25 +121,29 @@ export default function ClientDetailPage() {
     const selectedService = services.find(s => s.id === apptForm.serviceId);
     const fullName = `${editForm.name} ${editForm.surname}`.trim();
     
-    const result = await createAppointmentAdmin({
-      serviceId: apptForm.serviceId,
-      serviceName: selectedService?.title || '',
-      serviceDuration: selectedService?.duration || 60,
-      clientName: fullName,
-      clientEmail: editForm.email,
-      clientPhone: editForm.phone || undefined,
-      clientId: clientId,
-      appointmentDate: new Date(`${apptForm.date}T${apptForm.time}:00`),
-      notes: apptForm.notes || undefined,
-    });
+    try {
+      const result = await createAppointmentAdmin({
+        serviceId: apptForm.serviceId,
+        serviceName: selectedService?.title || '',
+        serviceDuration: selectedService?.duration || 60,
+        clientName: fullName,
+        clientEmail: editForm.email,
+        clientPhone: editForm.phone || undefined,
+        clientId: clientId,
+        appointmentDate: new Date(`${apptForm.date}T${apptForm.time}:00`),
+        notes: apptForm.notes || undefined,
+      });
 
-    if (result.success) {
-      success('Turno creado');
-      setShowNewAppt(false);
-      setApptForm({ serviceId: '', date: '', time: '', notes: '' });
-      loadData();
-    } else {
-      toastError(result.error || 'Error al crear turno');
+      if (result.ok) {
+        success('Turno creado');
+        setShowNewAppt(false);
+        setApptForm({ serviceId: '', date: '', time: '', notes: '' });
+        loadData();
+      } else {
+        toastError(result.error.message || 'Error al crear turno');
+      }
+    } catch (err) {
+      toastError((err as Error)?.message || 'Error al crear turno');
     }
   };
 

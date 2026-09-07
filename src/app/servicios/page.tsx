@@ -36,12 +36,9 @@ export default function ServiciosPage() {
   useEffect(() => {
     const fetchServices = async () => {
       const supabase = createClient();
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('services')
         .select('*');
-      
-      console.log('Services raw data:', data);
-      console.log('Services error:', error);
 
       if (data) {
         // Map snake_case from DB to camelCase for TypeScript type
@@ -59,7 +56,6 @@ export default function ServiciosPage() {
           icon: s.icon,
           images: s.images || [],
         }));
-        console.log('Mapped services:', mappedServices);
         setServices(mappedServices);
       }
       setLoading(false);

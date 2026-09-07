@@ -1,10 +1,9 @@
 import { Hero, AboutPreview, ContactCTA } from '@/components/client/Hero';
 import { ServiceCarousel } from '@/components/client/ServiceCarousel';
-import { getServices } from '@/lib/api/services';
+import { getVisibleServices } from '@/lib/api/services';
 
 export default async function HomePage() {
-  const allServices = await getServices();
-  const visibleServices = allServices.filter(s => s.isVisible);
+  const visibleServices = await getVisibleServices();
 
   return (
     <>

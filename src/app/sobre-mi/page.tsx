@@ -5,12 +5,26 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, Sparkles, Eye, Heart } from 'lucide-react';
 import { FadeIn } from '@/components/ui/FadeIn';
 import { getAdminSettings } from '@/lib/api/settings';
+import { sanitizeBioContent } from '@/lib/sanitize';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'Sobre Mí | Portadora de Eros',
   description: 'Conocé a la guía espiritual detrás de Portadora de Eros. Canalizadora, tarotista y puente entre lo terrenal y lo místico.',
 };
+
+const DEFAULT_BIO = `
+  <p>Desde muy joven sentí una conexión profunda con lo espiritual. Lo que comenzó
+  como una curiosidad innata se convirtió en mi camino de vida: ser puente entre
+  los mundos visible e invisible.</p>
+  <p>A lo largo de los años me formé en diversas disciplinas esotéricas — el tarot,
+  los buzios de la tradición africana, la velomancia y las técnicas de limpieza
+  energética. Cada herramienta me fue transmitida con respeto y profundidad,
+  y así es como las comparto con quienes buscan respuestas.</p>
+  <p>Mi misión es acompañarte en tu proceso espiritual con honestidad, empatía
+  y la sabiduría que las herramientas ancestrales nos ofrecen. No prometo
+  milagros — prometo un espacio seguro para explorar tu verdad.</p>
+`;
 
 const values = [
   {
@@ -32,6 +46,7 @@ const values = [
 
 export default async function SobreMiPage() {
   const settings = await getAdminSettings();
+  const bioHtml = sanitizeBioContent(settings?.bioContent || DEFAULT_BIO);
 
   return (
     <div className="py-16 md:py-24 px-6 md:px-10">
@@ -69,20 +84,7 @@ export default async function SobreMiPage() {
           <FadeIn delay={0.2} direction="up" distance={15}>
             <div 
               className="prose prose-sm md:prose-base prose-black max-w-none text-black/60 font-light leading-relaxed"
-              dangerouslySetInnerHTML={{ 
-                __html: settings?.bioContent || `
-                  <p>Desde muy joven sentí una conexión profunda con lo espiritual. Lo que comenzó
-                  como una curiosidad innata se convirtió en mi camino de vida: ser puente entre
-                  los mundos visible e invisible.</p>
-                  <p>A lo largo de los años me formé en diversas disciplinas esotéricas — el tarot,
-                  los buzios de la tradición africana, la velomancia y las técnicas de limpieza
-                  energética. Cada herramienta me fue transmitida con respeto y profundidad,
-                  y así es como las comparto con quienes buscan respuestas.</p>
-                  <p>Mi misión es acompañarte en tu proceso espiritual con honestidad, empatía
-                  y la sabiduría que las herramientas ancestrales nos ofrecen. No prometo
-                  milagros — prometo un espacio seguro para explorar tu verdad.</p>
-                ` 
-              }} 
+              dangerouslySetInnerHTML={{ __html: bioHtml }}
             />
           </FadeIn>
         </div>

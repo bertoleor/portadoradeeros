@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 
 export interface BlockedTime {
   id: string;
@@ -50,6 +51,8 @@ export async function getBlockedTimesByMonth(year: number, month: number): Promi
 }
 
 export async function createBlockedTime(data: Omit<BlockedTime, 'id'>): Promise<BlockedTime> {
+  await requireAdmin();
+
   const supabase = await createClient();
   
   const { data: newRow, error } = await supabase
@@ -66,6 +69,8 @@ export async function createBlockedTime(data: Omit<BlockedTime, 'id'>): Promise<
 }
 
 export async function updateBlockedTime(id: string, updates: Partial<BlockedTime>): Promise<BlockedTime> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   const { data: updatedRow, error } = await supabase
@@ -83,6 +88,8 @@ export async function updateBlockedTime(id: string, updates: Partial<BlockedTime
 }
 
 export async function deleteBlockedTime(id: string): Promise<void> {
+  await requireAdmin();
+
   const supabase = await createClient();
   const { error } = await supabase.from('blocked_times').delete().eq('id', id);
 

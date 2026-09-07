@@ -59,13 +59,17 @@ export default function HorariosConfiguracion() {
       };
     }
 
-    const result = await updateAdminSettings({ businessHours: businessHoursToSave });
-    
-    setIsSaving(false);
-    if (result.success) {
-      success('Horarios actualizados. El calendario de reservas usará ahora esta disponibilidad.');
-    } else {
-      error('Hubo un error al guardar los horarios. Intentalo de nuevo.');
+    try {
+      const result = await updateAdminSettings({ businessHours: businessHoursToSave });
+      setIsSaving(false);
+      if (result.ok) {
+        success('Horarios actualizados. El calendario de reservas usará ahora esta disponibilidad.');
+      } else {
+        error('Hubo un error al guardar los horarios. Intentalo de nuevo.');
+      }
+    } catch (err) {
+      setIsSaving(false);
+      error((err as Error)?.message || 'Hubo un error al guardar los horarios. Intentalo de nuevo.');
     }
   };
 

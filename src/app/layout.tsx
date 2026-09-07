@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Geist } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/hooks/useAuth";
 import { Shell } from "@/components/client/Shell";
 import { cn } from "@/lib/utils";
 import { PWAHandler } from "@/components/pwa/PWAHandler";
@@ -62,12 +61,10 @@ export default function RootLayout({
     <html lang="es" className={cn("font-sans", geist.variable)}>
       <body className={`${geist.variable} ${playfair.variable} font-sans antialiased text-black bg-[#f8f9fb] flex flex-col min-h-screen selection:bg-black selection:text-white`}>
         <BackgroundMesh />
-        <AuthProvider>
-          <PWAHandler />
-          <Shell>
-            {children}
-          </Shell>
-        </AuthProvider>
+        <PWAHandler />
+        <Shell>
+          {children}
+        </Shell>
       </body>
     </html>
   );

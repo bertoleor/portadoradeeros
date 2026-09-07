@@ -17,6 +17,7 @@ import { getAppointments, confirmAppointment, getContactMessages, updateContactS
 import { useToast } from '@/components/ui/ToastProvider';
 import { Button } from '@/components/ui';
 import { createClient } from '@/lib/supabase/client';
+import { logger } from '@/lib/logger';
 
 interface AppointmentRecord {
   id: string;
@@ -52,7 +53,7 @@ export default function AdminDashboard() {
       const isStandalone = globalThis.window?.matchMedia('(display-mode: standalone)').matches;
       const isInWebAppiOS = (globalThis.window?.navigator as { standalone?: boolean })?.standalone === true;
       // We could use isPwaInstalled to show/hide certain UI if needed later
-      console.debug('PWA status:', isStandalone || isInWebAppiOS);
+      logger.debug('PWA status:', { installed: isStandalone || isInWebAppiOS });
     };
     checkPwa();
 
@@ -218,20 +219,28 @@ export default function AdminDashboard() {
 
   const handleConfirm = async (id: string) => {
     setIsConfirming(id);
-    const result = await confirmAppointment(id);
-    if (result.success) {
-      setAppointments(prev => prev.map(app => app.id === id ? { ...app, status: 'confirmed' } : app));
-      success('Turno confirmado y email enviado.');
-    } else {
-      error(`Error: ${result.error || 'Intenta nuevamente.'}`);
+    try {
+      const result = await confirmAppointment(id);
+      if (result.ok) {
+        setAppointments(prev => prev.map(app => app.id === id ? { ...app, status: 'confirmed' } : app));
+        success('Turno confirmado y email enviado.');
+      } else {
+        error(`Error: ${result.error.message || 'Intenta nuevamente.'}`);
+      }
+    } catch (err) {
+      error(`Error: ${(err as Error)?.message || 'Intenta nuevamente.'}`);
     }
     setIsConfirming(null);
   };
 
   const markAsRead = async (id: string) => {
-    const res = await updateContactStatus(id, 'read');
-    if (res.success) {
-      setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'read' } : m));
+    try {
+      const res = await updateContactStatus(id, 'read');
+      if (res.ok) {
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'read' } : m));
+      }
+    } catch {
+      // best-effort: ignore failures updating the read flag
     }
   };
 

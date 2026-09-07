@@ -77,25 +77,28 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
 
     setSaving(true);
     const fullName = `${form.clientName.trim()} ${form.clientSurname.trim()}`.trim();
-    const result = await createAppointmentAdmin({
-      serviceId: form.serviceId,
-      serviceName: selectedService?.title ?? '',
-      serviceDuration: selectedService?.duration ?? 60,
-      clientName: fullName,
-      clientEmail: form.clientEmail.trim(),
-      clientPhone: form.clientPhone.trim(),
-      appointmentDate: apptDate,
-      notes: form.notes || undefined,
-    });
-    setSaving(false);
-
-    if (result.success) {
-      success('Turno creado y confirmación enviada al cliente.');
-      onCreated();
-      onClose();
-    } else {
-      toastError(result.error ?? 'Error al crear el turno.');
+    try {
+      const result = await createAppointmentAdmin({
+        serviceId: form.serviceId,
+        serviceName: selectedService?.title ?? '',
+        serviceDuration: selectedService?.duration ?? 60,
+        clientName: fullName,
+        clientEmail: form.clientEmail.trim(),
+        clientPhone: form.clientPhone.trim(),
+        appointmentDate: apptDate,
+        notes: form.notes || undefined,
+      });
+      if (result.ok) {
+        success('Turno creado y confirmación enviada al cliente.');
+        onCreated();
+        onClose();
+      } else {
+        toastError(result.error.message ?? 'Error al crear el turno.');
+      }
+    } catch (err) {
+      toastError((err as Error)?.message || 'Error al crear el turno.');
     }
+    setSaving(false);
   };
 
   return (

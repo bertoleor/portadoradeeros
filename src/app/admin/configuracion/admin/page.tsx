@@ -39,16 +39,20 @@ export default function AdminConfigPage() {
     e.preventDefault();
     setIsSaving(true);
     
-    const result = await updateAdminSettings({
-      adminName: formData.nombre,
-      adminAvatarUrl: formData.fotoPerfil,
-    });
-    
-    setIsSaving(false);
-    if (result.success) {
-      success('Configuración interna actualizada correctamente.');
-    } else {
-      error('Hubo un error al guardar los cambios.');
+    try {
+      const result = await updateAdminSettings({
+        adminName: formData.nombre,
+        adminAvatarUrl: formData.fotoPerfil,
+      });
+      setIsSaving(false);
+      if (result.ok) {
+        success('Configuración interna actualizada correctamente.');
+      } else {
+        error('Hubo un error al guardar los cambios.');
+      }
+    } catch (err) {
+      setIsSaving(false);
+      error((err as Error)?.message || 'Hubo un error al guardar los cambios.');
     }
   };
 

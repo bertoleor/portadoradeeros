@@ -50,12 +50,21 @@ async function sendEmailJS(templateId: string, templateParams: Record<string, un
   }
 }
 
-// Send appointment confirmation email to client - DISABLED (template "turno-confirmado" es fijo, no soporta mensajes custom)
-// Por ahora el cliente NO recibe email al crear turno, solo cuando el admin confirma
+// Send "request received" confirmation email to client when they book a turno.
+// Uses the dedicated "pendiente" template so the client knows their request is
+// awaiting admin confirmation (distinct from the "confirmed" email sent later).
 export async function sendAppointmentConfirmation(data: AppointmentEmailData) {
-  // Temporalmente deshabilitado hasta tener un template para "turno pendiente"
-  console.log('[Email] sendAppointmentConfirmation deshabilitado - esperando template de turno pendiente');
-  return { success: true, response: 'disabled' };
+  const templateId = process.env.EMAILJS_TEMPLATE_PENDIENTE || 'template_59jll2o';
+
+  const templateParams = {
+    clientName: data.clientName,
+    service: data.service,
+    date: data.date,
+    time: data.time,
+    to_email: data.clientEmail,
+  };
+
+  return sendEmailJS(templateId, templateParams);
 }
 
 // Send notification email to admin when a new appointment is requested
@@ -74,12 +83,20 @@ export async function sendNewAppointmentNotification(data: AppointmentEmailData)
   return sendEmailJS(templateId, templateParams);
 }
 
-// Send contact form notification
+// Send contact form notification to admin
 export async function sendContactFormNotification(name: string, email: string, message: string) {
-  // Envía a admin - usa el template fijo (solo muestra service, date, time)
-  // No se puede customize el mensaje, así que simplemente notificamos
-  console.log('[Email] Contact form notification:', { name, email, message });
-  return { success: true, response: 'logged' };
+  const templateId = process.env.EMAILJS_TEMPLATE_CONFIRMADO || 'template_59jll2o';
+
+  const templateParams = {
+    clientName: name,
+    service: message,
+    date: '',
+    time: '',
+    to_email: ADMIN_EMAIL,
+    from_email: email,
+  };
+
+  return sendEmailJS(templateId, templateParams);
 }
 
 // Helper for direct confirmation (when admin confirms)
@@ -122,6 +139,7 @@ export async function sendAppointmentCancellation(data: AppointmentEmailData, re
     date: data.date,
     time: data.time,
     to_email: data.clientEmail,
+    reason: reason ?? '',
   };
 
   return sendEmailJS(templateId, templateParams);

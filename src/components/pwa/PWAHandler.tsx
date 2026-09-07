@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { logger } from '@/lib/logger';
 
 const handleUpdatefound = (registration: ServiceWorkerRegistration) => {
   const newWorker = registration.installing;
@@ -8,7 +9,7 @@ const handleUpdatefound = (registration: ServiceWorkerRegistration) => {
 
   const onStateChange = () => {
     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-      console.log('PWA: New version available');
+      logger.info('PWA: New version available');
     }
   };
 
@@ -23,7 +24,7 @@ const registerSW = async () => {
     const registrations = await navigator.serviceWorker.getRegistrations();
     for (const reg of registrations) {
       if (reg.scope !== `${location.origin}/admin/`) {
-        console.log('PWA: removing old SW with scope:', reg.scope);
+        logger.info('PWA: removing old SW with scope:', { scope: reg.scope });
         await reg.unregister();
       }
     }
@@ -31,10 +32,10 @@ const registerSW = async () => {
     const registration = await navigator.serviceWorker.register('/sw.js', {
       scope: '/admin/',
     });
-    console.log('PWA: Service Worker registered with scope /admin/');
+    logger.info('PWA: Service Worker registered with scope /admin/');
     registration.addEventListener('updatefound', () => handleUpdatefound(registration));
   } catch (error) {
-    console.warn('PWA: registration failed:', error);
+    logger.warn('PWA: registration failed:', { error: String(error) });
   }
 };
 

@@ -102,25 +102,28 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
 
     setSaving(true);
     const fullName = `${form.clientName.trim()} ${form.clientSurname.trim()}`.trim();
-    const result = await createAppointmentAdmin({
-      serviceId: form.serviceId,
-      serviceName: selectedService?.title ?? '',
-      serviceDuration: selectedService?.duration ?? 60,
-      clientName: fullName,
-      clientEmail: form.clientEmail.trim(),
-      clientPhone: form.clientPhone.trim(),
-      appointmentDate: apptDate,
-      notes: form.notes || undefined,
-    });
-    setSaving(false);
-
-    if (result.success) {
-      success('Turno creado. Confirmación enviada al cliente.');
-      onCreated();
-      onClose();
-    } else {
-      toastError(result.error ?? 'Error al crear el turno.');
+    try {
+      const result = await createAppointmentAdmin({
+        serviceId: form.serviceId,
+        serviceName: selectedService?.title ?? '',
+        serviceDuration: selectedService?.duration ?? 60,
+        clientName: fullName,
+        clientEmail: form.clientEmail.trim(),
+        clientPhone: form.clientPhone.trim(),
+        appointmentDate: apptDate,
+        notes: form.notes || undefined,
+      });
+      if (result.ok) {
+        success('Turno creado. Confirmación enviada al cliente.');
+        onCreated();
+        onClose();
+      } else {
+        toastError(result.error.message ?? 'Error al crear el turno.');
+      }
+    } catch (err) {
+      toastError((err as Error)?.message || 'Error al crear el turno.');
     }
+    setSaving(false);
   };
 
   return (
@@ -486,51 +489,67 @@ export default function AdminCalendario() {
   };
 
   const handleConfirm = async (id: string) => {
-    const res = await confirmAppointment(id);
-    if (res.success) {
-      setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' } : a));
-      if (selectedAppointment?.id === id) {
-        setSelectedAppointment({ ...selectedAppointment, status: 'confirmed' });
+    try {
+      const res = await confirmAppointment(id);
+      if (res.ok) {
+        setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'confirmed' } : a));
+        if (selectedAppointment?.id === id) {
+          setSelectedAppointment({ ...selectedAppointment, status: 'confirmed' });
+        }
+        success('Turno confirmado exitosamente.');
+      } else {
+        toastError('Error al confirmar el turno.');
       }
-      success('Turno confirmado exitosamente.');
-    } else {
+    } catch {
       toastError('Error al confirmar el turno.');
     }
   };
 
   const handleComplete = async (id: string) => {
-    const res = await completeAppointment(id);
-    if (res.success) {
-      setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'completed' } : a));
-      if (selectedAppointment?.id === id) {
-        setSelectedAppointment({ ...selectedAppointment, status: 'completed' });
+    try {
+      const res = await completeAppointment(id);
+      if (res.ok) {
+        setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'completed' } : a));
+        if (selectedAppointment?.id === id) {
+          setSelectedAppointment({ ...selectedAppointment, status: 'completed' });
+        }
+        success('Turno marcado como completado.');
+      } else {
+        toastError('Error al completar el turno.');
       }
-      success('Turno marcado como completado.');
-    } else {
+    } catch {
       toastError('Error al completar el turno.');
     }
   };
 
   const handleCancel = async (id: string, reason?: string) => {
-    const res = await cancelAppointment(id, reason);
-    if (res.success) {
-      setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' } : a));
-      if (selectedAppointment?.id === id) {
-        setSelectedAppointment({ ...selectedAppointment, status: 'cancelled' });
+    try {
+      const res = await cancelAppointment(id, reason);
+      if (res.ok) {
+        setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' } : a));
+        if (selectedAppointment?.id === id) {
+          setSelectedAppointment({ ...selectedAppointment, status: 'cancelled' });
+        }
+        success('Turno cancelado. Se ha notificado al cliente.');
+      } else {
+        toastError('Error al cancelar el turno.');
       }
-      success('Turno cancelado. Se ha notificado al cliente.');
-    } else {
+    } catch {
       toastError('Error al cancelar el turno.');
     }
   };
 
   const handleDelete = async (id: string) => {
-    const res = await deleteAppointment(id);
-    if (res.success) {
-      setAppointments(prev => prev.filter(a => a.id !== id));
-      setSelectedAppointment(null);
-      success('Turno eliminado permanentemente.');
-    } else {
+    try {
+      const res = await deleteAppointment(id);
+      if (res.ok) {
+        setAppointments(prev => prev.filter(a => a.id !== id));
+        setSelectedAppointment(null);
+        success('Turno eliminado permanentemente.');
+      } else {
+        toastError('Error al eliminar el turno.');
+      }
+    } catch {
       toastError('Error al eliminar el turno.');
     }
   };

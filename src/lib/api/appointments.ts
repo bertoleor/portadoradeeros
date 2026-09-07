@@ -1,7 +1,11 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 import { getAdminSettings } from '@/lib/api/settings';
+import { AppError, ok, fail, type Result } from '@/lib/api/error';
 import webPush from 'web-push';
 import { 
   sendAppointmentConfirmation, 
@@ -9,6 +13,9 @@ import {
   sendAppointmentConfirmed,
   sendAppointmentCancellation
 } from '@/lib/email';
+import type { Database } from '@/types/database';
+
+type AppointmentRow = Database['public']['Tables']['appointments']['Row'];
 
 // Web-Push VAPID configuration
 if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
@@ -24,7 +31,11 @@ if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
  */
 async function sendPushToAdmins(payload: { title: string; body: string; url?: string }) {
   try {
-    const supabase = await createClient();
+    // Scoped service-role client (D-SEC-2): `push_subscriptions` RLS is
+    // `auth.uid() = admin_id`, which anon cannot satisfy. The privileged client
+    // bypasses RLS so the public booking flow can still broadcast to admin
+    // devices. It selects ONLY push-subscription rows (endpoint/keys) — never PII.
+    const supabase = createAdminClient();
     const { data: subs, error } = await supabase
       .from('push_subscriptions')
       .select('*');
@@ -68,7 +79,7 @@ interface AppointmentPayload {
   serviceName: string; // for email only
 }
 
-export async function createAppointment(payload: AppointmentPayload) {
+export async function createAppointment(payload: AppointmentPayload): Promise<Result<AppointmentRow>> {
   const supabase = await createClient();
 
   // 1. Insert into Supabase 'appointments' table
@@ -90,7 +101,7 @@ export async function createAppointment(payload: AppointmentPayload) {
 
   if (dbError) {
     console.error('Failed to create appointment in Supabase:', dbError);
-    return { success: false, error: 'Hubo un error al registrar el turno en la base de datos.' };
+    return fail(new AppError('DB', 'Hubo un error al registrar el turno en la base de datos.'));
   }
 
   // 2. Fetch settings
@@ -112,7 +123,7 @@ export async function createAppointment(payload: AppointmentPayload) {
     url: '/admin'
   });
 
-  return { success: true, data: dbData };
+  return ok(dbData);
 }
 
 async function sendBookingEmails(payload: AppointmentPayload, bankDetails: {
@@ -175,28 +186,30 @@ export async function getAppointments() {
 }
 
 export async function getBookedSlots(dateStr: string, durationMinutes: number = 60) {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
-  // Fetch appointments for the given date with service duration
+  // Fetch appointments for the given date with service duration.
+  // Privileged (service-role) read: RLS now denies anon SELECT on
+  // `appointments` (Slice 1), so the public booking form must source
+  // availability from a server-only path that selects ONLY non-PII columns.
   const { data, error } = await supabase
     .from('appointments')
-    .select('appointment_date, services:service_id(duration)')
+    .select('appointment_date, service_id, services:service_id(duration)')
     .filter('appointment_date', 'gte', `${dateStr}T00:00:00Z`)
     .filter('appointment_date', 'lte', `${dateStr}T23:59:59Z`)
     .neq('status', 'cancelled');
 
   if (error) {
-    console.error('Failed to fetch booked slots:', error);
-    return [];
+    throw new AppError('DB', `Failed to fetch booked slots: ${error.message}`);
   }
 
   // Generate all time slots that would be occupied based on duration
   const occupiedSlots: string[] = [];
-  
-  for (const app of data) {
+
+  for (const app of data ?? []) {
     const startDate = new Date(app.appointment_date);
-    const duration = (app.services as { duration?: number })?.duration || durationMinutes;
-    
+    const duration = (app.services as { duration?: number } | null)?.duration || durationMinutes;
+
     // Generate slots every 15 minutes for the duration of the appointment
     const slotsCount = Math.ceil(duration / 15);
     for (let i = 0; i < slotsCount; i++) {
@@ -211,7 +224,9 @@ export async function getBookedSlots(dateStr: string, durationMinutes: number = 
   return occupiedSlots.sort((a, b) => a.localeCompare(b));
 }
 
-export async function confirmAppointment(appointmentId: string) {
+export async function confirmAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   // 1. Fetch current appointment
@@ -223,7 +238,7 @@ export async function confirmAppointment(appointmentId: string) {
 
   if (fetchError || !appointment) {
     console.error('Failed to fetch appointment:', fetchError);
-    return { success: false, error: 'No se pudo obtener el turno.' };
+    throw new AppError('NOT_FOUND', 'No se pudo obtener el turno.');
   }
 
   // 2. Update status to confirmed
@@ -234,7 +249,7 @@ export async function confirmAppointment(appointmentId: string) {
 
   if (updateError) {
     console.error('Failed to update appointment status:', updateError);
-    return { success: false, error: 'Ocurrió un error al actualizar el estado.' };
+    throw new AppError('DB', 'Ocurrió un error al actualizar el estado.');
   }
 
   // 3. Send Confirmed Email to Client
@@ -260,11 +275,13 @@ export async function confirmAppointment(appointmentId: string) {
     console.error('Failed to send Confirmed email:', emailError);
   }
 
-  return { success: true };
+  return ok({ id: appointmentId });
 }
 
 // Complete an appointment (mark as completed after session)
-export async function completeAppointment(appointmentId: string) {
+export async function completeAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   // 1. Fetch current appointment
@@ -276,7 +293,7 @@ export async function completeAppointment(appointmentId: string) {
 
   if (fetchError || !appointment) {
     console.error('Failed to fetch appointment:', fetchError);
-    return { success: false, error: 'No se pudo obtener el turno.' };
+    throw new AppError('NOT_FOUND', 'No se pudo obtener el turno.');
   }
 
   // 2. Update status to completed
@@ -287,14 +304,16 @@ export async function completeAppointment(appointmentId: string) {
 
   if (updateError) {
     console.error('Failed to update appointment status:', updateError);
-    return { success: false, error: 'Ocurrió un error al actualizar el estado.' };
+    throw new AppError('DB', 'Ocurrió un error al actualizar el estado.');
   }
 
-  return { success: true };
+  return ok({ id: appointmentId });
 }
 
 // Cancel an appointment
-export async function cancelAppointment(appointmentId: string, reason?: string) {
+export async function cancelAppointment(appointmentId: string, reason?: string): Promise<Result<{ id: string }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   // 1. Fetch current appointment
@@ -306,7 +325,7 @@ export async function cancelAppointment(appointmentId: string, reason?: string) 
 
   if (fetchError || !appointment) {
     console.error('Failed to fetch appointment:', fetchError);
-    return { success: false, error: 'No se pudo obtener el turno.' };
+    throw new AppError('NOT_FOUND', 'No se pudo obtener el turno.');
   }
 
   // 2. Update status to cancelled
@@ -317,7 +336,7 @@ export async function cancelAppointment(appointmentId: string, reason?: string) 
 
   if (updateError) {
     console.error('Failed to update appointment status:', updateError);
-    return { success: false, error: 'Ocurrió un error al cancelar el turno.' };
+    throw new AppError('DB', 'Ocurrió un error al cancelar el turno.');
   }
 
   // 3. Send Cancellation Email to Client
@@ -343,7 +362,7 @@ export async function cancelAppointment(appointmentId: string, reason?: string) 
     console.error('Failed to send Cancellation email:', emailError);
   }
 
-  return { success: true };
+  return ok({ id: appointmentId });
 }
 
 export async function getContactMessages() {
@@ -361,15 +380,17 @@ export async function getContactMessages() {
   return data;
 }
 
-export async function updateContactStatus(id: string, status: 'read' | 'archived') {
+export async function updateContactStatus(id: string, status: 'read' | 'archived'): Promise<Result<{ id: string }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
   const { error } = await supabase
     .from('contact_messages')
     .update({ status })
     .eq('id', id);
 
-  if (error) return { success: false, error: error.message };
-  return { success: true };
+  if (error) throw new AppError('DB', error.message);
+  return ok({ id });
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -381,8 +402,11 @@ export async function checkSlotAvailability(
   proposedStart: Date,
   durationMin: number,
   excludeId?: string,
-): Promise<{ available: boolean; conflictWith?: string }> {
-  const supabase = await createClient();
+): Promise<{ available: boolean }> {
+  // Privileged (service-role) read of non-PII columns only. RLS denies anon
+  // SELECT on `appointments` (Slice 1), so availability must be resolved
+  // server-side without exposing client_name/client_email/client_phone.
+  const supabase = createServiceClient();
 
   const dayStart = new Date(proposedStart);
   dayStart.setHours(0, 0, 0, 0);
@@ -391,7 +415,7 @@ export async function checkSlotAvailability(
 
   let query = supabase
     .from('appointments')
-    .select('id, appointment_date, client_name, services:service_id(duration)')
+    .select('appointment_date, service_id, services:service_id(duration)')
     .gte('appointment_date', dayStart.toISOString())
     .lte('appointment_date', dayEnd.toISOString())
     .neq('status', 'cancelled');
@@ -399,19 +423,22 @@ export async function checkSlotAvailability(
   if (excludeId) query = query.neq('id', excludeId);
 
   const { data, error } = await query;
-  if (error) return { available: true }; // fail open so booking is never blocked by a query error
+  if (error) {
+    // FAIL CLOSED: a query error must never let a slot be reported as free.
+    console.error('checkSlotAvailability query failed:', error.message);
+    return { available: false };
+  }
 
   const proposedEnd = new Date(proposedStart.getTime() + durationMin * 60_000);
 
   for (const app of data ?? []) {
     const existStart = new Date(app.appointment_date);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const existDuration: number = (app.services as any)?.duration ?? 60;
+    const existDuration: number = (app.services as { duration?: number } | null)?.duration ?? 60;
     const existEnd = new Date(existStart.getTime() + existDuration * 60_000);
 
     // Overlap condition: proposed start < existing end AND proposed end > existing start
     if (proposedStart < existEnd && proposedEnd > existStart) {
-      return { available: false, conflictWith: app.client_name };
+      return { available: false };
     }
   }
 
@@ -434,14 +461,13 @@ interface AdminAppointmentPayload {
   notes?: string;
 }
 
-export async function createAppointmentAdmin(payload: AdminAppointmentPayload) {
+export async function createAppointmentAdmin(payload: AdminAppointmentPayload): Promise<Result<AppointmentRow>> {
+  await requireAdmin();
+
   // 1. Check for collisions first
   const availability = await checkSlotAvailability(payload.appointmentDate, payload.serviceDuration);
   if (!availability.available) {
-    return {
-      success: false,
-      error: `Ese horario se superpone con el turno de ${availability.conflictWith ?? 'otro cliente'}. Por favor elegí otro horario.`,
-    };
+    throw new AppError('VALIDATION', 'Ese horario se superpone con otro turno. Por favor elegí otro horario.');
   }
 
   const supabase = await createClient();
@@ -484,7 +510,7 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload) {
     .select()
     .single();
 
-  if (dbError) return { success: false, error: 'Error al registrar el turno.' };
+  if (dbError) throw new AppError('DB', 'Error al registrar el turno.');
 
   // 3. Send confirmation email to client
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
@@ -513,7 +539,7 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload) {
     url: '/admin'
   });
 
-  return { success: true, data: dbData };
+  return ok(dbData);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -613,42 +639,12 @@ export interface AvailableSlot {
 }
 
 /**
- * Helper to get occupied windows for a specific date:
- * - Appointments
- * - Blocked times
+ * A range of time already occupied (appointment or admin block), expressed as
+ * absolute epoch-milliseconds.
  */
-async function getOccupiedWindowsForDate(dateStr: string, checkDateTime: number, defaultDurationMs: number) {
-  const supabase = await createClient();
-  const windows: { start: number; end: number }[] = [];
-  
-  // 1. Get blocked times
-  const blockedTimes = await getBlockedTimesForDate(dateStr);
-  for (const bt of blockedTimes) {
-    if (bt.isAllDay) {
-      windows.push({ start: checkDateTime, end: checkDateTime + 24 * 60 * 60 * 1000 });
-    } else {
-      const [sh, sm] = bt.start.split(':').map(Number);
-      const [eh, em] = bt.end.split(':').map(Number);
-      windows.push({
-        start: checkDateTime + sh * 3600000 + sm * 60000,
-        end: checkDateTime + eh * 3600000 + em * 60000
-      });
-    }
-  }
-  
-  // 2. Get appointments
-  const { data: apts } = await supabase.from('appointments').select('appointment_date, services:service_id(duration)')
-    .gte('appointment_date', `${dateStr}T00:00:00Z`).lte('appointment_date', `${dateStr}T23:59:59Z`).neq('status', 'cancelled');
-  
-  if (apts) {
-    for (const apt of apts) {
-      const start = new Date(apt.appointment_date).getTime();
-      const dur = (apt.services as { duration?: number })?.duration || (defaultDurationMs / 60000);
-      windows.push({ start, end: start + dur * 60000 });
-    }
-  }
-  
-  return windows;
+interface OccupiedWindow {
+  start: number;
+  end: number;
 }
 
 export async function getNextAvailableSlots(
@@ -659,21 +655,74 @@ export async function getNextAvailableSlots(
   const availableSlots: AvailableSlot[] = [];
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const slotDurationMs = durationMinutes * 60000;
-  
+
+  // Single 30-day window (no per-day queries → no N+1, P2/P5).
+  const windowEnd = new Date(today);
+  windowEnd.setDate(windowEnd.getDate() + 30);
+  const windowEndDateStr = windowEnd.toISOString().split('T')[0];
+
+  // 1. Appointments for the whole window — ONE range query on the indexed
+  //    `appointment_date` column, SELECTing only non-PII columns (Slice 1
+  //    denies anon reads, so this must go through the service-role client).
+  const svc = createServiceClient();
+  const { data: apts, error: aptErr } = await svc
+    .from('appointments')
+    .select('appointment_date, service_id, services:service_id(duration)')
+    .gte('appointment_date', today.toISOString())
+    .lte('appointment_date', `${windowEndDateStr}T23:59:59Z`)
+    .neq('status', 'cancelled');
+
+  if (aptErr) {
+    throw new AppError('DB', `Failed to fetch availability: ${aptErr.message}`);
+  }
+
+  // 2. Blocked times for the whole window — ONE range query (public read).
+  const anon = await createClient();
+  const { data: blockedRows, error: blockedErr } = await anon
+    .from('blocked_times')
+    .select('*')
+    .gte('date', today.toISOString().split('T')[0])
+    .lte('date', windowEndDateStr);
+
+  if (blockedErr) {
+    throw new AppError('DB', `Failed to fetch blocked times: ${blockedErr.message}`);
+  }
+
+  // 3. Flatten both sources into a single in-memory occupancy list.
+  const occupied: OccupiedWindow[] = [];
+  for (const apt of apts ?? []) {
+    const start = new Date(apt.appointment_date).getTime();
+    const dur = (apt.services as { duration?: number } | null)?.duration ?? durationMinutes;
+    occupied.push({ start, end: start + dur * 60000 });
+  }
+  for (const bt of blockedRows ?? []) {
+    const dayMs = new Date(`${bt.date}T00:00:00`).getTime();
+    if (bt.is_all_day) {
+      occupied.push({ start: dayMs, end: dayMs + 24 * 60 * 60 * 1000 });
+    } else if (bt.time_start && bt.time_end) {
+      const [sh, sm] = bt.time_start.split(':').map(Number);
+      const [eh, em] = bt.time_end.split(':').map(Number);
+      occupied.push({
+        start: dayMs + sh * 3600000 + sm * 60000,
+        end: dayMs + eh * 3600000 + em * 60000,
+      });
+    }
+  }
+
+  // 4. Walk days/business-hours in memory (no DB), matching existing output.
   for (let d = 0; d < 30 && availableSlots.length < count; d++) {
     const checkDate = new Date(today); checkDate.setDate(checkDate.getDate() + d);
     const dateStr = checkDate.toISOString().split('T')[0];
     const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][checkDate.getDay()];
     const bh = businessHours[dayName];
-    
+
     if (!bh || bh.closed) continue;
-    
-    const occupied = await getOccupiedWindowsForDate(dateStr, checkDate.getTime(), slotDurationMs);
+
     const [sH, sM] = bh.start.split(':').map(Number);
     const [eH, eM] = bh.end.split(':').map(Number);
     const dayStartMs = checkDate.getTime() + sH * 3600000 + sM * 60000;
     const dayEndMs = checkDate.getTime() + eH * 3600000 + eM * 60000;
-    
+
     for (let cur = dayStartMs; cur + slotDurationMs <= dayEndMs && availableSlots.length < count; cur += 1800000) {
       if (!occupied.some(w => cur < w.end && (cur + slotDurationMs) > w.start)) {
         const sd = new Date(cur);
@@ -711,28 +760,39 @@ interface ClientData {
   notes?: string;
 }
 
-function normalizePhone(phone: string | null | undefined): string | null {
-  if (!phone) return null;
-  return phone.replaceAll(/\D/g, '');
-}
-
 export async function findClient(phone?: string, email?: string): Promise<Client | null> {
   const supabase = await createClient();
-  
-  if (phone) {
-    const normalizedPhone = normalizePhone(phone);
-    const { data: phoneClients } = await supabase.from('clients').select('*').not('phone', 'is', null);
-    if (phoneClients) {
-      const found = phoneClients.find(c => normalizePhone(c.phone) === normalizedPhone);
-      if (found) return found as Client;
-    }
-  }
-  
+
+  // Indexed lookups (D4/P1): no more "load all clients then filter in JS".
+  // Email first (backed by the UNIQUE index `idx_clients_email_unique`),
+  // then phone (backed by `idx_clients_phone`). `.maybeSingle()` lets us
+  // distinguish "no match" (data=null, no error) from a real query failure.
   if (email) {
-    const { data: emailClients } = await supabase.from('clients').select('*').eq('email', email.toLowerCase()).single();
-    if (emailClients) return emailClients as Client;
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('email', email.toLowerCase())
+      .maybeSingle();
+
+    if (error) {
+      throw new AppError('DB', `Failed to look up client by email: ${error.message}`);
+    }
+    if (data) return data as Client;
   }
-  
+
+  if (phone) {
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('phone', phone)
+      .maybeSingle();
+
+    if (error) {
+      throw new AppError('DB', `Failed to look up client by phone: ${error.message}`);
+    }
+    if (data) return data as Client;
+  }
+
   return null;
 }
 
@@ -793,16 +853,20 @@ export async function getAllClients(): Promise<Client[]> {
   return data as Client[];
 }
 
-export async function updateClient(clientId: string, data: Partial<ClientData>) {
+export async function updateClient(clientId: string, data: Partial<ClientData>): Promise<Result<Client>> {
+  await requireAdmin();
+
   const supabase = await createClient();
   const updates: Record<string, unknown> = { ...data, updated_at: new Date().toISOString() };
   if (data.email) updates.email = data.email.toLowerCase();
   const { data: updated, error } = await supabase.from('clients').update(updates).eq('id', clientId).select().single();
-  if (error || !updated) return { success: false, error: error?.message };
-  return { success: true, data: updated as Client };
+  if (error || !updated) throw new AppError('DB', error?.message ?? 'Error al actualizar el cliente.');
+  return ok(updated as Client);
 }
 
-export async function deleteAppointment(appointmentId: string) {
+export async function deleteAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
+  await requireAdmin();
+
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -812,9 +876,9 @@ export async function deleteAppointment(appointmentId: string) {
 
   if (error) {
     console.error('Failed to delete appointment:', error);
-    return { success: false, error: 'Error al eliminar el turno.' };
+    throw new AppError('DB', 'Error al eliminar el turno.');
   }
 
-  return { success: true };
+  return ok({ id: appointmentId });
 }
 

@@ -45,21 +45,25 @@ export default function PerfilConfiguracion() {
   const handleSave = async () => {
     setIsSaving(true);
     
-    const result = await updateAdminSettings({
-      siteUrl: config.siteUrl,
-      instagramUrl: config.instagram,
-      whatsappUrl: config.whatsapp,
-      tiktokUrl: config.tiktok,
-      contactEmail: config.email,
-      bioContent: config.sobreMi,
-      profileImageUrl: config.profileImage,
-    });
-    
-    setIsSaving(false);
-    if (result.success) {
-      success('Perfil y redes actualizados correctamente.');
-    } else {
-      error('Hubo un error al guardar. Inténtalo de nuevo.');
+    try {
+      const result = await updateAdminSettings({
+        siteUrl: config.siteUrl,
+        instagramUrl: config.instagram,
+        whatsappUrl: config.whatsapp,
+        tiktokUrl: config.tiktok,
+        contactEmail: config.email,
+        bioContent: config.sobreMi,
+        profileImageUrl: config.profileImage,
+      });
+      setIsSaving(false);
+      if (result.ok) {
+        success('Perfil y redes actualizados correctamente.');
+      } else {
+        error('Hubo un error al guardar. Inténtalo de nuevo.');
+      }
+    } catch (err) {
+      setIsSaving(false);
+      error((err as Error)?.message || 'Hubo un error al guardar. Inténtalo de nuevo.');
     }
   };
 

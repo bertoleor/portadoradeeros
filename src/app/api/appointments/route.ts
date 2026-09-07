@@ -1,28 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { sendAppointmentConfirmation, sendNewAppointmentNotification } from '@/lib/email';
+
+const appointmentSchema = z.object({
+  name: z.string().min(1, 'Nombre requerido'),
+  surname: z.string().min(1, 'Apellido requerido'),
+  email: z.email('Email inválido'),
+  phone: z.string().min(1, 'Teléfono requerido'),
+  service: z.string().min(1, 'Servicio requerido'),
+  date: z.string().min(1, 'Fecha requerida'),
+  time: z.string().min(1, 'Hora requerida'),
+  price: z.coerce.number(),
+  bankDetails: z.object({
+    bankName: z.string().default(''),
+    accountType: z.string().default(''),
+    accountNumber: z.string().default(''),
+    cbu: z.string().default(''),
+    alias: z.string().default(''),
+  }).optional(),
+});
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { 
-      name, 
-      surname, 
-      email, 
-      phone, 
-      service, 
-      date, 
-      time, 
-      price,
-      bankDetails 
-    } = body;
 
-    // Validate required fields
-    if (!name || !surname || !email || !phone || !service || !date || !time || !price) {
+    const parsed = appointmentSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
         { error: 'Faltan campos requeridos' },
         { status: 400 }
       );
     }
+
+    const { name, surname, email, phone, service, date, time, price, bankDetails } = parsed.data;
 
     // Format the date for display
     const formattedDate = new Date(date).toLocaleDateString('es-AR', {
@@ -57,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     // Future integration: Save to database (Supabase) when configured
     // For now, we just send emails
-    
+
     return NextResponse.json({
       success: true,
       message: 'Cita agendada exitosamente',

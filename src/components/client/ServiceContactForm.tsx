@@ -343,9 +343,9 @@ export function ServiceContactForm({ serviceName, serviceId, serviceDuration = 6
         appointmentDate: new Date(y, m - 1, d, hh, mm),
         notes: formData.message,
       });
-      if (result.success) setIsSubmitted(true);
-      else setErrors({ submit: result.error || 'Error al agendar.' });
-    } catch { setErrors({ submit: 'Error de conexión.' }); }
+      if (result.ok) setIsSubmitted(true);
+      else setErrors({ submit: result.error.message || 'Error al agendar.' });
+    } catch (err) { setErrors({ submit: (err as Error)?.message || 'Error de conexión.' }); }
     finally { setIsLoading(false); }
   };
 

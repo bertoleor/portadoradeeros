@@ -73,20 +73,23 @@ export default function BankConfigPage() {
 
     setIsSaving(true);
     
-    // Server action
-    const result = await updateAdminSettings({
-      bankOwner: formData.bankOwner.trim(),
-      bankName: formData.bankName.trim(),
-      bankCbu: formData.cbu.trim(),
-      bankAlias: formData.alias.trim(),
-    });
-
-    setIsSaving(false);
-
-    if (result.success) {
-      success('Datos bancarios guardados con éxito');
-    } else {
-      error(result.error || 'Error al guardar los datos');
+    try {
+      // Server action
+      const result = await updateAdminSettings({
+        bankOwner: formData.bankOwner.trim(),
+        bankName: formData.bankName.trim(),
+        bankCbu: formData.cbu.trim(),
+        bankAlias: formData.alias.trim(),
+      });
+      setIsSaving(false);
+      if (result.ok) {
+        success('Datos bancarios guardados con éxito');
+      } else {
+        error(result.error.message || 'Error al guardar los datos');
+      }
+    } catch (err) {
+      setIsSaving(false);
+      error((err as Error)?.message || 'Error al guardar los datos');
     }
   };
 
