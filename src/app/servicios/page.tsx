@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ServiceCard } from '@/components/client/ServiceCard';
 import { getVisibleServices } from '@/lib/api/services';
@@ -14,21 +14,21 @@ const containerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.1,
-      delayChildren: 0.1
-    }
-  }
+      delayChildren: 0.1,
+    },
+  },
 };
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
     transition: {
       duration: 0.4,
-      ease: [0.25, 0.46, 0.45, 0.94] as const
-    }
-  }
+      ease: [0.25, 0.46, 0.45, 0.94] as const,
+    },
+  },
 };
 
 export default function ServiciosPage() {
@@ -54,8 +54,8 @@ export default function ServiciosPage() {
 
   if (loading) {
     return (
-      <section className="py-16 md:py-24 px-6 md:px-10">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16 md:py-24 px-4 md:px-8">
+        <div className="max-w-[1200px] mx-auto">
           <div className="mb-14 md:mb-20">
             <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
               Servicios
@@ -77,9 +77,8 @@ export default function ServiciosPage() {
   const visibleServices = services;
 
   return (
-    <section className="py-16 md:py-24 px-6 md:px-10">
-      <div className="max-w-6xl mx-auto">
-
+    <section className="py-16 md:py-24 px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="mb-14 md:mb-20">
           <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
@@ -91,7 +90,7 @@ export default function ServiciosPage() {
         </div>
 
         {/* Mobile: staggered masonry grid */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
@@ -100,16 +99,18 @@ export default function ServiciosPage() {
           {visibleServices.map((service, index) => {
             const isLarge = index % 3 === 0;
             return (
-              <motion.div 
-                key={service.id} 
+              <motion.div
+                key={service.id}
                 variants={itemVariants}
                 className={isLarge ? 'break-after-avoid' : ''}
               >
-                <ServiceCard 
-                  service={service} 
-                  index={index} 
+                <ServiceCard
+                  service={service}
+                  index={index}
                   featured={isLarge}
-                  className={isLarge ? 'min-h-[200px] sm:min-h-[340px]' : 'min-h-[180px] sm:min-h-[280px]'}
+                  className={
+                    isLarge ? 'min-h-[200px] sm:min-h-[340px]' : 'min-h-[180px] sm:min-h-[280px]'
+                  }
                 />
               </motion.div>
             );
@@ -128,7 +129,7 @@ export default function ServiciosPage() {
             })
             .map((service, index) => {
               const isFeatured = index === 0 || index === 3 || index === 4 || index === 7;
-              
+
               return (
                 <div key={service.id} className={isFeatured ? 'col-span-2' : 'col-span-1'}>
                   <ServiceCard service={service} index={index} featured={isFeatured} />
@@ -136,7 +137,6 @@ export default function ServiciosPage() {
               );
             })}
         </div>
-
       </div>
     </section>
   );

@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle2, MessageCircle, Mail, Send } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import { CheckCircle2, Mail, MessageCircle, Send } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, Input, Label } from '@/components/ui';
 import { SocialIcon } from '@/components/ui/ServiceIcons';
@@ -13,7 +13,7 @@ import { getAdminSettings } from '@/lib/api/settings';
 function TikTokIcon({ size = 18 }: { readonly size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
     </svg>
   );
 }
@@ -63,6 +63,7 @@ export default function ContactPage() {
     email: '',
     phone: '',
     message: '',
+    company_website: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -137,7 +138,7 @@ export default function ContactPage() {
 
       if (response.ok) {
         setIsSubmitted(true);
-        setFormData({ name: '', email: '', phone: '', message: '' });
+        setFormData({ name: '', email: '', phone: '', message: '', company_website: '' });
       } else {
         const data = await response.json();
         setErrors({ submit: data.error || 'Error al enviar el mensaje' });
@@ -150,9 +151,9 @@ export default function ContactPage() {
   };
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors((prev) => ({ ...prev, [field]: '' }));
     }
   };
 
@@ -177,7 +178,7 @@ export default function ContactPage() {
               className="rounded-full border-[rgba(15,15,20,0.2)] text-[rgba(15,15,20,0.8)]"
               onClick={() => {
                 setIsSubmitted(false);
-                setFormData({ name: '', email: '', phone: '', message: '' });
+                setFormData({ name: '', email: '', phone: '', message: '', company_website: '' });
               }}
             >
               Enviar otro mensaje
@@ -189,8 +190,8 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="py-16 md:py-24 px-6 md:px-10">
-      <div className="max-w-5xl mx-auto">
+    <div className="py-16 md:py-24 px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -201,9 +202,7 @@ export default function ContactPage() {
           <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-3">
             Contacto
           </span>
-          <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-black">
-            Hablemos
-          </h1>
+          <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-black">Hablemos</h1>
         </motion.div>
 
         {/* Main Glass Card - Divided in Two */}
@@ -216,11 +215,41 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Left: Form */}
             <div className="p-8 md:p-10 border-b lg:border-b-0 lg:border-r border-[rgba(255,255,255,0.25)]">
-              <h2 className="text-xl font-light text-[rgba(15,15,20,0.82)] mb-10 tracking-tight">Envíame un mensaje</h2>
+              <h2 className="text-xl font-light text-[rgba(15,15,20,0.82)] mb-10 tracking-tight">
+                Envíame un mensaje
+              </h2>
               <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                {/* Honeypot — visually hidden field to trap bots. Real users
+                                  never see or interact with it; its value stays empty. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute h-px w-px overflow-hidden"
+                  style={{
+                    clip: 'rect(0 0 0 0)',
+                    clipPath: 'inset(50%)',
+                    whiteSpace: 'nowrap',
+                    border: 0,
+                  }}
+                >
+                  <label htmlFor="company_website">No completar este campo</label>
+                  <input
+                    id="company_website"
+                    name="company_website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData.company_website}
+                    onChange={(e) => handleChange('company_website', e.target.value)}
+                  />
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Nombre</Label>
+                    <Label
+                      htmlFor="name"
+                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                    >
+                      Nombre
+                    </Label>
                     <Input
                       id="name"
                       placeholder="Tu nombre"
@@ -234,7 +263,12 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Email</Label>
+                    <Label
+                      htmlFor="email"
+                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                    >
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -250,7 +284,12 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Teléfono (opcional)</Label>
+                  <Label
+                    htmlFor="phone"
+                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                  >
+                    Teléfono (opcional)
+                  </Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -263,7 +302,12 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2 flex flex-col">
-                  <Label htmlFor="message" className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium">Mensaje</Label>
+                  <Label
+                    htmlFor="message"
+                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                  >
+                    Mensaje
+                  </Label>
                   <Textarea
                     id="message"
                     placeholder="Contame sobre tu consulta..."
@@ -293,16 +337,20 @@ export default function ContactPage() {
             <div className="p-8 md:p-10 bg-[rgba(255,255,255,0.08)]">
               {/* Info card */}
               <div className="mb-8">
-                <h3 className="text-lg font-medium text-[rgba(15,15,20,0.9)] mb-3">Portadora de Eros</h3>
+                <h3 className="text-lg font-medium text-[rgba(15,15,20,0.9)] mb-3">
+                  Portadora de Eros
+                </h3>
                 <p className="text-sm text-[rgba(15,15,20,0.65)] leading-relaxed">
-                  Guía espiritual, canalizadora y puente entre lo terrenal y lo místico.
-                  Conectando con la sabiduría ancestral para guiarte en tu camino.
+                  Guía espiritual, canalizadora y puente entre lo terrenal y lo místico. Conectando
+                  con la sabiduría ancestral para guiarte en tu camino.
                 </p>
               </div>
 
               {/* Social links */}
               <div className="space-y-2">
-                <h4 className="text-xs uppercase tracking-widest text-[rgba(15,15,20,0.45)] mb-4">Conectar</h4>
+                <h4 className="text-xs uppercase tracking-widest text-[rgba(15,15,20,0.45)] mb-4">
+                  Conectar
+                </h4>
                 {contactLinks.map((social) => (
                   <a
                     key={social.label}
@@ -313,13 +361,21 @@ export default function ContactPage() {
                   >
                     <div className="w-11 h-11 rounded-lg bg-[rgba(15,15,20,0.08)] flex items-center justify-center shrink-0 group-hover:bg-[rgba(15,15,20,0.12)] transition-colors">
                       {social.platform ? (
-                        <SocialIcon platform={social.platform} size={18} className="text-[rgba(15,15,20,0.6)]" />
+                        <SocialIcon
+                          platform={social.platform}
+                          size={18}
+                          className="text-[rgba(15,15,20,0.6)]"
+                        />
                       ) : (
-                        social.icon && <social.icon size={18} className="text-[rgba(15,15,20,0.6)]" />
+                        social.icon && (
+                          <social.icon size={18} className="text-[rgba(15,15,20,0.6)]" />
+                        )
                       )}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">{social.label}</div>
+                      <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">
+                        {social.label}
+                      </div>
                       <div className="text-sm font-medium text-[rgba(15,15,20,0.75)] group-hover:text-[rgba(15,15,20,0.9)] truncate transition-colors">
                         {social.handle}
                       </div>

@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Eye, Heart } from 'lucide-react';
+import { ArrowRight, Eye, Heart, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,12 +8,12 @@ import { getAdminSettings } from '@/lib/api/settings';
 import { sanitizeBioContent } from '@/lib/sanitize';
 import { cn } from '@/lib/utils';
 
-
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Sobre Mí | Portadora de Eros',
-  description: 'Conocé a la guía espiritual detrás de Portadora de Eros. Canalizadora, tarotista y puente entre lo terrenal y lo místico.',
+  description:
+    'Conocé a la guía espiritual detrás de Portadora de Eros. Canalizadora, tarotista y puente entre lo terrenal y lo místico.',
 };
 
 const DEFAULT_BIO = `
@@ -33,17 +33,20 @@ const values = [
   {
     icon: Sparkles,
     title: 'Sabiduría Ancestral',
-    description: 'Honro las tradiciones que me fueron transmitidas, respetando cada herramienta espiritual con la profundidad que merece.',
+    description:
+      'Honro las tradiciones que me fueron transmitidas, respetando cada herramienta espiritual con la profundidad que merece.',
   },
   {
     icon: Eye,
     title: 'Claridad & Verdad',
-    description: 'Mi compromiso es con la verdad de lo que las herramientas revelan. Sin adornos, sin filtros — solo lo que necesitás escuchar.',
+    description:
+      'Mi compromiso es con la verdad de lo que las herramientas revelan. Sin adornos, sin filtros — solo lo que necesitás escuchar.',
   },
   {
     icon: Heart,
     title: 'Conexión Genuina',
-    description: 'Cada sesión es un espacio sagrado de confianza. Te acompaño con empatía y respeto en tu proceso espiritual.',
+    description:
+      'Cada sesión es un espacio sagrado de confianza. Te acompaño con empatía y respeto en tu proceso espiritual.',
   },
 ];
 
@@ -52,8 +55,8 @@ export default async function SobreMiPage() {
   const bioHtml = sanitizeBioContent(settings?.bioContent || DEFAULT_BIO);
 
   return (
-    <div className="py-16 md:py-24 px-6 md:px-10">
-      <div className="max-w-4xl mx-auto">
+    <div className="py-16 md:py-24 px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="text-center mb-16 md:mb-24">
           <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
@@ -71,10 +74,10 @@ export default async function SobreMiPage() {
         {settings?.profileImageUrl && (
           <FadeIn delay={0.1} direction="up" distance={15} className="mb-20">
             <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-3xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-              <Image 
-                src={settings.profileImageUrl} 
-                alt="Portadora de Eros" 
-                fill 
+              <Image
+                src={settings.profileImageUrl}
+                alt="Portadora de Eros"
+                fill
                 className="object-cover"
                 sizes="(max-w-768px) 100vw, 1200px"
               />
@@ -85,7 +88,7 @@ export default async function SobreMiPage() {
         {/* Bio Section */}
         <div className="max-w-2xl mx-auto mb-20 md:mb-28">
           <FadeIn delay={0.2} direction="up" distance={15}>
-            <div 
+            <div
               className="prose prose-sm md:prose-base prose-black max-w-none text-black/60 font-light leading-relaxed"
               dangerouslySetInnerHTML={{ __html: bioHtml }}
             />
@@ -101,11 +104,25 @@ export default async function SobreMiPage() {
           </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {values.map((value, idx) => (
-              <FadeIn key={value.title} delay={0.2 + idx * 0.1} direction="up" distance={20} className="h-full">
+              <FadeIn
+                key={value.title}
+                delay={0.2 + idx * 0.1}
+                direction="up"
+                distance={20}
+                className="h-full"
+              >
                 <div className="h-full rounded-2xl bg-white/35 backdrop-blur-xl border border-white/50 p-7 md:p-8 hover:border-white/60 transition-colors">
-                  <value.icon size={24} className="text-[rgba(15,15,20,0.8)] mb-4" strokeWidth={1.5} />
-                  <h3 className="text-base font-medium mb-2 text-[rgba(15,15,20,0.85)]">{value.title}</h3>
-                  <p className="text-sm text-[rgba(15,15,20,0.6)] leading-relaxed font-light">{value.description}</p>
+                  <value.icon
+                    size={24}
+                    className="text-[rgba(15,15,20,0.8)] mb-4"
+                    strokeWidth={1.5}
+                  />
+                  <h3 className="text-base font-medium mb-2 text-[rgba(15,15,20,0.85)]">
+                    {value.title}
+                  </h3>
+                  <p className="text-sm text-[rgba(15,15,20,0.6)] leading-relaxed font-light">
+                    {value.description}
+                  </p>
                 </div>
               </FadeIn>
             ))}
@@ -119,13 +136,16 @@ export default async function SobreMiPage() {
               ¿Querés saber más o agendar una sesión?
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/contacto" className={cn(buttonVariants({ variant: "default", size: "lg" }), "btn-primary")}>
+              <Link
+                href="/contacto"
+                className={cn(buttonVariants({ variant: 'default', size: 'lg' }), 'btn-primary')}
+              >
                 Contactar
               </Link>
-              <Link href="/servicios" className={cn(
-                buttonVariants({ variant: "outline", size: "lg" }),
-                "btn-outline"
-              )}>
+              <Link
+                href="/servicios"
+                className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'btn-outline')}
+              >
                 Ver Servicios
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>

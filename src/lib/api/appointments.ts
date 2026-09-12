@@ -2,20 +2,25 @@
 
 import webPush from 'web-push';
 
-import { AppError, ok, fail, type Result } from '@/lib/api/error';
+import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
-import { 
-  sendAppointmentConfirmation, 
-  sendNewAppointmentNotification,
+import {
+  sendAppointmentCancellation,
+  sendAppointmentConfirmation,
   sendAppointmentConfirmed,
-  sendAppointmentCancellation
+  sendNewAppointmentNotification,
 } from '@/lib/email';
+import {
+  checkRateLimit,
+  HONEYPOT_FIELD,
+  isHoneypotTriggered,
+  SPAM_RATE_LIMIT,
+} from '@/lib/spam-protection';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { createServiceClient } from '@/lib/supabase/service';
-
-
+import { headers } from 'next/headers';
 
 import type { Database } from '@/types/database';
 
@@ -51,32 +56,29 @@ async function sendPushToAdmins(payload: { title: string; body: string; url?: st
     // bypasses RLS so the public booking flow can still broadcast to admin
     // devices. It selects ONLY push-subscription rows (endpoint/keys) — never PII.
     const supabase = createAdminClient();
-    const { data: subs, error } = await supabase
-      .from('push_subscriptions')
-      .select('*');
+    const { data: subs, error } = await supabase.from('push_subscriptions').select('*');
 
     if (error || !subs) return;
 
-    const pushPromises = subs.map((sub: { id: string; endpoint: string; p256dh: string; auth: string }) => {
-      const pushConfig = {
-        endpoint: sub.endpoint,
-        keys: {
-          p256dh: sub.p256dh,
-          auth: sub.auth
-        }
-      };
+    const pushPromises = subs.map(
+      (sub: { id: string; endpoint: string; p256dh: string; auth: string }) => {
+        const pushConfig = {
+          endpoint: sub.endpoint,
+          keys: {
+            p256dh: sub.p256dh,
+            auth: sub.auth,
+          },
+        };
 
-      return webPush.sendNotification(
-        pushConfig,
-        JSON.stringify(payload)
-      ).catch(err => {
-        // If 410 Gone or 404, the subscription is expired/invalid
-        if (err.statusCode === 410 || err.statusCode === 404) {
-          return supabase.from('push_subscriptions').delete().eq('id', sub.id);
-        }
-        console.error('Push error for sub:', sub.id, err);
-      });
-    });
+        return webPush.sendNotification(pushConfig, JSON.stringify(payload)).catch((err) => {
+          // If 410 Gone or 404, the subscription is expired/invalid
+          if (err.statusCode === 410 || err.statusCode === 404) {
+            return supabase.from('push_subscriptions').delete().eq('id', sub.id);
+          }
+          console.error('Push error for sub:', sub.id, err);
+        });
+      }
+    );
 
     await Promise.all(pushPromises);
   } catch (err) {
@@ -92,9 +94,67 @@ interface AppointmentPayload {
   appointmentDate: Date;
   notes?: string;
   serviceName: string; // for email only
+  [HONEYPOT_FIELD]?: string;
 }
 
-export async function createAppointment(payload: AppointmentPayload): Promise<Result<AppointmentRow>> {
+const RATE_LIMIT_SCOPE = 'appointments';
+
+/**
+ * Resolve the client IP for a server action from request headers. Server
+ * actions don't receive a `Request`, so we read the forwarding headers via
+ * `next/headers`. Falls back to a shared `unknown` bucket when absent (local
+ * dev). The email here is the real spam surface: a public form that mails the
+ * admin with no throttle is an open relay, so the check must live where the
+ * side-effect happens, not only in the (currently unused) `/api` route.
+ */
+async function resolveActionClientIp(): Promise<string> {
+  try {
+    const headerStore = await headers();
+    const forwarded = headerStore.get('x-forwarded-for');
+    if (forwarded) {
+      const first = forwarded.split(',')[0];
+      if (first !== undefined && first.trim().length > 0) {
+        return first.trim();
+      }
+    }
+    const realIp = headerStore.get('x-real-ip');
+    if (realIp && realIp.trim().length > 0) {
+      return realIp.trim();
+    }
+  } catch {
+    // `headers()` may throw outside a request context (e.g. tests); treat as unknown.
+  }
+  return 'unknown';
+}
+
+export async function createAppointment(
+  payload: AppointmentPayload
+): Promise<Result<AppointmentRow>> {
+  // HONEYPOT — bots that populate the hidden field must not trigger any email
+  // or DB write. We still return a successful-looking result so the caller's
+  // UI (and any bot) can't tell it was caught.
+  if (isHoneypotTriggered(payload[HONEYPOT_FIELD])) {
+    return ok({
+      id: 'honeypot',
+      service_id: null,
+      client_name: payload.clientName,
+      client_email: payload.clientEmail,
+      client_phone: payload.clientPhone ?? null,
+      appointment_date: payload.appointmentDate.toISOString(),
+      notes: payload.notes ?? null,
+      status: 'pending',
+    } as AppointmentRow);
+  }
+
+  // RATE LIMIT — cap this public write+email flow per IP.
+  const ip = await resolveActionClientIp();
+  const rate = checkRateLimit(RATE_LIMIT_SCOPE, ip, SPAM_RATE_LIMIT);
+  if (rate.limited) {
+    return fail(
+      new AppError('VALIDATION', 'Demasiadas solicitudes. Intenta nuevamente en unos minutos.')
+    );
+  }
+
   const supabase = await createClient();
 
   // 1. Insert into Supabase 'appointments' table
@@ -125,7 +185,7 @@ export async function createAppointment(payload: AppointmentPayload): Promise<Re
     bankOwner: 'Jacqueline',
     bankName: 'Mercado Pago',
     cbu: 'No configurado',
-    alias: 'PORTADORA.EROS'
+    alias: 'PORTADORA.EROS',
   };
 
   // 3. Notify
@@ -135,22 +195,25 @@ export async function createAppointment(payload: AppointmentPayload): Promise<Re
   void sendPushToAdmins({
     title: 'Nuevo turno ✨',
     body: `${payload.clientName} agendó ${payload.serviceName}.`,
-    url: '/admin'
+    url: '/admin',
   });
 
   return ok(dbData);
 }
 
-async function sendBookingEmails(payload: AppointmentPayload, bankDetails: {
-  bankOwner: string;
-  bankName: string;
-  cbu: string;
-  alias: string;
-}) {
+async function sendBookingEmails(
+  payload: AppointmentPayload,
+  bankDetails: {
+    bankOwner: string;
+    bankName: string;
+    cbu: string;
+    alias: string;
+  }
+) {
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
     dateStyle: 'full',
     timeStyle: 'short',
-    timeZone: 'America/Argentina/Buenos_Aires', 
+    timeZone: 'America/Argentina/Buenos_Aires',
   }).format(payload.appointmentDate);
 
   const emailData = {
@@ -167,7 +230,7 @@ async function sendBookingEmails(payload: AppointmentPayload, bankDetails: {
       accountNumber: bankDetails.cbu,
       cbu: bankDetails.cbu,
       alias: bankDetails.alias,
-    }
+    },
   };
 
   try {
@@ -186,10 +249,12 @@ export async function getAppointments() {
 
   const { data, error } = await supabase
     .from('appointments')
-    .select(`
+    .select(
+      `
       *,
       services ( title, price )
-    `)
+    `
+    )
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -271,7 +336,7 @@ export async function confirmAppointment(appointmentId: string): Promise<Result<
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
     dateStyle: 'full',
     timeStyle: 'short',
-    timeZone: 'America/Argentina/Buenos_Aires', 
+    timeZone: 'America/Argentina/Buenos_Aires',
   }).format(new Date(appointment.appointment_date));
 
   const serviceName = appointment.services?.title || 'tu sesión';
@@ -284,7 +349,7 @@ export async function confirmAppointment(appointmentId: string): Promise<Result<
       service: serviceName,
       date: formattedDate.split(' a las ')[0],
       time: formattedDate.split(' a las ')[1] || '',
-      price: 0
+      price: 0,
     });
   } catch (emailError) {
     console.error('Failed to send Confirmed email:', emailError);
@@ -326,7 +391,10 @@ export async function completeAppointment(appointmentId: string): Promise<Result
 }
 
 // Cancel an appointment
-export async function cancelAppointment(appointmentId: string, reason?: string): Promise<Result<{ id: string }>> {
+export async function cancelAppointment(
+  appointmentId: string,
+  reason?: string
+): Promise<Result<{ id: string }>> {
   await requireAdmin();
 
   const supabase = await createClient();
@@ -358,21 +426,24 @@ export async function cancelAppointment(appointmentId: string, reason?: string):
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
     dateStyle: 'full',
     timeStyle: 'short',
-    timeZone: 'America/Argentina/Buenos_Aires', 
+    timeZone: 'America/Argentina/Buenos_Aires',
   }).format(new Date(appointment.appointment_date));
 
   const serviceName = appointment.services?.title || 'tu sesión';
 
   try {
-    await sendAppointmentCancellation({
-      clientName: appointment.client_name,
-      clientEmail: appointment.client_email,
-      clientPhone: appointment.client_phone || '',
-      service: serviceName,
-      date: formattedDate.split(' a las ')[0],
-      time: formattedDate.split(' a las ')[1] || '',
-      price: 0
-    }, reason);
+    await sendAppointmentCancellation(
+      {
+        clientName: appointment.client_name,
+        clientEmail: appointment.client_email,
+        clientPhone: appointment.client_phone || '',
+        service: serviceName,
+        date: formattedDate.split(' a las ')[0],
+        time: formattedDate.split(' a las ')[1] || '',
+        price: 0,
+      },
+      reason
+    );
   } catch (emailError) {
     console.error('Failed to send Cancellation email:', emailError);
   }
@@ -395,14 +466,14 @@ export async function getContactMessages() {
   return data;
 }
 
-export async function updateContactStatus(id: string, status: 'read' | 'archived'): Promise<Result<{ id: string }>> {
+export async function updateContactStatus(
+  id: string,
+  status: 'read' | 'archived'
+): Promise<Result<{ id: string }>> {
   await requireAdmin();
 
   const supabase = await createClient();
-  const { error } = await supabase
-    .from('contact_messages')
-    .update({ status })
-    .eq('id', id);
+  const { error } = await supabase.from('contact_messages').update({ status }).eq('id', id);
 
   if (error) throw new AppError('DB', error.message);
   return ok({ id });
@@ -416,7 +487,7 @@ export async function updateContactStatus(id: string, status: 'read' | 'archived
 export async function checkSlotAvailability(
   proposedStart: Date,
   durationMin: number,
-  excludeId?: string,
+  excludeId?: string
 ): Promise<{ available: boolean }> {
   // Privileged (service-role) read of non-PII columns only. RLS denies anon
   // SELECT on `appointments` (Slice 1), so availability must be resolved
@@ -476,13 +547,21 @@ interface AdminAppointmentPayload {
   notes?: string;
 }
 
-export async function createAppointmentAdmin(payload: AdminAppointmentPayload): Promise<Result<AppointmentRow>> {
+export async function createAppointmentAdmin(
+  payload: AdminAppointmentPayload
+): Promise<Result<AppointmentRow>> {
   await requireAdmin();
 
   // 1. Check for collisions first
-  const availability = await checkSlotAvailability(payload.appointmentDate, payload.serviceDuration);
+  const availability = await checkSlotAvailability(
+    payload.appointmentDate,
+    payload.serviceDuration
+  );
   if (!availability.available) {
-    throw new AppError('VALIDATION', 'Ese horario se superpone con otro turno. Por favor elegí otro horario.');
+    throw new AppError(
+      'VALIDATION',
+      'Ese horario se superpone con otro turno. Por favor elegí otro horario.'
+    );
   }
 
   const supabase = await createClient();
@@ -494,7 +573,7 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload): 
     const nameParts = payload.clientName.split(' ');
     const firstName = nameParts[0];
     const surname = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-    
+
     try {
       const client = await findOrCreateClient({
         name: firstName,
@@ -512,16 +591,18 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload): 
   // 3. Insert with status 'confirmed' directly (admin-created = already confirmed)
   const { data: dbData, error: dbError } = await supabase
     .from('appointments')
-    .insert([{
-      service_id: payload.serviceId || null,
-      client_id: clientId || null, // Link to clients table
-      client_name: payload.clientName, // Keep for backwards compatibility
-      client_email: payload.clientEmail,
-      client_phone: payload.clientPhone || null,
-      appointment_date: payload.appointmentDate.toISOString(),
-      notes: payload.notes || null,
-      status: 'confirmed',
-    }])
+    .insert([
+      {
+        service_id: payload.serviceId || null,
+        client_id: clientId || null, // Link to clients table
+        client_name: payload.clientName, // Keep for backwards compatibility
+        client_email: payload.clientEmail,
+        client_phone: payload.clientPhone || null,
+        appointment_date: payload.appointmentDate.toISOString(),
+        notes: payload.notes || null,
+        status: 'confirmed',
+      },
+    ])
     .select()
     .single();
 
@@ -529,7 +610,8 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload): 
 
   // 3. Send confirmation email to client
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
-    dateStyle: 'full', timeStyle: 'short',
+    dateStyle: 'full',
+    timeStyle: 'short',
     timeZone: 'America/Argentina/Buenos_Aires',
   }).format(payload.appointmentDate);
 
@@ -541,7 +623,7 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload): 
       service: payload.serviceName,
       date: formattedDate.split(' a las ')[0],
       time: formattedDate.split(' a las ')[1] || '',
-      price: 0
+      price: 0,
     });
   } catch (emailErr) {
     console.error('Email error on admin appointment:', emailErr);
@@ -551,7 +633,7 @@ export async function createAppointmentAdmin(payload: AdminAppointmentPayload): 
   void sendPushToAdmins({
     title: 'Nuevo turno (Manual) ✨',
     body: `Turno creado para ${payload.clientName}: ${payload.serviceName}.`,
-    url: '/admin'
+    url: '/admin',
   });
 
   return ok(dbData);
@@ -579,7 +661,9 @@ export async function getClients(): Promise<ClientRecord[]> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('appointments')
-    .select('id, client_name, client_email, client_phone, appointment_date, status, services:service_id(title)')
+    .select(
+      'id, client_name, client_email, client_phone, appointment_date, status, services:service_id(title)'
+    )
     .order('appointment_date', { ascending: false });
 
   if (error || !data) return [];
@@ -587,7 +671,8 @@ export async function getClients(): Promise<ClientRecord[]> {
   // Group by email
   const map = new Map<string, ClientRecord>();
   for (const row of data) {
-    const serviceTitle = (row.services as unknown as { title: string | null }[])?.[0]?.title ?? null;
+    const serviceTitle =
+      (row.services as unknown as { title: string | null }[])?.[0]?.title ?? null;
     const existing = map.get(row.client_email);
     const appt = {
       id: row.id,
@@ -610,34 +695,37 @@ export async function getClients(): Promise<ClientRecord[]> {
   }
 
   // Recalculate totals
-  const clients = Array.from(map.values()).map(c => ({
+  const clients = Array.from(map.values()).map((c) => ({
     ...c,
     totalAppointments: c.appointments.length,
     lastAppointment: c.appointments[0]?.appointment_date ?? '',
   }));
 
-  return clients.sort((a, b) => new Date(b.lastAppointment).getTime() - new Date(a.lastAppointment).getTime());
+  return clients.sort(
+    (a, b) => new Date(b.lastAppointment).getTime() - new Date(a.lastAppointment).getTime()
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET BLOCKED TIMES FOR A SPECIFIC DATE (Client Side)
 // Returns times that admin has blocked for a given date
 // ─────────────────────────────────────────────────────────────────────────────
-export async function getBlockedTimesForDate(dateStr: string): Promise<{ start: string; end: string; isAllDay: boolean }[]> {
+export async function getBlockedTimesForDate(
+  dateStr: string
+): Promise<{ start: string; end: string; isAllDay: boolean }[]> {
   const supabase = await createClient();
-  
-  const { data, error } = await supabase
-    .from('blocked_times')
-    .select('*')
-    .eq('date', dateStr);
+
+  const { data, error } = await supabase.from('blocked_times').select('*').eq('date', dateStr);
 
   if (error || !data) return [];
 
-  return data.map((bt: { time_start: string | null; time_end: string | null; is_all_day: boolean | null }) => ({
-    start: bt.time_start || '00:00',
-    end: bt.time_end || '23:59',
-    isAllDay: bt.is_all_day ?? false
-  }));
+  return data.map(
+    (bt: { time_start: string | null; time_end: string | null; is_all_day: boolean | null }) => ({
+      start: bt.time_start || '00:00',
+      end: bt.time_end || '23:59',
+      isAllDay: bt.is_all_day ?? false,
+    })
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -668,7 +756,8 @@ export async function getNextAvailableSlots(
   count = 5
 ): Promise<AvailableSlot[]> {
   const availableSlots: AvailableSlot[] = [];
-  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const slotDurationMs = durationMinutes * 60000;
 
   // Single 30-day window (no per-day queries → no N+1, P2/P5).
@@ -726,9 +815,12 @@ export async function getNextAvailableSlots(
 
   // 4. Walk days/business-hours in memory (no DB), matching existing output.
   for (let d = 0; d < 30 && availableSlots.length < count; d++) {
-    const checkDate = new Date(today); checkDate.setDate(checkDate.getDate() + d);
+    const checkDate = new Date(today);
+    checkDate.setDate(checkDate.getDate() + d);
     const dateStr = checkDate.toISOString().split('T')[0];
-    const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][checkDate.getDay()];
+    const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
+      checkDate.getDay()
+    ];
     const bh = businessHours[dayName];
 
     if (!bh || bh.closed) continue;
@@ -738,13 +830,17 @@ export async function getNextAvailableSlots(
     const dayStartMs = checkDate.getTime() + sH * 3600000 + sM * 60000;
     const dayEndMs = checkDate.getTime() + eH * 3600000 + eM * 60000;
 
-    for (let cur = dayStartMs; cur + slotDurationMs <= dayEndMs && availableSlots.length < count; cur += 1800000) {
-      if (!occupied.some(w => cur < w.end && (cur + slotDurationMs) > w.start)) {
+    for (
+      let cur = dayStartMs;
+      cur + slotDurationMs <= dayEndMs && availableSlots.length < count;
+      cur += 1800000
+    ) {
+      if (!occupied.some((w) => cur < w.end && cur + slotDurationMs > w.start)) {
         const sd = new Date(cur);
         availableSlots.push({
           date: dateStr,
           time: `${sd.getUTCHours().toString().padStart(2, '0')}:${sd.getUTCMinutes().toString().padStart(2, '0')}`,
-          datetime: sd.toISOString()
+          datetime: sd.toISOString(),
         });
       }
     }
@@ -821,69 +917,112 @@ export async function findOrCreateClient(data: ClientData): Promise<Client> {
     email: data.email ? data.email.toLowerCase() : undefined,
   };
   const existing = await findClient(normalizedData.phone, normalizedData.email);
-  
+
   if (existing) {
     const updates: Partial<ClientData> = {};
     const fields: (keyof ClientData)[] = ['name', 'surname', 'email', 'phone'];
-    
-    fields.forEach(field => {
+
+    fields.forEach((field) => {
       const val = normalizedData[field];
       if (val && val !== existing[field]) {
         updates[field] = val;
       }
     });
-    
+
     if (Object.keys(updates).length > 0) {
       const updatedAt = new Date().toISOString();
-      await supabase.from('clients').update({ ...updates, updated_at: updatedAt }).eq('id', existing.id);
+      await supabase
+        .from('clients')
+        .update({ ...updates, updated_at: updatedAt })
+        .eq('id', existing.id);
       return { ...existing, ...updates, updated_at: updatedAt } as Client;
     }
     return existing;
   }
-  
-  const { data: newClient, error } = await supabase.from('clients').insert([{
-    name: normalizedData.name,
-    surname: normalizedData.surname || null,
-    email: normalizedData.email?.toLowerCase() || null,
-    phone: normalizedData.phone || null,
-    notes: normalizedData.notes || null,
-  }]).select().single();
-  
+
+  const { data: newClient, error } = await supabase
+    .from('clients')
+    .insert([
+      {
+        name: normalizedData.name,
+        surname: normalizedData.surname || null,
+        email: normalizedData.email?.toLowerCase() || null,
+        phone: normalizedData.phone || null,
+        notes: normalizedData.notes || null,
+      },
+    ])
+    .select()
+    .single();
+
   if (error || !newClient) throw new Error('Failed to create client: ' + error?.message);
   return newClient as Client;
 }
 
 export async function getClientById(clientId: string) {
   const supabase = await createClient();
-  const { data: client, error } = await supabase.from('clients').select('*').eq('id', clientId).single();
+  const { data: client, error } = await supabase
+    .from('clients')
+    .select('*')
+    .eq('id', clientId)
+    .single();
   if (error || !client) return null;
-  
-  const { data: appointments } = await supabase.from('appointments').select('*, services:service_id(title, duration)').eq('client_id', clientId).order('appointment_date', { ascending: false });
-  
+
+  const { data: appointments } = await supabase
+    .from('appointments')
+    .select('*, services:service_id(title, duration)')
+    .eq('client_id', clientId)
+    .order('appointment_date', { ascending: false });
+
   const now = new Date();
-  const upcoming = (appointments || []).filter(a => { const d = new Date(a.appointment_date); return (a.status === 'pending' || a.status === 'confirmed') && d >= now; });
-  const history = (appointments || []).filter(a => a.status === 'completed');
-  const cancelled = (appointments || []).filter(a => a.status === 'cancelled');
-  
-  return { ...client, upcoming, history, cancelled, stats: { total: appointments?.length || 0, completed: history.length, cancelled: cancelled.length, lastAppointment: appointments?.[0]?.appointment_date || null } };
+  const upcoming = (appointments || []).filter((a) => {
+    const d = new Date(a.appointment_date);
+    return (a.status === 'pending' || a.status === 'confirmed') && d >= now;
+  });
+  const history = (appointments || []).filter((a) => a.status === 'completed');
+  const cancelled = (appointments || []).filter((a) => a.status === 'cancelled');
+
+  return {
+    ...client,
+    upcoming,
+    history,
+    cancelled,
+    stats: {
+      total: appointments?.length || 0,
+      completed: history.length,
+      cancelled: cancelled.length,
+      lastAppointment: appointments?.[0]?.appointment_date || null,
+    },
+  };
 }
 
 export async function getAllClients(): Promise<Client[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .order('created_at', { ascending: false });
   if (error || !data) return [];
   return data as Client[];
 }
 
-export async function updateClient(clientId: string, data: Partial<ClientData>): Promise<Result<Client>> {
+export async function updateClient(
+  clientId: string,
+  data: Partial<ClientData>
+): Promise<Result<Client>> {
   await requireAdmin();
 
   const supabase = await createClient();
   const updates: Record<string, unknown> = { ...data, updated_at: new Date().toISOString() };
   if (data.email) updates.email = data.email.toLowerCase();
   if (data.phone) updates.phone = normalizePhone(data.phone);
-  const { data: updated, error } = await supabase.from('clients').update(updates).eq('id', clientId).select().single();
-  if (error || !updated) throw new AppError('DB', error?.message ?? 'Error al actualizar el cliente.');
+  const { data: updated, error } = await supabase
+    .from('clients')
+    .update(updates)
+    .eq('id', clientId)
+    .select()
+    .single();
+  if (error || !updated)
+    throw new AppError('DB', error?.message ?? 'Error al actualizar el cliente.');
   return ok(updated as Client);
 }
 
@@ -892,10 +1031,7 @@ export async function deleteAppointment(appointmentId: string): Promise<Result<{
 
   const supabase = await createClient();
 
-  const { error } = await supabase
-    .from('appointments')
-    .delete()
-    .eq('id', appointmentId);
+  const { error } = await supabase.from('appointments').delete().eq('id', appointmentId);
 
   if (error) {
     console.error('Failed to delete appointment:', error);
@@ -904,4 +1040,3 @@ export async function deleteAppointment(appointmentId: string): Promise<Result<{
 
   return ok({ id: appointmentId });
 }
-

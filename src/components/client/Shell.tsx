@@ -18,9 +18,7 @@ export function Shell({ children }: { readonly children: ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="flex-grow flex flex-col pt-16 min-h-[calc(100vh-8rem)]">
-        {children}
-      </main>
+      <main className="flex-grow flex flex-col pt-20 min-h-[calc(100vh-8rem)]">{children}</main>
       <Footer />
     </>
   );

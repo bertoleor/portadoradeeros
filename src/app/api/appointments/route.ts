@@ -2,8 +2,15 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { sendAppointmentConfirmation, sendNewAppointmentNotification } from '@/lib/email';
+import {
+  checkRateLimit,
+  HONEYPOT_FIELD,
+  isHoneypotTriggered,
+  resolveClientIp,
+  SPAM_RATE_LIMIT,
+} from '@/lib/spam-protection';
 
-import type { NextRequest} from 'next/server';
+import type { NextRequest } from 'next/server';
 
 const appointmentSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
@@ -14,25 +21,46 @@ const appointmentSchema = z.object({
   date: z.string().min(1, 'Fecha requerida'),
   time: z.string().min(1, 'Hora requerida'),
   price: z.coerce.number(),
-  bankDetails: z.object({
-    bankName: z.string().default(''),
-    accountType: z.string().default(''),
-    accountNumber: z.string().default(''),
-    cbu: z.string().default(''),
-    alias: z.string().default(''),
-  }).optional(),
+  bankDetails: z
+    .object({
+      bankName: z.string().default(''),
+      accountType: z.string().default(''),
+      accountNumber: z.string().default(''),
+      cbu: z.string().default(''),
+      alias: z.string().default(''),
+    })
+    .optional(),
+  [HONEYPOT_FIELD]: z.string().optional(),
 });
+
+const RATE_LIMIT_SCOPE = 'appointments';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // HONEYPOT — bots that fill the hidden field get a silent no-op success so
+    // they cannot distinguish being caught; no email is sent.
+    if (isHoneypotTriggered(body[HONEYPOT_FIELD])) {
+      return NextResponse.json({
+        success: true,
+        message: 'Cita agendada exitosamente',
+      });
+    }
+
+    // RATE LIMIT — cap email sends per IP.
+    const ip = resolveClientIp(request);
+    const rate = checkRateLimit(RATE_LIMIT_SCOPE, ip, SPAM_RATE_LIMIT);
+    if (rate.limited) {
+      return NextResponse.json(
+        { error: 'Demasiadas solicitudes. Intenta nuevamente en unos minutos.' },
+        { status: 429 }
+      );
+    }
+
     const parsed = appointmentSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: 'Faltan campos requeridos' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
     const { name, surname, email, phone, service, date, time, price, bankDetails } = parsed.data;
@@ -79,10 +107,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error processing appointment:', error);
-    return NextResponse.json(
-      { error: 'Error al procesar la solicitud' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error al procesar la solicitud' }, { status: 500 });
   }
 }
 

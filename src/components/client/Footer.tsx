@@ -1,11 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { SocialIcon } from '@/components/ui/ServiceIcons';
 import { getAdminSettings } from '@/lib/api/settings';
-
 
 // TikTokIcon is no longer needed here as it's in SocialIcon
 
@@ -66,7 +65,7 @@ export function Footer() {
 
   return (
     <footer className="w-full py-10 md:py-16 border-t border-[rgba(255,255,255,0.25)] mt-auto glass-subtle">
-      <div className="w-full max-w-7xl mx-auto px-4 md:px-10">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8 items-start mb-10">
           {/* Logo & Brand */}
           <div className="space-y-4">
@@ -84,7 +83,9 @@ export function Footer() {
           {/* Navigation */}
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">Sitio</h4>
+              <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">
+                Sitio
+              </h4>
               <nav className="flex flex-col gap-3">
                 {navLinks.map((link) => (
                   <Link
@@ -98,18 +99,37 @@ export function Footer() {
               </nav>
             </div>
             <div className="space-y-4">
-              <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">Legal</h4>
+              <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">
+                Legal
+              </h4>
               <nav className="flex flex-col gap-3">
-                <Link href="/terminos" className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit">Términos</Link>
-                <Link href="/politica-cancelacion" className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit">Cancelación</Link>
-                <Link href="/privacidad" className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit">Privacidad</Link>
+                <Link
+                  href="/terminos"
+                  className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit"
+                >
+                  Términos
+                </Link>
+                <Link
+                  href="/politica-cancelacion"
+                  className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit"
+                >
+                  Cancelación
+                </Link>
+                <Link
+                  href="/privacidad"
+                  className="text-xs font-light text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.9)] transition-colors tracking-wide w-fit"
+                >
+                  Privacidad
+                </Link>
               </nav>
             </div>
           </div>
 
           {/* Socials */}
           <div className="flex flex-col md:items-end gap-6">
-            <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">Seguime</h4>
+            <h4 className="text-[10px] font-bold text-[rgba(15,15,20,0.85)] uppercase tracking-[0.2em]">
+              Seguime
+            </h4>
             <div className="flex items-center gap-3">
               {footerSocials.map((social) => (
                 <a
@@ -134,7 +154,9 @@ export function Footer() {
           </p>
           <div className="flex items-center gap-2">
             <span className="w-1 h-1 rounded-full bg-[rgba(15,15,20,0.15)]"></span>
-            <p className="text-[10px] text-[rgba(15,15,20,0.25)] font-medium tracking-[0.2em] uppercase">Buenos Aires, Argentina</p>
+            <p className="text-[10px] text-[rgba(15,15,20,0.25)] font-medium tracking-[0.2em] uppercase">
+              Buenos Aires, Argentina
+            </p>
           </div>
         </div>
       </div>

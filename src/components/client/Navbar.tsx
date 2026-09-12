@@ -1,10 +1,10 @@
 'use client';
 
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { getAdminSettings } from '@/lib/api/settings';
 
@@ -26,22 +26,22 @@ export function Navbar() {
   const { scrollY } = useScroll();
   const lastScrollY = useRef(0);
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
+  useMotionValueEvent(scrollY, 'change', (latest) => {
     const currentScrollY = latest;
     setIsScrolled(currentScrollY > 20);
-    
+
     // Hide on scroll down, show on scroll up
     if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
       setHidden(true);
     } else {
       setHidden(false);
     }
-    
+
     lastScrollY.current = currentScrollY;
   });
 
   useEffect(() => {
-    getAdminSettings().then(settings => {
+    getAdminSettings().then((settings) => {
       if (settings) {
         setSocialLinks({
           instagram: settings.socialLinks.instagram || 'https://instagram.com/portadoradeeros',
@@ -62,16 +62,16 @@ export function Navbar() {
   };
 
   return (
-    <nav 
+    <nav
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 h-16 transition-all duration-500 flex items-center justify-center',
+        'fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-500 flex items-center justify-center',
         isScrolled
           ? 'bg-white/80 backdrop-blur-2xl border-b border-white/30 shadow-[0_1px_20px_rgba(0,0,0,0.04)]'
           : 'bg-white/8 backdrop-blur-sm border-b border-white/10',
         hidden ? '-translate-y-full' : 'translate-y-0'
       )}
     >
-      <div className="w-full max-w-7xl mx-auto px-4 md:px-10 flex items-center justify-between relative">
+      <div className="w-full max-w-[1200px] mx-auto px-4 md:px-8 flex items-center justify-between relative">
         {/* Mobile Menu Button */}
         <button
           className="md:hidden p-3 -ml-3 text-[rgba(15,15,20,0.85)] hover:text-[rgba(15,15,20,1)] hover:bg-white/20 rounded-xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
@@ -141,22 +141,45 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
                 className="mt-12 pt-8 border-t border-[rgba(15,15,20,0.1)]"
               >
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.5)] font-medium mb-4">Redes</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.5)] font-medium mb-4">
+                  Redes
+                </p>
                 <div className="flex gap-6 justify-center">
-                  <a href={socialLinks.instagram || '#'} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors">Instagram</a>
-                  <a href={socialLinks.tiktok || '#'} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors">TikTok</a>
-                  <a href={socialLinks.whatsapp || '#'} target="_blank" rel="noopener noreferrer" className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors">WhatsApp</a>
+                  <a
+                    href={socialLinks.instagram || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors"
+                  >
+                    Instagram
+                  </a>
+                  <a
+                    href={socialLinks.tiktok || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors"
+                  >
+                    TikTok
+                  </a>
+                  <a
+                    href={socialLinks.whatsapp || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors"
+                  >
+                    WhatsApp
+                  </a>
                 </div>
               </motion.div>
             </div>
-            
+
             {/* Close button */}
             <button
               onClick={() => setIsMenuOpen(false)}

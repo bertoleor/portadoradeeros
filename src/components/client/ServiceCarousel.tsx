@@ -3,13 +3,7 @@
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 import { cn } from '@/lib/utils';
@@ -18,10 +12,10 @@ import type { Service } from '@/types';
 
 // ─── Constantes ──────────────────────────────────────────────────────────────
 
-const AUTO_MS      = 5000;  // ms entre avances automáticos
-const DURATION_MS  = 500;   // ms de la transición CSS
-const GAP_PX       = 24;    // gap entre cards en px
-const CARD_PERCENT = 0.6;   // ancho de la card activa como fracción del viewport
+const AUTO_MS = 5000; // ms entre avances automáticos
+const DURATION_MS = 500; // ms de la transición CSS
+const GAP_PX = 24; // gap entre cards en px
+const CARD_PERCENT = 0.6; // ancho de la card activa como fracción del viewport
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -35,13 +29,7 @@ interface ServiceCardProps {
 
 // ─── ServiceCard ─────────────────────────────────────────────────────────────
 
-function ServiceCard({
-  service,
-  displayIndex,
-  isActive,
-  onNavigate,
-  onClick,
-}: ServiceCardProps) {
+function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: ServiceCardProps) {
   const handleClick = () => {
     if (isActive) onNavigate();
     else onClick();
@@ -60,7 +48,7 @@ function ServiceCard({
         'glass transition-all duration-500 overflow-hidden outline-none w-full',
         isActive
           ? 'bg-white/45 shadow-[0_20px_50px_rgba(0,0,0,0.08)] cursor-pointer'
-          : 'bg-white/20 cursor-pointer backdrop-blur-sm opacity-70 hover:opacity-85',
+          : 'bg-white/20 cursor-pointer backdrop-blur-sm opacity-70 hover:opacity-85'
       )}
     >
       {/* Número */}
@@ -89,7 +77,7 @@ function ServiceCard({
         <p
           className={cn(
             'text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-2 md:line-clamp-4',
-            isActive ? 'text-[rgba(15,15,20,0.6)]' : 'text-[rgba(15,15,20,0.5)]',
+            isActive ? 'text-[rgba(15,15,20,0.6)]' : 'text-[rgba(15,15,20,0.5)]'
           )}
         >
           {service.shortDescription}
@@ -100,7 +88,7 @@ function ServiceCard({
             <span
               className={cn(
                 'text-[10px] uppercase tracking-[0.2em] font-medium transition-colors duration-500',
-                isActive ? 'text-[rgba(15,15,20,0.4)]' : 'text-[rgba(15,15,20,0.3)]',
+                isActive ? 'text-[rgba(15,15,20,0.4)]' : 'text-[rgba(15,15,20,0.3)]'
               )}
             >
               Duración
@@ -129,7 +117,7 @@ function ServiceCard({
 function CarouselSkeleton() {
   return (
     <section className="py-24 md:py-32" aria-hidden="true">
-      <div className="px-6 md:px-10 mb-16 max-w-[1248px] mx-auto">
+      <div className="px-4 md:px-8 mb-16 max-w-[1200px] mx-auto">
         <div className="h-4 w-32 rounded-full bg-black/5 mb-4 animate-pulse" />
         <div className="h-12 w-80 rounded-2xl bg-black/5 animate-pulse" />
       </div>
@@ -138,8 +126,8 @@ function CarouselSkeleton() {
           <div
             key={i}
             className={cn(
-              "shrink-0 w-[85%] md:w-[60%] h-[340px] md:h-[380px] rounded-[32px] bg-black/5 animate-pulse",
-              i === 0 ? "opacity-100" : "opacity-40"
+              'shrink-0 w-[85%] md:w-[60%] h-[340px] md:h-[380px] rounded-[32px] bg-black/5 animate-pulse',
+              i === 0 ? 'opacity-100' : 'opacity-40'
             )}
           />
         ))}
@@ -155,22 +143,22 @@ interface ServiceCarouselProps {
 }
 
 export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
-  const router  = useRouter();
-  const total   = initialServices.length;
+  const router = useRouter();
+  const total = initialServices.length;
 
   // ── Estado del índice
   // El array looped es [original × 3].
   // Empezamos en `total` (primera copia del medio) para poder ir hacia atrás.
-  const [realIndex, setRealIndex]   = useState(total);       // posición en el array looped
-  const [animated,  setAnimated]    = useState(false);       // false = sin transition (teleport)
+  const [realIndex, setRealIndex] = useState(total); // posición en el array looped
+  const [animated, setAnimated] = useState(false); // false = sin transition (teleport)
 
   // ── Refs
-  const trackRef      = useRef<HTMLDivElement>(null);
-  const wrapperRef    = useRef<HTMLDivElement>(null);
-  const cardWidthRef  = useRef(0);  // ancho real de la card en px (calculado por ResizeObserver)
-  const isPaused      = useRef(false);
-  const isJumping     = useRef(false);  // true durante el teleport silencioso
-  const timerRef      = useRef<ReturnType<typeof setInterval> | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const cardWidthRef = useRef(0); // ancho real de la card en px (calculado por ResizeObserver)
+  const isPaused = useRef(false);
+  const isJumping = useRef(false); // true durante el teleport silencioso
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── Array triplicado para loop infinito
   const looped = [...initialServices, ...initialServices, ...initialServices];
@@ -219,18 +207,15 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
         : 'none';
       track.style.transform = `translateX(${getOffset(idx)}px)`;
     },
-    [getOffset],
+    [getOffset]
   );
 
   // ── Navegar a un índice (con animación)
-  const goTo = useCallback(
-    (nextIdx: number) => {
-      if (isJumping.current) return;
-      setRealIndex(nextIdx);
-      setAnimated(true);
-    },
-    [],
-  );
+  const goTo = useCallback((nextIdx: number) => {
+    if (isJumping.current) return;
+    setRealIndex(nextIdx);
+    setAnimated(true);
+  }, []);
 
   const prev = useCallback(() => goTo(realIndex - 1), [goTo, realIndex]);
   const next = useCallback(() => goTo(realIndex + 1), [goTo, realIndex]);
@@ -244,7 +229,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const handleTransitionEnd = useCallback(() => {
     if (!animated) return;
     const normalized = ((realIndex % total) + total) % total;
-    const middle     = normalized + total; // equivalente en la copia del medio
+    const middle = normalized + total; // equivalente en la copia del medio
     if (realIndex !== middle) {
       isJumping.current = true;
       setAnimated(false);
@@ -296,7 +281,8 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
     const dx = touchStartX.current - e.changedTouches[0].clientX;
     const dy = touchStartY.current - e.changedTouches[0].clientY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx > 0) next(); else prev();
+      if (dx > 0) next();
+      else prev();
     }
     isPaused.current = false;
   };
@@ -311,18 +297,21 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
     <section
       aria-label="Carrusel de servicios"
       className="py-12 md:py-32 bg-transparent"
-      onMouseEnter={() => { isPaused.current = true; }}
-      onMouseLeave={() => { isPaused.current = false; }}
+      onMouseEnter={() => {
+        isPaused.current = true;
+      }}
+      onMouseLeave={() => {
+        isPaused.current = false;
+      }}
     >
       {/* Header */}
-      <div className="px-6 md:px-10 mb-8 md:mb-16 flex items-end justify-between gap-8 max-w-[1248px] mx-auto">
+      <div className="px-4 md:px-8 mb-8 md:mb-16 flex items-end justify-between gap-8 max-w-[1200px] mx-auto">
         <div className="max-w-xl">
           <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-3 md:mb-4">
             Servicios Exclusivos
           </span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
-            Guía y Claridad{' '}
-            <br />
+            Guía y Claridad <br />
             <span className="text-[rgba(15,15,20,0.4)]">en tu camino.</span>
           </h2>
         </div>
@@ -375,16 +364,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
         onTouchEnd={onTouchEnd}
         onTouchMove={onTouchMove}
       >
-        <div
-          ref={trackRef}
-          className="flex gap-6"
-          onTransitionEnd={handleTransitionEnd}
-        >
+        <div ref={trackRef} className="flex gap-6" onTransitionEnd={handleTransitionEnd}>
           {looped.map((s, i) => (
-            <div
-              key={`${s.id}-${i}`}
-              className="shrink-0 w-[78%] md:w-[60%]"
-            >
+            <div key={`${s.id}-${i}`} className="shrink-0 w-[78%] md:w-[60%]">
               <ServiceCard
                 service={s}
                 displayIndex={i % total}
@@ -408,9 +390,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
               aria-label={`Ir a servicio ${i + 1}`}
               className={cn(
                 'h-1 transition-all duration-500 rounded-full',
-                currentActual === i
-                  ? 'w-8 bg-black'
-                  : 'w-1.5 bg-black/10 hover:bg-black/20',
+                currentActual === i ? 'w-8 bg-black' : 'w-1.5 bg-black/10 hover:bg-black/20'
               )}
             />
           ))}

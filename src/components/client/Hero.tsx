@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
 import Link from 'next/link';
 
 const fadeUp = {
@@ -14,7 +14,7 @@ const fadeUp = {
  */
 export function Hero() {
   return (
-    <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-4 md:px-10">
+    <section className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-4 md:px-8">
       <div className="max-w-3xl mx-auto flex flex-col items-center justify-center gap-5 md:gap-8">
         <motion.div
           {...fadeUp}
@@ -44,17 +44,11 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-col sm:flex-row gap-3 justify-center items-center mt-4 md:mt-6 w-full px-4"
         >
-          <Link 
-            href="/servicios" 
-            className="btn-primary w-full sm:w-auto"
-          >
+          <Link href="/servicios" className="btn-primary w-full sm:w-auto">
             <Calendar className="w-4 h-4 mr-2 shrink-0" />
             Agendar Consulta
           </Link>
-          <Link 
-            href="/servicios" 
-            className="btn-outline w-full sm:w-auto"
-          >
+          <Link href="/servicios" className="btn-outline w-full sm:w-auto">
             Ver Servicios
             <ArrowRight className="w-4 h-4 ml-2 shrink-0" />
           </Link>
@@ -68,7 +62,9 @@ export function Hero() {
         transition={{ delay: 0.8, duration: 0.5 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-0"
       >
-        <span className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)]">Scroll</span>
+        <span className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)]">
+          Scroll
+        </span>
         <div className="w-px h-6 bg-[rgba(15,15,20,0.2)]" />
       </motion.div>
     </section>
@@ -80,12 +76,12 @@ export function Hero() {
  */
 export function AboutPreview() {
   return (
-    <section className="py-16 md:py-28 px-4 md:px-10">
-      <div className="max-w-7xl mx-auto text-center">
+    <section className="py-16 md:py-28 px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
         >
           <span className="text-xs uppercase tracking-[0.3em] text-[rgba(15,15,20,0.5)] font-medium block mb-3">
@@ -95,20 +91,15 @@ export function AboutPreview() {
             Guía espiritual & canalizadora
           </h2>
           <p className="text-sm md:text-lg text-[rgba(15,15,20,0.6)] leading-relaxed font-light max-w-2xl mx-auto mb-6 md:mb-8 px-2">
-            Trabajo con herramientas ancestrales para guiarte hacia la claridad y el bienestar interior.
+            Trabajo con herramientas ancestrales para guiarte hacia la claridad y el bienestar
+            interior.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center px-4">
-            <Link 
-              href="/sobre-mi" 
-              className="btn-outline w-full sm:w-auto"
-            >
+            <Link href="/sobre-mi" className="btn-outline w-full sm:w-auto">
               Conocer más
               <ArrowRight className="w-4 h-4 ml-2" />
             </Link>
-            <Link 
-              href="/servicios" 
-              className="btn-primary w-full sm:w-auto"
-            >
+            <Link href="/servicios" className="btn-primary w-full sm:w-auto">
               <Calendar className="w-4 h-4 mr-2" />
               Agendar Consulta
             </Link>
@@ -124,12 +115,12 @@ export function AboutPreview() {
  */
 export function ContactCTA() {
   return (
-    <section className="py-16 md:py-28 px-4 md:px-10">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 md:py-28 px-4 md:px-8">
+      <div className="max-w-[1200px] mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
+          viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.5 }}
           className="rounded-2xl glass text-center p-6 md:p-12"
         >
@@ -137,12 +128,10 @@ export function ContactCTA() {
             ¿Lista para comenzar?
           </h2>
           <p className="text-sm md:text-base text-[rgba(15,15,20,0.6)] font-light max-w-lg mx-auto mb-6 md:mb-8">
-            Cada camino espiritual es único. Dejá que te guíe para encontrar las respuestas que buscás.
+            Cada camino espiritual es único. Dejá que te guíe para encontrar las respuestas que
+            buscás.
           </p>
-          <Link
-            href="/servicios"
-            className="btn-primary w-full sm:w-auto"
-          >
+          <Link href="/servicios" className="btn-primary w-full sm:w-auto">
             <Calendar className="w-4 h-4 mr-2" />
             Agendar Consulta
           </Link>
