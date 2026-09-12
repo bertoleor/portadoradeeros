@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
-import { LayoutDashboard, Calendar, Settings, Sparkles, LogOut, Menu, X, MessageSquare, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LayoutDashboard, Calendar, Settings, Sparkles, LogOut, Menu, X, MessageSquare, Users } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { createClient } from '@/lib/supabase/client';
 

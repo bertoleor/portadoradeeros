@@ -1,5 +1,6 @@
-import type { Metadata } from 'next';
 import { FadeIn } from '@/components/ui/FadeIn';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | Portadora de Eros',

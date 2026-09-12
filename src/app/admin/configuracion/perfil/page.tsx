@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Save, User, Link as LinkIcon } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+import { ImageUploader } from '@/components/ui/ImageUploader';
 import { Input } from '@/components/ui/Input';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { useToast } from '@/components/ui/ToastProvider';
-import { ImageUploader } from '@/components/ui/ImageUploader';
 import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
 
 export default function PerfilConfiguracion() {

@@ -4,16 +4,16 @@ context: |
   Tech stack: Next.js 16 (App Router) + React 19 + TypeScript 5 (strict), Tailwind CSS 4, shadcn/ui (Radix/base-ui).
   Backend: Supabase (Postgres) via @supabase/ssr + supabase-js; EmailJS for email; web-push for notifications.
   Architecture: App Router route groups, client/server components, path alias `@/*` -> `./src/*`, SQL migrations in `migrations/`.
-  Testing: no test runner configured (strict_tdd disabled).
+  Testing: Vitest 3 (unit/smoke), strict_tdd disabled.
   Style: ESLint (next config), TypeScript strict, no formatter configured.
 
 strict_tdd: false
 
 testing:
   strict_tdd: false
-  test_runner: none
-  test_command: ""
-  coverage: none
+  test_runner: vitest
+  test_command: "npm run test"
+  coverage: "npm run test -- --coverage"
   linter: "npx eslint"
   type_checker: "npx tsc --noEmit"
 
@@ -30,10 +30,10 @@ rules:
     - Keep tasks completable in one session
   apply:
     - Follow existing code patterns
-    tdd: false
-    test_command: ""
+    - tdd: false
+    - test_command: ""
   verify:
-    test_command: ""
+    test_command: "npm run test"
     build_command: "npm run build"
     coverage_threshold: 0
   archive:

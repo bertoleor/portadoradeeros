@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
-import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Expand, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
+
 import { cn } from '@/lib/utils';
 
 interface ServiceImageCarouselProps {

@@ -1,5 +1,8 @@
 'use client';
 
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   useCallback,
   useEffect,
@@ -7,11 +10,10 @@ import {
   useRef,
   useState,
 } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 import { cn } from '@/lib/utils';
+
 import type { Service } from '@/types';
 
 // ─── Constantes ──────────────────────────────────────────────────────────────

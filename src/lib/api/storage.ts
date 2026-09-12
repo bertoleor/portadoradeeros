@@ -1,9 +1,19 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
+import { AppError, ok, fail, type Result } from '@/lib/api/error';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
+import { createClient } from '@/lib/supabase/server';
 
-export async function uploadImage(formData: FormData) {
+/**
+ * Uploads an image to Supabase Storage and returns its public URL.
+ *
+ * Follows the shared `Result<T>` / `AppError` contract of the data layer
+ * instead of the legacy `{ success: boolean, url?, error? }` shape. Uses
+ * `AppError('VALIDATION')` for a missing file and `AppError('DB')` for a
+ * storage failure. The allowlist guard (`requireAdmin`) throws `AppError`
+ * (`UNAUTHORIZED`) before any storage work.
+ */
+export async function uploadImage(formData: FormData): Promise<Result<{ url: string }>> {
   // Defense-in-depth guard (D-SEC-3): only allowlisted admins may upload. This
   // rejects any non-allowlist user at the guard, not just at the session check.
   await requireAdmin();
@@ -11,7 +21,7 @@ export async function uploadImage(formData: FormData) {
   const file = formData.get('file') as File | null;
 
   if (!file) {
-    return { success: false, error: 'No se propocionó ninguna imagen.' };
+    return fail(new AppError('VALIDATION', 'No se propocionó ninguna imagen.'));
   }
 
   const supabase = await createClient();
@@ -30,7 +40,7 @@ export async function uploadImage(formData: FormData) {
 
   if (uploadError) {
     console.error('Storage upload error:', uploadError);
-    return { success: false, error: 'Error al subir la imagen al servidor.' };
+    return fail(new AppError('DB', 'Error al subir la imagen al servidor.'));
   }
 
   // Generate the public URL
@@ -38,5 +48,5 @@ export async function uploadImage(formData: FormData) {
     .from('public-images')
     .getPublicUrl(filePath);
 
-  return { success: true, url: publicUrl };
+  return ok({ url: publicUrl });
 }

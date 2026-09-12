@@ -4,10 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit3, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 import { useToast } from '@/components/ui/ToastProvider';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { getServices, deleteService } from '@/lib/api/services';
+
 import type { Service } from '@/types';
 
 const BULK_ACTION = 'bulk';

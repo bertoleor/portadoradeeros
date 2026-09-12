@@ -1,7 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, 
@@ -13,11 +11,14 @@ import {
   X,
   Phone,
 } from 'lucide-react';
-import { getAppointments, confirmAppointment, getContactMessages, updateContactStatus } from '@/lib/api/appointments';
-import { useToast } from '@/components/ui/ToastProvider';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
 import { Button } from '@/components/ui';
-import { createClient } from '@/lib/supabase/client';
+import { useToast } from '@/components/ui/ToastProvider';
+import { getAppointments, confirmAppointment, getContactMessages, updateContactStatus } from '@/lib/api/appointments';
 import { logger } from '@/lib/logger';
+import { createClient } from '@/lib/supabase/client';
 
 interface AppointmentRecord {
   id: string;
@@ -35,7 +36,7 @@ interface ContactMessage {
   name: string;
   email: string;
   message: string;
-  status: string;
+  status: string | null;
   created_at: string;
 }
 

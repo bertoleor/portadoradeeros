@@ -1,12 +1,15 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button-variants';
-import { cn } from '@/lib/utils';
 import { ArrowRight, Sparkles, Eye, Heart } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { buttonVariants } from '@/components/ui/button-variants';
 import { FadeIn } from '@/components/ui/FadeIn';
 import { getAdminSettings } from '@/lib/api/settings';
 import { sanitizeBioContent } from '@/lib/sanitize';
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
+
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Sobre Mí | Portadora de Eros',

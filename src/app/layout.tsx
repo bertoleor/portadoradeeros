@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
+
 import { Playfair_Display, Geist } from "next/font/google";
+
 import "./globals.css";
-import { Shell } from "@/components/client/Shell";
-import { cn } from "@/lib/utils";
-import { PWAHandler } from "@/components/pwa/PWAHandler";
 import BackgroundMesh from "@/components/client/BackgroundMesh";
+import { Shell } from "@/components/client/Shell";
+import { PWAHandler } from "@/components/pwa/PWAHandler";
+import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

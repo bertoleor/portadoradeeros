@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Check, Archive, X, Send, ArrowLeft, MessageSquare, ChevronRight } from 'lucide-react';
-import { getContactMessages, updateContactStatus } from '@/lib/api/appointments';
-import { useToast } from '@/components/ui/ToastProvider';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+import { useToast } from '@/components/ui/ToastProvider';
+import { getContactMessages, updateContactStatus } from '@/lib/api/appointments';
 
 interface ContactMessage {
   id: string;
@@ -13,7 +14,7 @@ interface ContactMessage {
   email: string;
   phone: string | null;
   message: string;
-  status: string;
+  status: string | null;
   created_at: string;
 }
 

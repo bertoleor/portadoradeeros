@@ -57,9 +57,7 @@ export interface BusinessSettings {
   bioContent: string;
   profileImageUrl: string;
   socialLinks: SocialLinks;
-  businessHours: {
-    [key: string]: { start: string; end: string; closed: boolean };
-  };
+  businessHours: Record<string, { start: string; end: string; closed: boolean }>;
   bankDetails: {
     bankOwner: string;
     bankName: string;

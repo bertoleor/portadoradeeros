@@ -1,10 +1,12 @@
 'use client';
 
-import { useActionState, useState, useEffect } from 'react';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
+import { useActionState, useState, useEffect } from 'react';
+
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+
 import { login } from './actions';
 
 /** 4-pointed star with sharp (angular) points */

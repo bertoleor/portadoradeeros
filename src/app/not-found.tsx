@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+
 import { buttonVariants } from '@/components/ui/Button';
 
 export default function NotFound() {

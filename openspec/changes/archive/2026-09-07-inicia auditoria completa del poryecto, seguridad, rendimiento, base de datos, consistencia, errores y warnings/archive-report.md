@@ -53,5 +53,14 @@ PASSED. tasks.md shows 21/21 `[x]`, no stale unchecked implementation tasks. No 
 5. Nullable-column drift between generated types and some columns (verify-report noted) — verify before any schema change.
 All non-blocking; no CRITICAL or WARNING at archive time.
 
+## Follow-ups resolved (2026-09-07, post-archive `sdd-apply`)
+All 5 SUGGESTION-level follow-ups from the archived audit were resolved in a code-only pass (no commits/PRs). Verified: `npx tsc --noEmit` exit 0, `npm run lint` exit 0 (0 warnings), `npm test` 3/3 pass.
+
+1. **`uploadImage` Result contract** — `src/lib/api/storage.ts` now returns `Promise<Result<{ url: string }>>` via `ok`/`fail` + `AppError` (`VALIDATION` for missing file, `DB` for storage failure). `requireAdmin()` guard retained (throws `UNAUTHORIZED`). Caller `src/components/ui/ImageUploader.tsx` updated to `result.ok`/`result.data.url`/`result.error.message`.
+2. **Public `/servicios` cached fetch** — `src/app/servicios/page.tsx` now uses the cached `getVisibleServices()` server action (`unstable_cache` + `revalidateTag`) instead of an on-mount anon browser-client query. Anon client import removed; RLS (`is_visible = true`) and the cache preserved.
+3. **Phone normalization** — added `normalizePhone()` (strips non-digit/non-`+`) in `src/lib/api/appointments.ts`; applied consistently to the `findClient` phone lookup, and to store/write paths (`findOrCreateClient` create + update, `updateClient`), so dedupe by phone is robust against formatting.
+4. **Dead `config.ts`** — confirmed zero imports and deleted `src/lib/config.ts`.
+5. **Nullable-column drift** — resolved in the type/safety layer (no DDL). `Client.created_at`/`updated_at` now `string | null`; `getClients` coalesces `status` to `'pending'`; `BlockedTime.is_all_day` now `boolean | null` with `?? false`/`=== true` in consumers; `ContactMessage.status` typed `string | null`; the one real runtime-crash site (`[id]/page.tsx` `new Date(client.created_at)`) null-guarded. `services.is_visible`/`icon` were already defaulted in `mapServiceRow` (no change needed). No `as any` introduced.
+
 ## Verdict
 **ARCHIVED — SDD cycle complete.** All planned, implemented, verified (PASS), and archived. Ready for next change.

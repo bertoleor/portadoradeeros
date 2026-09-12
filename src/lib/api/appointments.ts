@@ -1,21 +1,36 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
-import { createServiceClient } from '@/lib/supabase/service';
-import { createAdminClient } from '@/lib/supabase/admin';
-import { requireAdmin } from '@/lib/auth/requireAdmin';
-import { getAdminSettings } from '@/lib/api/settings';
-import { AppError, ok, fail, type Result } from '@/lib/api/error';
 import webPush from 'web-push';
+
+import { AppError, ok, fail, type Result } from '@/lib/api/error';
+import { getAdminSettings } from '@/lib/api/settings';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
 import { 
   sendAppointmentConfirmation, 
   sendNewAppointmentNotification,
   sendAppointmentConfirmed,
   sendAppointmentCancellation
 } from '@/lib/email';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
+
+
+
 import type { Database } from '@/types/database';
 
 type AppointmentRow = Database['public']['Tables']['appointments']['Row'];
+
+/**
+ * Normalize a phone number to a consistent format for dedupe and lookup:
+ * strips everything that is not a digit (spaces, dashes, parentheses) and keeps
+ * the leading `+` (country code marker) if present. Applied consistently when
+ * storing a phone (clients insert/update) and when matching by phone, so an
+ * exact `.eq(phone, ...)` lookup is robust against formatting differences.
+ */
+export function normalizePhone(input: string): string {
+  return input.trim().replace(/[^\d+]/g, '');
+}
 
 // Web-Push VAPID configuration
 if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
@@ -185,7 +200,7 @@ export async function getAppointments() {
   return data;
 }
 
-export async function getBookedSlots(dateStr: string, durationMinutes: number = 60) {
+export async function getBookedSlots(dateStr: string, durationMinutes = 60) {
   const supabase = createServiceClient();
 
   // Fetch appointments for the given date with service duration.
@@ -577,7 +592,7 @@ export async function getClients(): Promise<ClientRecord[]> {
     const appt = {
       id: row.id,
       appointment_date: row.appointment_date,
-      status: row.status,
+      status: row.status ?? 'pending', // DB column is nullable; default keeps the record well-formed
       serviceTitle,
     };
     if (existing) {
@@ -618,10 +633,10 @@ export async function getBlockedTimesForDate(dateStr: string): Promise<{ start: 
 
   if (error || !data) return [];
 
-  return data.map((bt: { time_start: string | null; time_end: string | null; is_all_day: boolean }) => ({
+  return data.map((bt: { time_start: string | null; time_end: string | null; is_all_day: boolean | null }) => ({
     start: bt.time_start || '00:00',
     end: bt.time_end || '23:59',
-    isAllDay: bt.is_all_day
+    isAllDay: bt.is_all_day ?? false
   }));
 }
 
@@ -650,7 +665,7 @@ interface OccupiedWindow {
 export async function getNextAvailableSlots(
   businessHours: Record<string, { closed: boolean; start: string; end: string }>,
   durationMinutes: number,
-  count: number = 5
+  count = 5
 ): Promise<AvailableSlot[]> {
   const availableSlots: AvailableSlot[] = [];
   const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -697,7 +712,7 @@ export async function getNextAvailableSlots(
   }
   for (const bt of blockedRows ?? []) {
     const dayMs = new Date(`${bt.date}T00:00:00`).getTime();
-    if (bt.is_all_day) {
+    if (bt.is_all_day === true) {
       occupied.push({ start: dayMs, end: dayMs + 24 * 60 * 60 * 1000 });
     } else if (bt.time_start && bt.time_end) {
       const [sh, sm] = bt.time_start.split(':').map(Number);
@@ -748,8 +763,8 @@ export interface Client {
   email: string | null;
   phone: string | null;
   notes: string | null;
-  created_at: string;
-  updated_at: string;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 interface ClientData {
@@ -784,7 +799,7 @@ export async function findClient(phone?: string, email?: string): Promise<Client
     const { data, error } = await supabase
       .from('clients')
       .select('*')
-      .eq('phone', phone)
+      .eq('phone', normalizePhone(phone))
       .maybeSingle();
 
     if (error) {
@@ -798,14 +813,21 @@ export async function findClient(phone?: string, email?: string): Promise<Client
 
 export async function findOrCreateClient(data: ClientData): Promise<Client> {
   const supabase = await createClient();
-  const existing = await findClient(data.phone, data.email);
+  // Normalize phone (and email) once so both the lookup and any write use the
+  // same canonical format as `findClient`'s `.eq(phone, ...)`.
+  const normalizedData: ClientData = {
+    ...data,
+    phone: data.phone ? normalizePhone(data.phone) : undefined,
+    email: data.email ? data.email.toLowerCase() : undefined,
+  };
+  const existing = await findClient(normalizedData.phone, normalizedData.email);
   
   if (existing) {
     const updates: Partial<ClientData> = {};
     const fields: (keyof ClientData)[] = ['name', 'surname', 'email', 'phone'];
     
     fields.forEach(field => {
-      const val = data[field];
+      const val = normalizedData[field];
       if (val && val !== existing[field]) {
         updates[field] = val;
       }
@@ -820,11 +842,11 @@ export async function findOrCreateClient(data: ClientData): Promise<Client> {
   }
   
   const { data: newClient, error } = await supabase.from('clients').insert([{
-    name: data.name,
-    surname: data.surname || null,
-    email: data.email?.toLowerCase() || null,
-    phone: data.phone || null,
-    notes: data.notes || null,
+    name: normalizedData.name,
+    surname: normalizedData.surname || null,
+    email: normalizedData.email?.toLowerCase() || null,
+    phone: normalizedData.phone || null,
+    notes: normalizedData.notes || null,
   }]).select().single();
   
   if (error || !newClient) throw new Error('Failed to create client: ' + error?.message);
@@ -859,6 +881,7 @@ export async function updateClient(clientId: string, data: Partial<ClientData>):
   const supabase = await createClient();
   const updates: Record<string, unknown> = { ...data, updated_at: new Date().toISOString() };
   if (data.email) updates.email = data.email.toLowerCase();
+  if (data.phone) updates.phone = normalizePhone(data.phone);
   const { data: updated, error } = await supabase.from('clients').update(updates).eq('id', clientId).select().single();
   if (error || !updated) throw new AppError('DB', error?.message ?? 'Error al actualizar el cliente.');
   return ok(updated as Client);

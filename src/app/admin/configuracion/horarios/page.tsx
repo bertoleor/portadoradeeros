@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Save, AlertTriangle } from 'lucide-react';
-import { useToast } from '@/components/ui/ToastProvider';
+import { useState, useEffect } from 'react';
+
 import { TimePicker } from '@/components/ui/TimePicker';
+import { useToast } from '@/components/ui/ToastProvider';
 import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
 
 export default function HorariosConfiguracion() {

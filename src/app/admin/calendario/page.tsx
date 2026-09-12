@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Calendar as CalendarIcon, 
@@ -15,13 +14,16 @@ import {
   Ban,
   Trash2,
 } from 'lucide-react';
-import { getAppointments, confirmAppointment, completeAppointment, cancelAppointment, createAppointmentAdmin, deleteAppointment } from '@/lib/api/appointments';
-import { getServices } from '@/lib/api/services';
-import { getBlockedTimes, createBlockedTime, deleteBlockedTime, type BlockedTime } from '@/lib/api/blocked-times';
+import { useState, useEffect } from 'react';
+
 import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { useToast } from '@/components/ui/ToastProvider';
+import { getAppointments, confirmAppointment, completeAppointment, cancelAppointment, createAppointmentAdmin, deleteAppointment } from '@/lib/api/appointments';
+import { getBlockedTimes, createBlockedTime, deleteBlockedTime, type BlockedTime } from '@/lib/api/blocked-times';
+import { getServices } from '@/lib/api/services';
 import { createClient } from '@/lib/supabase/client';
+
 import type { Service } from '@/types';
 
 interface Appointment {

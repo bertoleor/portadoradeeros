@@ -1,9 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Navbar } from './Navbar';
+
 import { Footer } from './Footer';
-import { ReactNode } from 'react';
+import { Navbar } from './Navbar';
+
+import type { ReactNode } from 'react';
 
 export function Shell({ children }: { readonly children: ReactNode }) {
   const pathname = usePathname();

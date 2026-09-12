@@ -1,11 +1,14 @@
 'use server';
 
 import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
-import { createReadClient } from '@/lib/supabase/readonly';
-import { requireAdmin } from '@/lib/auth/requireAdmin';
-import { Service } from '@/types';
+
 import { mapServiceRow } from '@/lib/api/mappers';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
+import { createReadClient } from '@/lib/supabase/readonly';
+import { createClient } from '@/lib/supabase/server';
+
+import type { Service } from '@/types';
+
 
 const SERVICES_CACHE_TAG = 'public-services';
 

@@ -1,9 +1,11 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
+
 import type { Service } from '@/types';
 
 interface Props {

@@ -1,7 +1,7 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
+import { createClient } from '@/lib/supabase/server';
 
 export interface BlockedTime {
   id: string;
@@ -10,7 +10,7 @@ export interface BlockedTime {
   date: string;
   time_start?: string;
   time_end?: string;
-  is_all_day: boolean;
+  is_all_day: boolean | null;
   type: 'blocked' | 'occupied' | 'event';
   color: string;
 }

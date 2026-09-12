@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle2, 
@@ -15,16 +14,18 @@ import {
   MessageSquare,
   Sparkles
 } from 'lucide-react';
-import { Input, Label } from '@/components/ui';
-import { Textarea } from '@/components/ui/TextArea';
-import { Button } from '@/components/ui/Button';
-
 import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+
+import { Input, Label } from '@/components/ui';
+import { Button } from '@/components/ui/Button';
+import { Textarea } from '@/components/ui/TextArea';
 import {
   createAppointment,
   getBookedSlots,
   getBlockedTimesForDate,
 } from '@/lib/api/appointments';
+
 import { BookingCalendar } from './BookingCalendar';
 import { CustomTimePicker } from './CustomTimePicker';
 

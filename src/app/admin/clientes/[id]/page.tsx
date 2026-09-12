@@ -1,7 +1,5 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 import { 
   ArrowLeft, 
   Phone, 
@@ -11,16 +9,20 @@ import {
   Edit2,
   X
 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
+
+import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { getClientById, updateClient, createAppointmentAdmin, type Client } from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
-import { useToast } from '@/components/ui/ToastProvider';
-import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+
 import type { Service } from '@/types';
 
 interface Appointment {
   id: string;
   appointment_date: string;
-  status: string;
+  status: string | null;
   notes: string | null;
   services: { title: string; duration?: number } | null;
 }
@@ -210,7 +212,7 @@ export default function ClientDetailPage() {
             <h2 className="text-xl font-medium">
               {client.name} {client.surname}
             </h2>
-            <p className="text-sm text-black/40">Cliente desde {new Date(client.created_at).toLocaleDateString('es-AR')}</p>
+            <p className="text-sm text-black/40">Cliente desde {client.created_at ? new Date(client.created_at).toLocaleDateString('es-AR') : '—'}</p>
           </div>
           <button 
             onClick={() => setShowEdit(true)}
@@ -298,7 +300,7 @@ export default function ClientDetailPage() {
           </div>
         ) : (
           appointments.map((appt, idx) => {
-            const config = statusConfig[appt.status] || statusConfig.pending;
+            const config = statusConfig[appt.status ?? 'pending'] || statusConfig.pending;
             return (
               <div 
                 key={appt.id} 

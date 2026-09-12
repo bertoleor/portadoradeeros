@@ -1,9 +1,12 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, X, AlertCircle } from 'lucide-react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+
 import { cn } from '@/lib/utils';
+
+import type { ReactNode} from 'react';
 
 type ToastType = 'success' | 'error' | 'info';
 

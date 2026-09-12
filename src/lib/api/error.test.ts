@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { AppError, ok, fail } from './error';
 
 describe('Result/AppError contract', () => {

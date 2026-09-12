@@ -1,12 +1,15 @@
 'use server';
 
 import { unstable_cache, revalidateTag } from 'next/cache';
-import { createClient } from '@/lib/supabase/server';
-import { createReadClient } from '@/lib/supabase/readonly';
-import { requireAdmin } from '@/lib/auth/requireAdmin';
-import { BusinessSettings } from '@/types';
-import { mapSettingsRow } from '@/lib/api/mappers';
+
 import { AppError, ok, type Result } from '@/lib/api/error';
+import { mapSettingsRow } from '@/lib/api/mappers';
+import { requireAdmin } from '@/lib/auth/requireAdmin';
+import { createReadClient } from '@/lib/supabase/readonly';
+import { createClient } from '@/lib/supabase/server';
+
+import type { BusinessSettings } from '@/types';
+
 
 const SETTINGS_CACHE_TAG = 'admin-settings';
 

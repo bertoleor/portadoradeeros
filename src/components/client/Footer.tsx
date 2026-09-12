@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { getAdminSettings } from '@/lib/api/settings';
 
 import { SocialIcon } from '@/components/ui/ServiceIcons';
+import { getAdminSettings } from '@/lib/api/settings';
+
 
 // TikTokIcon is no longer needed here as it's in SocialIcon
 

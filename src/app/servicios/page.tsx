@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { ServiceCard } from '@/components/client/ServiceCard';
 import { motion } from 'framer-motion';
-import { createClient } from '@/lib/supabase/client';
+import { useState, useEffect } from 'react';
+
+import { ServiceCard } from '@/components/client/ServiceCard';
+import { getVisibleServices } from '@/lib/api/services';
+
 import type { Service } from '@/types';
 
 const containerVariants = {
@@ -35,30 +37,16 @@ export default function ServiciosPage() {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from('services')
-        .select('*');
-
-      if (data) {
-        // Map snake_case from DB to camelCase for TypeScript type
-        // Note: Supabase may return boolean as string 'true'/'false', so we convert explicitly
-        const mappedServices: Service[] = data.map((s) => ({
-          id: s.id,
-          slug: s.slug,
-          title: s.title,
-          shortDescription: s.short_description,
-          description: s.description || '',
-          price: Number(s.price),
-          duration: Number(s.duration),
-          // Handle both boolean and string 'true'/'false' from Supabase
-          isVisible: s.is_visible === true || s.is_visible === 'true',
-          icon: s.icon,
-          images: s.images || [],
-        }));
-        setServices(mappedServices);
+      // Use the cached `getVisibleServices()` server action (unstable_cache +
+      // revalidateTag) instead of an on-mount anon client query. RLS still
+      // limits the result to `is_visible = true`, and the shared cache key is
+      // safe because this is a role-independent public read.
+      try {
+        const data = await getVisibleServices();
+        setServices(data);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchServices();

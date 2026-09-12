@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Button, Input, Label } from '@/components/ui';
 import { Save } from 'lucide-react';
-import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
+import { useState, useEffect } from 'react';
+
+import { Button, Input, Label } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
+import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
 
 export default function BankConfigPage() {
   const [isLoading, setIsLoading] = useState(true);

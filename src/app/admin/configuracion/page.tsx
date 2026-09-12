@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { User, CreditCard, Clock, Lock, Smartphone } from 'lucide-react';
+
 import { SettingsCard } from '@/components/admin/SettingsCard';
 
 const settingsSections = [

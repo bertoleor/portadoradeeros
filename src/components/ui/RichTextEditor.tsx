@@ -1,11 +1,11 @@
 'use client';
 
+import Image from '@tiptap/extension-image';
+import LinkExtension from '@tiptap/extension-link';
+import Placeholder from '@tiptap/extension-placeholder';
+import TextAlign from '@tiptap/extension-text-align';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Placeholder from '@tiptap/extension-placeholder';
-import LinkExtension from '@tiptap/extension-link';
-import TextAlign from '@tiptap/extension-text-align';
-import Image from '@tiptap/extension-image';
 import { 
   Bold, Italic, Strikethrough, Heading2, 
   AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Link as LinkIcon, ImagePlus

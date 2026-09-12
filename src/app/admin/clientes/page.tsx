@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Search, ChevronRight, X, Phone, Mail, Calendar, Plus, Clock } from 'lucide-react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+
+import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+import { useToast } from '@/components/ui/ToastProvider';
 import { getClients, createAppointmentAdmin, type ClientRecord } from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
-import { useToast } from '@/components/ui/ToastProvider';
-import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+
 import type { Service } from '@/types';
 
 const statusLabel: Record<string, { text: string; className: string }> = {

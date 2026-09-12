@@ -1,21 +1,23 @@
 'use client';
 
-import { useState, useEffect, use } from 'react';
-import type { ChangeEvent } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Save, Sparkles, Trash2, Image as ImageIcon, ChevronUp, ChevronDown } from 'lucide-react';
-import Link from 'next/link';
 import Image from 'next/image';
-import { getServiceBySlug, updateService, createService, deleteService } from '@/lib/api/services';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect, use } from 'react';
+
+import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { ImageUploader } from '@/components/ui/ImageUploader';
 import { Input } from '@/components/ui/Input';
-import { Textarea } from '@/components/ui/TextArea';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { ServiceIcon, SERVICES_ICONS_GALLERY } from '@/components/ui/ServiceIcons';
-import { ImageUploader } from '@/components/ui/ImageUploader';
-import type { Service } from '@/types';
+import { Textarea } from '@/components/ui/TextArea';
 import { useToast } from '@/components/ui/ToastProvider';
-import { ConfirmModal } from '@/components/ui/ConfirmModal';
+import { getServiceBySlug, updateService, createService, deleteService } from '@/lib/api/services';
+
+import type { Service } from '@/types';
+import type { ChangeEvent } from 'react';
 
 interface AdminEditServicioProps {
   readonly params: Promise<{ slug: string }>;

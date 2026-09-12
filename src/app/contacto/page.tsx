@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Button, Input, Label } from '@/components/ui';
-import { Textarea } from '@/components/ui/TextArea';
-import { CheckCircle2, MessageCircle, Mail, Send } from 'lucide-react';
-import { SocialIcon } from '@/components/ui/ServiceIcons';
 import { motion } from 'framer-motion';
+import { CheckCircle2, MessageCircle, Mail, Send } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+
+import { Button, Input, Label } from '@/components/ui';
+import { SocialIcon } from '@/components/ui/ServiceIcons';
+import { Textarea } from '@/components/ui/TextArea';
 import { getAdminSettings } from '@/lib/api/settings';
 
 // Custom TikTok icon
@@ -17,13 +18,13 @@ function TikTokIcon({ size = 18 }: { readonly size?: number }) {
   );
 }
 
-type SocialLink = {
+interface SocialLink {
   label: string;
   href: string;
   handle: string;
   platform?: 'instagram' | 'whatsapp' | 'tiktok';
   icon?: React.ComponentType<{ size?: number; className?: string }>;
-};
+}
 
 const socials: SocialLink[] = [
   {

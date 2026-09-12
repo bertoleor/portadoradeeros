@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
 
 export default function ConfiguracionLayout({ children }: { readonly children: React.ReactNode }) {
   const pathname = usePathname();

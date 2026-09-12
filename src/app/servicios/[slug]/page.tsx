@@ -1,11 +1,13 @@
+import { Clock, Sparkles } from 'lucide-react';
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import { getServiceBySlug } from '@/lib/api/services';
-import { ServiceIcon } from '@/components/ui/ServiceIcons';
+
 import { ServiceContactForm } from '@/components/client/ServiceContactForm';
 import { ServiceImageCarousel } from '@/components/client/ServiceImageCarousel';
-import { Clock, Sparkles } from 'lucide-react';
+import { ServiceIcon } from '@/components/ui/ServiceIcons';
+import { getServiceBySlug } from '@/lib/api/services';
 import { getAdminSettings } from '@/lib/api/settings';
+
+import type { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{ slug: string }>;

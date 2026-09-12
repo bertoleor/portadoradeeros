@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Settings, Save } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
 import { Button, Input, Label } from '@/components/ui';
 import { ImageUploader } from '@/components/ui/ImageUploader';
-import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
 import { useToast } from '@/components/ui/ToastProvider';
+import { getAdminSettings, updateAdminSettings } from '@/lib/api/settings';
 
 export default function AdminConfigPage() {
   const [formData, setFormData] = useState({

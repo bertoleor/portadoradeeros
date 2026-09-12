@@ -8,7 +8,7 @@ import React, { useEffect, useRef } from "react";
 
 // Parejas de colores que conviven. Se muestran de a una por vez
 // con crossfade suave entre ellas.
-const COLOR_PAIRS: Array<[RGB, RGB]> = [
+const COLOR_PAIRS: [RGB, RGB][] = [
   [{ r: 152, g: 251, b: 152 }, { r: 255, g: 235, b: 153 }], // menta + amarillo
   [{ r: 135, g: 206, b: 250 }, { r: 216, g: 180, b: 226 }], // celeste + violeta
   [{ r: 255, g: 182, b: 193 }, { r: 255, g: 200, b: 162 }], // rosa + naranja

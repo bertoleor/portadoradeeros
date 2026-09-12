@@ -1,5 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
 import { AppError } from '@/lib/api/error';
+import { createClient } from '@/lib/supabase/server';
 
 /**
  * Server-side authorization guard (defense-in-depth, D-SEC-3).

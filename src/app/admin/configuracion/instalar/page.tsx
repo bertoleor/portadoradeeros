@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Download, Smartphone, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
 import { Button } from '@/components/ui';
-import { BeforeInstallPromptEvent } from '@/types';
+
+import type { BeforeInstallPromptEvent } from '@/types';
 
 // iOS detection
 // iOS detection

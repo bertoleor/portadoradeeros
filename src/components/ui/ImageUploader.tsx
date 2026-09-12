@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { UploadCloud, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { UploadCloud, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+
 import { uploadImage } from '@/lib/api/storage';
 import { cn } from '@/lib/utils';
 
@@ -54,12 +55,13 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
       
       const result = await uploadImage(formData);
       
-      if (result.success && result.url) {
-        onUpload(result.url); 
+      if (result.ok) {
+        onUpload(result.data.url);
       } else {
-        console.error(result.error);
+        const errMsg = result.error.message;
+        console.error(errMsg);
         setPreview(defaultImage || null); // Revert on error
-        alert(result.error || 'Error al subir la imagen');
+        alert(errMsg || 'Error al subir la imagen');
       }
     } catch (err) {
       console.error('Upload failed:', err);

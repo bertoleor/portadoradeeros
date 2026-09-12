@@ -1,7 +1,7 @@
 'use client';
 
-import { Calendar, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Calendar, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const fadeUp = {
