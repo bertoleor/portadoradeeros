@@ -287,7 +287,7 @@ export default function AdminDashboard() {
   const yearOptions = Array.from({ length: 3 }, (_, i) => new Date().getFullYear() - 1 + i);
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto w-full">
+    <div className="p-4 md:p-6 max-w-[1200px] mx-auto w-full">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

@@ -202,7 +202,7 @@ export default function AdminServicios() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto w-full">
+    <div className="p-6 md:p-10 max-w-[1200px] mx-auto w-full">
       <ConfirmModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}

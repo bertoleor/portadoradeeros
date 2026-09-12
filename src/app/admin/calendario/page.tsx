@@ -567,7 +567,7 @@ export default function AdminCalendario() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto w-full">
+    <div className="p-6 md:p-10 max-w-[1200px] mx-auto w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

@@ -12,7 +12,7 @@ export default function ConfiguracionLayout({ children }: { readonly children: R
   const backLabel = isMainConfig ? 'Volver al panel' : 'Volver a configuración';
 
   return (
-    <div className="p-4 sm:p-6 md:p-10 max-w-5xl mx-auto w-full">
+    <div className="p-4 sm:p-6 md:p-10 max-w-[1200px] mx-auto w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

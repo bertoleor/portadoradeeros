@@ -127,7 +127,7 @@ export default function AdminMensajes() {
   };
 
   return (
-    <div className="p-4 md:p-6 max-w-6xl mx-auto w-full">
+    <div className="p-4 md:p-6 max-w-[1200px] mx-auto w-full">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
