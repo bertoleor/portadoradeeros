@@ -12,6 +12,11 @@ import {
   sendNewAppointmentNotification,
 } from '@/lib/email';
 import {
+  deleteCalendarEvent,
+  isGoogleCalendarConfigured,
+  upsertAppointmentEvent,
+} from '@/lib/google-calendar';
+import {
   checkRateLimit,
   HONEYPOT_FIELD,
   isHoneypotTriggered,
@@ -306,6 +311,27 @@ export async function getBookedSlots(dateStr: string, durationMinutes = 60) {
   return occupiedSlots.sort((a, b) => a.localeCompare(b));
 }
 
+/**
+ * Google Calendar sync helpers (server-only).
+ * Best-effort: calendar failures are logged but never break the booking flow.
+ * Only confirmed/completed appointments are synced; cancellations delete.
+ */
+interface CalendarServiceJoin {
+  title?: string | null;
+  duration?: number | null;
+}
+
+function resolveServiceJoin(value: unknown): CalendarServiceJoin | null {
+  if (value === null || value === undefined) return null;
+  if (Array.isArray(value)) {
+    const first: unknown = value[0];
+    if (typeof first === 'object' && first !== null) return first as CalendarServiceJoin;
+    return null;
+  }
+  if (typeof value === 'object') return value as CalendarServiceJoin;
+  return null;
+}
+
 export async function confirmAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
   await requireAdmin();
 
@@ -314,7 +340,7 @@ export async function confirmAppointment(appointmentId: string): Promise<Result<
   // 1. Fetch current appointment
   const { data: appointment, error: fetchError } = await supabase
     .from('appointments')
-    .select('*, services:service_id(title)')
+    .select('*, services:service_id(title,duration)')
     .eq('id', appointmentId)
     .single();
 
@@ -341,7 +367,8 @@ export async function confirmAppointment(appointmentId: string): Promise<Result<
     timeZone: 'America/Argentina/Buenos_Aires',
   }).format(new Date(appointment.appointment_date));
 
-  const serviceName = appointment.services?.title || 'tu sesión';
+  const serviceJoin = resolveServiceJoin(appointment.services);
+  const serviceName = serviceJoin?.title || 'tu sesión';
 
   try {
     await sendAppointmentConfirmed({
@@ -357,6 +384,31 @@ export async function confirmAppointment(appointmentId: string): Promise<Result<
     console.error('Failed to send Confirmed email:', emailError);
   }
 
+  // 4. Google Calendar sync (best-effort, never breaks confirmation)
+  try {
+    if (isGoogleCalendarConfigured()) {
+      const { id: eventId } = await upsertAppointmentEvent(
+        {
+          clientName: appointment.client_name,
+          clientEmail: appointment.client_email,
+          clientPhone: appointment.client_phone,
+          serviceName,
+          appointmentDateIso: appointment.appointment_date,
+          durationMinutes: serviceJoin?.duration ?? undefined,
+          notes: appointment.notes,
+          status: 'confirmed',
+        },
+        appointment.google_event_id ?? null
+      );
+      await supabase
+        .from('appointments')
+        .update({ google_event_id: eventId })
+        .eq('id', appointmentId);
+    }
+  } catch (calendarError) {
+    console.error('Google Calendar sync failed on confirm:', calendarError);
+  }
+
   return ok({ id: appointmentId });
 }
 
@@ -369,7 +421,7 @@ export async function completeAppointment(appointmentId: string): Promise<Result
   // 1. Fetch current appointment
   const { data: appointment, error: fetchError } = await supabase
     .from('appointments')
-    .select('*, services:service_id(title)')
+    .select('*, services:service_id(title,duration)')
     .eq('id', appointmentId)
     .single();
 
@@ -387,6 +439,32 @@ export async function completeAppointment(appointmentId: string): Promise<Result
   if (updateError) {
     console.error('Failed to update appointment status:', updateError);
     throw new AppError('DB', 'Ocurrió un error al actualizar el estado.');
+  }
+
+  // 3. Google Calendar sync (best-effort): keep the event, mark completed
+  try {
+    if (isGoogleCalendarConfigured()) {
+      const serviceJoin = resolveServiceJoin(appointment.services);
+      const { id: eventId } = await upsertAppointmentEvent(
+        {
+          clientName: appointment.client_name,
+          clientEmail: appointment.client_email,
+          clientPhone: appointment.client_phone,
+          serviceName: serviceJoin?.title || 'Sesión',
+          appointmentDateIso: appointment.appointment_date,
+          durationMinutes: serviceJoin?.duration ?? undefined,
+          notes: appointment.notes,
+          status: 'completed',
+        },
+        appointment.google_event_id ?? null
+      );
+      await supabase
+        .from('appointments')
+        .update({ google_event_id: eventId })
+        .eq('id', appointmentId);
+    }
+  } catch (calendarError) {
+    console.error('Google Calendar sync failed on complete:', calendarError);
   }
 
   return ok({ id: appointmentId });
@@ -431,7 +509,7 @@ export async function cancelAppointment(
     timeZone: 'America/Argentina/Buenos_Aires',
   }).format(new Date(appointment.appointment_date));
 
-  const serviceName = appointment.services?.title || 'tu sesión';
+  const serviceName = resolveServiceJoin(appointment.services)?.title || 'tu sesión';
 
   try {
     await sendAppointmentCancellation(
@@ -448,6 +526,22 @@ export async function cancelAppointment(
     );
   } catch (emailError) {
     console.error('Failed to send Cancellation email:', emailError);
+  }
+
+  // 4. Google Calendar: delete the event (best-effort) and clear the id
+  try {
+    const existingEventId = appointment.google_event_id;
+    if (isGoogleCalendarConfigured() && existingEventId !== null && existingEventId !== undefined) {
+      await deleteCalendarEvent(existingEventId);
+    }
+    if (existingEventId !== null && existingEventId !== undefined) {
+      await supabase
+        .from('appointments')
+        .update({ google_event_id: null })
+        .eq('id', appointmentId);
+    }
+  } catch (calendarError) {
+    console.error('Google Calendar delete failed on cancel:', calendarError);
   }
 
   return ok({ id: appointmentId });
@@ -643,6 +737,31 @@ export async function createAppointmentAdmin(
     body: `Turno creado para ${payload.clientName}: ${payload.serviceName}.`,
     url: '/admin',
   });
+
+  // 5. Google Calendar sync (best-effort): admin turnos are confirmed at birth
+  try {
+    if (isGoogleCalendarConfigured()) {
+      const { id: eventId } = await upsertAppointmentEvent(
+        {
+          clientName: payload.clientName,
+          clientEmail: payload.clientEmail,
+          clientPhone: payload.clientPhone ?? null,
+          serviceName: payload.serviceName,
+          appointmentDateIso: payload.appointmentDate.toISOString(),
+          durationMinutes: payload.serviceDuration,
+          notes: payload.notes ?? null,
+          status: 'confirmed',
+        },
+        null
+      );
+      await supabase
+        .from('appointments')
+        .update({ google_event_id: eventId })
+        .eq('id', dbData.id);
+    }
+  } catch (calendarError) {
+    console.error('Google Calendar sync failed on admin create:', calendarError);
+  }
 
   return ok(dbData);
 }
@@ -1060,11 +1179,35 @@ export async function deleteAppointment(appointmentId: string): Promise<Result<{
 
   const supabase = await createClient();
 
+  // Fetch the google_event_id BEFORE deleting so the calendar event can die too.
+  let existingEventId: string | null = null;
+  try {
+    const { data } = await supabase
+      .from('appointments')
+      .select('google_event_id')
+      .eq('id', appointmentId)
+      .single();
+    if (data?.google_event_id !== null && data?.google_event_id !== undefined) {
+      existingEventId = data.google_event_id;
+    }
+  } catch (fetchError) {
+    console.error('Failed to fetch appointment before delete:', fetchError);
+  }
+
   const { error } = await supabase.from('appointments').delete().eq('id', appointmentId);
 
   if (error) {
     console.error('Failed to delete appointment:', error);
     throw new AppError('DB', 'Error al eliminar el turno.');
+  }
+
+  // Google Calendar: delete the event (best-effort, never breaks the delete)
+  try {
+    if (isGoogleCalendarConfigured() && existingEventId !== null) {
+      await deleteCalendarEvent(existingEventId);
+    }
+  } catch (calendarError) {
+    console.error('Google Calendar delete failed on hard delete:', calendarError);
   }
 
   return ok({ id: appointmentId });
