@@ -50,18 +50,18 @@
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.2",
-    "@tailwindcss/postcss": "^4.2.1",
-    "@types/node": "^20",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/sanitize-html": "^2.16.1",
-    "@types/tailwindcss": "^3.0.11",
+    "@types/tailwindcss": "^3.1.0",
     "@types/web-push": "^3.6.4",
-    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react": "^6.1.1",
     "babel-plugin-react-compiler": "1.0.0",
     "changeset": "^0.2.6",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^10",
+    "eslint-config-next": "16.3.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -75,7 +75,7 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5",
-    "vitest": "^3.2.7"
+    "typescript": "^7",
+    "vitest": "^5.0.0"
   }
 }
