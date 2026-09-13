@@ -33,7 +33,7 @@ type AppointmentRow = Database['public']['Tables']['appointments']['Row'];
  * storing a phone (clients insert/update) and when matching by phone, so an
  * exact `.eq(phone, ...)` lookup is robust against formatting differences.
  */
-export function normalizePhone(input: string): string {
+function normalizePhone(input: string): string {
   return input.trim().replace(/[^\d+]/g, '');
 }
 
@@ -58,7 +58,9 @@ async function sendPushToAdmins(payload: { title: string; body: string; url?: st
     const supabase = createAdminClient();
     const { data: subs, error } = await supabase.from('push_subscriptions').select('*');
 
-    if (error || !subs) return;
+    if (error || !subs) {
+      return;
+    }
 
     const pushPromises = subs.map(
       (sub: { id: string; endpoint: string; p256dh: string; auth: string }) => {
@@ -475,7 +477,9 @@ export async function updateContactStatus(
   const supabase = await createClient();
   const { error } = await supabase.from('contact_messages').update({ status }).eq('id', id);
 
-  if (error) throw new AppError('DB', error.message);
+  if (error) {
+    throw new AppError('DB', error.message);
+  }
   return ok({ id });
 }
 
@@ -506,7 +510,9 @@ export async function checkSlotAvailability(
     .lte('appointment_date', dayEnd.toISOString())
     .neq('status', 'cancelled');
 
-  if (excludeId) query = query.neq('id', excludeId);
+  if (excludeId) {
+    query = query.neq('id', excludeId);
+  }
 
   const { data, error } = await query;
   if (error) {
@@ -606,7 +612,9 @@ export async function createAppointmentAdmin(
     .select()
     .single();
 
-  if (dbError) throw new AppError('DB', 'Error al registrar el turno.');
+  if (dbError) {
+    throw new AppError('DB', 'Error al registrar el turno.');
+  }
 
   // 3. Send confirmation email to client
   const formattedDate = new Intl.DateTimeFormat('es-AR', {
@@ -666,7 +674,9 @@ export async function getClients(): Promise<ClientRecord[]> {
     )
     .order('appointment_date', { ascending: false });
 
-  if (error || !data) return [];
+  if (error || !data) {
+    return [];
+  }
 
   // Group by email
   const map = new Map<string, ClientRecord>();
@@ -717,7 +727,9 @@ export async function getBlockedTimesForDate(
 
   const { data, error } = await supabase.from('blocked_times').select('*').eq('date', dateStr);
 
-  if (error || !data) return [];
+  if (error || !data) {
+    return [];
+  }
 
   return data.map(
     (bt: { time_start: string | null; time_end: string | null; is_all_day: boolean | null }) => ({
@@ -823,7 +835,9 @@ export async function getNextAvailableSlots(
     ];
     const bh = businessHours[dayName];
 
-    if (!bh || bh.closed) continue;
+    if (!bh || bh.closed) {
+      continue;
+    }
 
     const [sH, sM] = bh.start.split(':').map(Number);
     const [eH, eM] = bh.end.split(':').map(Number);
@@ -888,7 +902,9 @@ export async function findClient(phone?: string, email?: string): Promise<Client
     if (error) {
       throw new AppError('DB', `Failed to look up client by email: ${error.message}`);
     }
-    if (data) return data as Client;
+    if (data) {
+      return data as Client;
+    }
   }
 
   if (phone) {
@@ -901,7 +917,9 @@ export async function findClient(phone?: string, email?: string): Promise<Client
     if (error) {
       throw new AppError('DB', `Failed to look up client by phone: ${error.message}`);
     }
-    if (data) return data as Client;
+    if (data) {
+      return data as Client;
+    }
   }
 
   return null;
@@ -954,7 +972,9 @@ export async function findOrCreateClient(data: ClientData): Promise<Client> {
     .select()
     .single();
 
-  if (error || !newClient) throw new Error('Failed to create client: ' + error?.message);
+  if (error || !newClient) {
+    throw new Error('Failed to create client: ' + error?.message);
+  }
   return newClient as Client;
 }
 
@@ -965,7 +985,9 @@ export async function getClientById(clientId: string) {
     .select('*')
     .eq('id', clientId)
     .single();
-  if (error || !client) return null;
+  if (error || !client) {
+    return null;
+  }
 
   const { data: appointments } = await supabase
     .from('appointments')
@@ -1001,7 +1023,9 @@ export async function getAllClients(): Promise<Client[]> {
     .from('clients')
     .select('*')
     .order('created_at', { ascending: false });
-  if (error || !data) return [];
+  if (error || !data) {
+    return [];
+  }
   return data as Client[];
 }
 
@@ -1013,16 +1037,21 @@ export async function updateClient(
 
   const supabase = await createClient();
   const updates: Record<string, unknown> = { ...data, updated_at: new Date().toISOString() };
-  if (data.email) updates.email = data.email.toLowerCase();
-  if (data.phone) updates.phone = normalizePhone(data.phone);
+  if (data.email) {
+    updates.email = data.email.toLowerCase();
+  }
+  if (data.phone) {
+    updates.phone = normalizePhone(data.phone);
+  }
   const { data: updated, error } = await supabase
     .from('clients')
     .update(updates)
     .eq('id', clientId)
     .select()
     .single();
-  if (error || !updated)
+  if (error || !updated) {
     throw new AppError('DB', error?.message ?? 'Error al actualizar el cliente.');
+  }
   return ok(updated as Client);
 }
 
