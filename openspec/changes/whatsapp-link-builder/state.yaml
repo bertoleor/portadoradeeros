@@ -1,0 +1,11 @@
+change: whatsapp-link-builder
+status: verified
+phases:
+  proposal: done
+  spec: done
+  design: done
+  tasks: done
+  apply: done
+  verify: done
+strict_tdd: true
+test_runner: pnpm test
