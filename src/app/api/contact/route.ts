@@ -13,7 +13,7 @@ import { createClient } from '@/lib/supabase/server';
 
 import type { NextRequest } from 'next/server';
 
-const contactSchema = z.object({
+export const contactSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
   email: z.email('Email inválido'),
   message: z.string().min(1, 'Mensaje requerido'),

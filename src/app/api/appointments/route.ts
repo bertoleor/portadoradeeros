@@ -12,7 +12,7 @@ import {
 
 import type { NextRequest } from 'next/server';
 
-const appointmentSchema = z.object({
+export const appointmentSchema = z.object({
   name: z.string().min(1, 'Nombre requerido'),
   surname: z.string().min(1, 'Apellido requerido'),
   email: z.email('Email inválido'),

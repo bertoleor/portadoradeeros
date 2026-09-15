@@ -2,9 +2,9 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| main    | ✅                 |
+| Version | Supported |
+| ------- | --------- |
+| main    | ✅        |
 
 ## Reporting a Vulnerability
 
@@ -19,7 +19,10 @@ We will acknowledge receipt within 48 hours and provide a timeline for fix withi
 - **Authentication**: Supabase Auth with RLS (Row Level Security)
 - **Authorization**: Server-side RBAC (role hierarchy: super_admin > admin > editor > viewer)
 - **Payments**: MercadoPago zero-PAN delegation (no card data stored)
-- **Rate Limiting**: Upstash Redis tiers (auth 5/15min, public 60/min, authed 600/min)
+- **Rate Limiting**: In-memory sliding-window per IP+form (`src/lib/spam-protection.ts`); public
+  contact & booking forms capped at 5/60s
+- **Bot Protection**: Honeypot hidden field (`company_website`) on all public forms, rejected
+  silently
 - **CSP**: Strict Content Security Policy with nonce per request
 - **Cookies**: HttpOnly + Secure + SameSite=Strict (admin) / Lax (public)
 - **Headers**: HSTS, X-Frame-Options DENY, X-Content-Type-Options nosniff
