@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import type { NextRequest } from 'next/server';
 
-import { sendAppointmentReminder } from '@/lib/email';
+import { sendAppointmentReminder } from '@/lib/email/resend';
 import { createServiceClient } from '@/lib/supabase/service';
 
 export const runtime = 'nodejs';
@@ -30,10 +30,7 @@ export async function GET(request: NextRequest) {
   // requests rather than exposing a public email relay.
   const secret = process.env.CRON_SECRET;
   if (!secret) {
-    return NextResponse.json(
-      { error: 'CRON_SECRET not configured' },
-      { status: 503 },
-    );
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 503 });
   }
   const authHeader = request.headers.get('authorization') ?? '';
   const expected = `Bearer ${secret}`;
@@ -49,7 +46,7 @@ export async function GET(request: NextRequest) {
   const { data: appointments, error } = await supabase
     .from('appointments')
     .select(
-      'id, client_name, client_email, client_phone, appointment_date, services:service_id(title)',
+      'id, client_name, client_email, client_phone, appointment_date, services:service_id(title)'
     )
     .eq('status', 'confirmed')
     .gte('appointment_date', from.toISOString())
@@ -65,8 +62,8 @@ export async function GET(request: NextRequest) {
 
   for (const appointment of appointments ?? []) {
     const serviceTitle = Array.isArray(appointment.services)
-      ? appointment.services[0]?.title ?? 'tu sesión'
-      : (appointment.services as { title?: string } | null)?.title ?? 'tu sesión';
+      ? (appointment.services[0]?.title ?? 'tu sesión')
+      : ((appointment.services as { title?: string } | null)?.title ?? 'tu sesión');
 
     const date = new Date(appointment.appointment_date);
     const formattedDate = new Intl.DateTimeFormat('es-AR', {
@@ -90,10 +87,7 @@ export async function GET(request: NextRequest) {
         sent += 1;
       } else {
         failed += 1;
-        console.error(
-          `Reminder failed for appointment ${appointment.id}:`,
-          result.error,
-        );
+        console.error(`Reminder failed for appointment ${appointment.id}:`, result.error);
       }
     } catch (emailError) {
       failed += 1;

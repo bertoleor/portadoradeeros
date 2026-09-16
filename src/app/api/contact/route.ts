@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-import { sendContactFormNotification } from '@/lib/email';
+import { sendContactFormNotification } from '@/lib/email/resend';
 import {
   checkRateLimit,
   HONEYPOT_FIELD,
