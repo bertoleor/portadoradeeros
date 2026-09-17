@@ -43,3 +43,6 @@ next-env.d.ts
 .changeset/
 .husky/
 .eslintcache
+
+# RDD receipts (local-only, no se commitean)
+.rdd/
