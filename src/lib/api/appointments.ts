@@ -135,6 +135,11 @@ export async function createAppointment(
   // HONEYPOT — bots that populate the hidden field must not trigger any email
   // or DB write. We still return a successful-looking result so the caller's
   // UI (and any bot) can't tell it was caught.
+  // HISTÓRICO: the key here is HONEYPOT_FIELD (the fixed string 'company_website',
+  // see src/lib/spam-protection.ts), never derived from input. An attacker
+  // controls the VALUE at that key, not the key name, so there is no path to
+  // reach a prototype shadow such as __proto__/constructor — no injection.
+  // eslint-disable-next-line security/detect-object-injection
   if (isHoneypotTriggered(payload[HONEYPOT_FIELD])) {
     return ok({
       id: 'honeypot',
@@ -833,6 +838,12 @@ export async function getNextAvailableSlots(
     const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
       checkDate.getDay()
     ];
+    // HISTÓRICO: `dayName` is bounded to the 7 hardcoded day-name strings above
+    // (indexed by Date.getDay(), which returns 0–6). `businessHours[dayName]`
+    // can therefore never be asked for an arbitrary attacker-chosen key; even
+    // the matching tested by `if (!bh || bh.closed)` cannot reach a prototype
+    // shadow. The object content comes from admin settings, not client input.
+    // eslint-disable-next-line security/detect-object-injection
     const bh = businessHours[dayName];
 
     if (!bh || bh.closed) {
@@ -940,9 +951,20 @@ export async function findOrCreateClient(data: ClientData): Promise<Client> {
     const updates: Partial<ClientData> = {};
     const fields: (keyof ClientData)[] = ['name', 'surname', 'email', 'phone'];
 
+    // HISTÓRICO: `field` iterates the hardcoded 4-element `fields` array above
+    // (typed `keyof ClientData`), never an attacker-controlled string. So the
+    // reads `normalizedData[field]` / `existing[field]` and the write
+    // `updates[field]` are bounded to those 4 known model keys — cannot reach
+    // __proto__/constructor. `existing`/`updates` are module-owned objects.
+    // NOTE: uses disable-next-line (not a disable block) because ESLint 9 flat
+    // config only honors the per-line directive here — the block form was
+    // ignored and left 3 live security/detect-object-injection warnings.
     fields.forEach((field) => {
+      // eslint-disable-next-line security/detect-object-injection
       const val = normalizedData[field];
+      // eslint-disable-next-line security/detect-object-injection
       if (val && val !== existing[field]) {
+        // eslint-disable-next-line security/detect-object-injection
         updates[field] = val;
       }
     });
