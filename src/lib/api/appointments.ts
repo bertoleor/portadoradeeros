@@ -27,6 +27,33 @@ import type { Database } from '@/types/database';
 type AppointmentRow = Database['public']['Tables']['appointments']['Row'];
 
 /**
+ * Default slot duration (minutes) assumed for an appointment when the linked
+ * service has no duration configured. Mirrors the fallback already used by
+ * `getBookedSlots` and `checkSlotAvailability` for the admin path.
+ */
+const DEFAULT_SERVICE_DURATION_MIN = 60;
+
+/**
+ * Resolve the duration of the service being booked. Server actions cannot
+ * pass the admin-only `services` read down to the client, and the public
+ * booking form already knows the duration it rendered the calendar with, so
+ * the form passes `serviceDurationMinutes` alongside the payload. When
+ * absent (older callers / tests) we fall back to the standard 60-minute
+ * slot — the same default the availability helpers use — so the overlap
+ * window is never shorter than the slot the calendar promised.
+ */
+function resolveServiceDuration(payload: {
+  serviceDurationMinutes?: number;
+  serviceName: string;
+}): number {
+  const raw = payload.serviceDurationMinutes;
+  if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) {
+    return Math.ceil(raw);
+  }
+  return DEFAULT_SERVICE_DURATION_MIN;
+}
+
+/**
  * Normalize a phone number to a consistent format for dedupe and lookup:
  * strips everything that is not a digit (spaces, dashes, parentheses) and keeps
  * the leading `+` (country code marker) if present. Applied consistently when
@@ -96,6 +123,7 @@ interface AppointmentPayload {
   appointmentDate: Date;
   notes?: string;
   serviceName: string; // for email only
+  serviceDurationMinutes?: number; // overlap window (defaults to 60)
   [HONEYPOT_FIELD]?: string;
 }
 
@@ -159,6 +187,24 @@ export async function createAppointment(
   if (rate.limited) {
     return fail(
       new AppError('VALIDATION', 'Demasiadas solicitudes. Intenta nuevamente en unos minutos.')
+    );
+  }
+
+  // OVERLAP GUARD (ORN-173) — the public path must honor the same
+  // anti-overbooking contract as the admin path: a proposed slot that
+  // collides with any existing non-cancelled appointment is rejected
+  // BEFORE any side effect (DB write, emails, push). `checkSlotAvailability`
+  // reads non-PII columns through the service-role client, filters cancelled
+  // rows server-side and FAILS CLOSED on query errors, so a broken
+  // availability read can never admit a double booking.
+  const durationMin = resolveServiceDuration(payload);
+  const availability = await checkSlotAvailability(payload.appointmentDate, durationMin);
+  if (!availability.available) {
+    return fail(
+      new AppError(
+        'VALIDATION',
+        'Ese horario acaba de ocuparse. Por favor elegí otro horario disponible.'
+      )
     );
   }
 

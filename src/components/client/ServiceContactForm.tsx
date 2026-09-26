@@ -589,6 +589,7 @@ export function ServiceContactForm({
       const result = await createAppointment({
         serviceId,
         serviceName,
+        serviceDurationMinutes: serviceDuration,
         clientName: `${formData.name} ${formData.surname}`,
         clientEmail: formData.email,
         clientPhone: formData.phone,
