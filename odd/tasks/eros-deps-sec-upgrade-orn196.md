@@ -61,10 +61,20 @@ picomatch, path-to-regexp, browserslist, fast-uri, hono, ip-address, linkify-it,
   - evidence: `npm audit --package-lock-only` → {low:0, moderate:2, high:0, critical:0} — the 2
     moderate are @vitest/mocker GHSA-82fw-gwwq-j7x9 (dev-only, fix=vitest@5.0.2 breaking → out of
     scope)
-- [ ] T8: Clean reinstall node_modules + run tests/build/typecheck/lint
-  - evidence: (in progress — pnpm install running after audited trash of corrupted hybrid
-    node_modules; old install had vitest bin missing so tests were impossible)
-- [ ] T9: Commit work-unit(s)
+- [x] T8: Clean reinstall node_modules + run tests/build/typecheck/lint
+  - evidence: vitest 69/69 PASS (135s); tsc --noEmit exit 0; next build PASS (28 routes, exit 0);
+    npm audit 0 high/critical (2 moderate dev-only @vitest/mocker, out of scope); lint = 174
+    problems (138 err) PREEXISTING baseline, identical with and without this diff (verified on clean
+    HEAD checkout) — not a regression of this change.
+  - extra fix: added devDep @types/nodemailer@8.0.2. Root cause of TS7016 on src/lib/email/smtp.ts:
+    nodemailer ships no types (7.x and 9.x both `types: None`) and @types/nodemailer was NEVER in
+    any lockfile — the module previously compiled only via phantom resolution from the corrupted
+    hybrid node_modules. Clean install exposed it. RED log: tsc exit 1 before the devDep; GREEN
+    after.
+- [x] T9: Commit work-unit + push
+  - evidence: commit 28bce67 on feat/eros-sec, pushed e84923f..28bce67; pre-commit gates green
+    (gitleaks protect, lint-staged prettier, gga secrets scan); RDD receipt
+    receipt-1699e87c32d0.json (4 files) signed pre-commit.
 
 ## Accumulated evidence
 
@@ -88,10 +98,12 @@ picomatch, path-to-regexp, browserslist, fast-uri, hono, ip-address, linkify-it,
 
 ## Next step
 
-- Finish T8: `pnpm install --force` re-linking in progress; then `pnpm test`, `pnpm typecheck`,
-  `pnpm lint`, `pnpm build`. Then commit (T9).
+- DONE — feature complete. All 9 tasks closed. Card in kanban review; Linear ORN-196 comment posted.
 
 ## Progress
 
 - 2026-09-27: T1-T7 complete; T8 in progress (fresh pnpm install done, --force re-link pass running
   to fix .ignored_* stubs left by an --ignore-scripts run).
+- 2026-09-27 (turno noche): T8 complete (vitest 69/69, tsc clean, build PASS 28 routes; added
+  @types/nodemailer@8.0.2 devDep fixing TS7016 exposed by clean install); T9 complete (commit
+  28bce67 pushed to origin/feat/eros-sec; RDD receipt 1699e87c32d0). Feature closed.
