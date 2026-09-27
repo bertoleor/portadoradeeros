@@ -46,3 +46,5 @@ next-env.d.ts
 
 # RDD receipts (local-only, no se commitean)
 .rdd/
+
+!.env.example
