@@ -1,4 +1,5 @@
 # AUDITORÍA ESTÉTICA COMPLETA Y MINUCIOSA - Portadora de Eros
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[05-identidad-visual]] · [[PLAN_CORRECCIONES]]
 
 ## RESUMEN EJECUTIVO
 

@@ -1,4 +1,5 @@
 # MEJORAS ADICIONALES PARA SITIO PREMIUM
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[PLAN_CORRECCIONES]] · [[PROPUESTAS_MEJORAS]] · [[EROS-plan-2026-09-14]]
 
 Basándome en mejores prácticas de sitios web profesionales de wellness/espirituales, propongo las siguientes mejoras adicionales:
 

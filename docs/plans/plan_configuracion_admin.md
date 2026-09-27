@@ -1,4 +1,5 @@
 # Plan: Nueva Configuración de Admin - Estilo Notion/App Nativa
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[0001-admin-allowlist-is-admin]]
 
 ## Resumen
 

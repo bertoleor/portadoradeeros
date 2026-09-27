@@ -1,4 +1,5 @@
 # ADR-0001 — Autorización admin por allowlist `is_admin()`
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[ADR-CONVENTION]] · [[ADR-TEMPLATE]] · [[02-como-se-arma]]
 
 - **Fecha:** 2026-09-12 | **Estado:** aceptado (documenta lo existente, UNVERIFIED)
 - **Contexto:** sitio monolingüe es-AR con un área `/admin` de un solo operador. Supabase Auth con signup público deshabilitado.

@@ -1,4 +1,5 @@
 # PLAN DE IMPLEMENTACIÓN FINAL - PORTADORA DE EROS
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[plan]]
 
 **Objetivo:** Dejar el proyecto listo para que el cliente solo tenga que cargar sus servicios.  
 **Exclusiones:** Google Calendar, Facebook/Twitter/YouTube, Live Chat  

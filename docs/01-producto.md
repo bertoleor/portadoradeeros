@@ -1,4 +1,5 @@
 # EROS — Producto: qué es y funciones
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[PRD-eros-minimo]] · [[EROS-plan-2026-09-14]] · [[docs/proyectos/eros|eros]]
 
 > Fuente: `src/app/*`, `src/components/client/*`, `src/lib/api/*`, `supabase_schema.sql`,
 > `supabase_seed.sql`, `public/manifest.json`. Verificado 2026-09-15.

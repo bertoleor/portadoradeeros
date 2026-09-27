@@ -1,4 +1,5 @@
 # Changelog — portadora-eros
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[projects/eros/STATUS|STATUS]] · [[docs/proyectos/eros|eros]] · [[ESTADO-FLOTA-2026-09-14]]
 
 Formato: Keep a Changelog simplificado. Todo UNVERIFIED hasta revisión humana.
 

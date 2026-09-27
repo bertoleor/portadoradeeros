@@ -1,4 +1,5 @@
 # AUDITORÍA DEL PANEL DE ADMINISTRACIÓN
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-admin]] · [[PLAN_CORRECCIONES]]
 
 **Fecha:** 11 de Marzo 2026  
 **Ámbito:** Panel de Administración ("/admin/\*")

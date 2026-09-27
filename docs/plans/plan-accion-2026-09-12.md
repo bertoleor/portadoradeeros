@@ -1,4 +1,5 @@
 # EROS — Plan de acción 2026-09-12 (UNVERIFIED)
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[projects/eros/STATUS|STATUS]]
 
 > Fuente: consolidado 2026-09-12 + `docs/eros-reporte-producto-marketing-estilo-2026-09-12.md` +
 > gaps EROS. Branch `feat/security-audit-remediation`. Nada aplicado sin OK de Jacque.

@@ -1,4 +1,5 @@
 # Auditoría Panel de Administración
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-responsive-mobile]] · [[PLAN_CORRECCIONES]]
 
 Fecha: 2026-03-16
 Archivos leídos: 28

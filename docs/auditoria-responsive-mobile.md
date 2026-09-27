@@ -1,4 +1,5 @@
 # Auditoría Responsive Mobile
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-admin]] · [[05-identidad-visual]]
 
 ## Resumen ejecutivo
 

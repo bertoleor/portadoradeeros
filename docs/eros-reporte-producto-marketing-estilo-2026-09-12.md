@@ -1,4 +1,5 @@
 # EROS — Reporte Producto / Marketing / Estilo
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-REPORTS]] · [[04-branding]] · [[06-marketing]]
 
 > Origen: `plan.md`, `package.json`, `AUDITORIA_*` (2024/2026/estética), `docs/`, `plans/`, `reports/` (auditor + project-analysis). Nada aplicado, nada borrado. UNVERIFIED. Español rioplatense. Provider nvidia.
 

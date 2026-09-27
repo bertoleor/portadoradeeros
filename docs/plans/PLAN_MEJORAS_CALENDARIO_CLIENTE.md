@@ -1,4 +1,5 @@
 # Plan de Mejoras: Calendario Cliente
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[plan_mejoras_calendario]]
 
 ## Problemas a Resolver
 

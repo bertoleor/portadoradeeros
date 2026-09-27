@@ -1,4 +1,5 @@
 # AUDITORÍA COMPLETA Y EXHAUSTIVA - PORTADORA DE EROS
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[AUDITORIA_COMPLETA_2024]] · [[projects/eros/STATUS|STATUS]]
 
 **Fecha de auditoría:** 15 de Marzo 2026  
 **Versión:** Actualización integral post-análisis  

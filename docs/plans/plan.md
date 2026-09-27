@@ -1,4 +1,5 @@
 # Portadora de Eros - Implementation Plan
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[PLAN_IMPLEMENTACION_FINAL]]
 
 ## Project Overview
 

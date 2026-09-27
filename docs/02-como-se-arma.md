@@ -1,4 +1,5 @@
 # EROS — Cómo se arma (build, run, deploy)
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[03-stack]] · [[0001-admin-allowlist-is-admin]] · [[projects/eros/STATUS|STATUS]]
 
 > Fuente: `package.json`, `next.config.ts`, `vercel.json`, `supabase_schema.sql`, `migrations/*`,
 > `src/proxy.ts`. Verificado 2026-09-15. Solo docs, no toca código.

@@ -1,4 +1,5 @@
 # Plan: Mejoras del Calendario
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[AUDITORIA_CALENDARIO_2024]]
 
 ## Estado Actual
 - Solo vista de mes

@@ -1,4 +1,5 @@
 # EROS — Repos relacionados
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[01-producto]] · [[docs/proyectos/eros|eros]]
 
 > Solo documentación. Búsqueda web 2026-09-15. Código intocado. Criterio: e-commerce open source
 > reutilizable para una tienda como EROS (Next.js + Supabase + pagos LATAM). "Portadora" en telecom

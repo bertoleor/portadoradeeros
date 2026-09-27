@@ -1,4 +1,5 @@
 # EROS — STATUS
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[projects/eros/CHANGELOG|CHANGELOG]] · [[EROS-plan-2026-09-14]] · [[docs/proyectos/eros|eros]]
 
 > Estado del proyecto y dónde vive cada fuente de verdad. Solo documentación. Actualizado:
 > 2026-09-15 · Rama: `feat/rls-phase10` · Verificado contra `src/`, `package.json`,

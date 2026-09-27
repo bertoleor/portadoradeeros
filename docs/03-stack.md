@@ -1,4 +1,5 @@
 # EROS — Framework / Stack
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[02-como-se-arma]] · [[projects/eros/STATUS|STATUS]] · [[docs/proyectos/eros|eros]]
 
 > Fuente: `package.json`, `next.config.ts`, `src/app/layout.tsx`, `src/app/globals.css`,
 > `components.json`, `tsconfig.json`. Verificado 2026-09-15.

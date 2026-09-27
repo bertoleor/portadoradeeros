@@ -1,4 +1,5 @@
 # Security Policy
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[seguridad]] · [[docs/proyectos/eros|eros]]
 
 ## Supported Versions
 

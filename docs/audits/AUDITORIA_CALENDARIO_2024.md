@@ -1,4 +1,5 @@
 # Auditoría del Sistema de Calendario y Horarios
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[plan_mejoras_calendario]] · [[PLAN_MEJORAS_CALENDARIO_CLIENTE]]
 
 ## Resumen Ejecutivo
 

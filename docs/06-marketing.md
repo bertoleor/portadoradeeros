@@ -1,4 +1,5 @@
 # EROS — Marketing
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[04-branding]] · [[eros-reporte-producto-marketing-estilo-2026-09-12]]
 
 > Fuente: metadata/OG/sitemap (layout, sitemap, robots), Hero/Footer/sobre-mí, `admin_settings`
 > (redes/bio), cron recordatorios. Verificado 2026-09-15.

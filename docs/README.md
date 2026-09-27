@@ -1,4 +1,5 @@
 # EROS — Docs: índice
+> Relacionados: [[docs/proyectos/eros|eros]] · [[Hub-Proyectos]] · [[INDICE-PLANS]]
 
 > Solo documentación. Código intocado.
 
