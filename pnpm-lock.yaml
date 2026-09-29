@@ -68,11 +68,11 @@ importers:
         specifier: ^0.577.0
         version: 0.577.0(react@19.2.3)
       next:
-        specifier: 16.3.6
-        version: 16.3.6(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@20.19.43)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^16.3.6
+        version: 16.3.6(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.63.0)(@types/node@20.19.43)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       nodemailer:
-        specifier: ^9.1.1
-        version: 9.1.1
+        specifier: 10.0.11
+        version: 10.0.11
       react:
         specifier: 19.2.3
         version: 19.2.3
@@ -104,15 +104,15 @@ importers:
       '@changesets/cli':
         specifier: ^3.0.2
         version: 3.0.2
+      '@playwright/test':
+        specifier: ^1.63.0
+        version: 1.63.0
       '@tailwindcss/postcss':
         specifier: ^4.2.1
         version: 4.3.3
       '@types/node':
         specifier: ^20
         version: 20.19.43
-      '@types/nodemailer':
-        specifier: 8.0.2
-        version: 8.0.2
       '@types/react':
         specifier: ^19
         version: 19.3.0
@@ -1530,6 +1530,14 @@ packages:
       }
     engines: { node: '>=12.4.0' }
 
+  '@playwright/test@1.63.0':
+    resolution:
+      {
+        integrity: sha512-oxMK4vllB9RK5NQ2l1pq1IfOf2AvnEuj/vYGDj0H2nMtmtZpKtCwt/l00GEO6xjGfpBNAvjovvYdCm50dRQkpQ==,
+      }
+    engines: { node: '>=20' }
+    hasBin: true
+
   '@pnpm/deps.graph-sequencer@1100.0.1':
     resolution:
       {
@@ -2343,12 +2351,6 @@ packages:
     resolution:
       {
         integrity: sha512-6oYBAi5ikg4Pl+kGsoYtawUMBT2zZMCvPNF7pVLnHZfd1zf38DRiWn/gT01RYCdUqkv7Fhr+C9ot4/tb+2sVvA==,
-      }
-
-  '@types/nodemailer@8.0.2':
-    resolution:
-      {
-        integrity: sha512-c7M5ox8p0nEOfbJ2E9Qcmt8/QCu/VzsiAhzBiZbvky2PhKZDHpKB3sQHBM5MEZNkCfBOaS6S9//AGPRTNB7IaA==,
       }
 
   '@types/react-dom@19.3.0':
@@ -5491,12 +5493,12 @@ packages:
       }
     engines: { node: '>=18' }
 
-  nodemailer@9.1.1:
+  nodemailer@10.0.11:
     resolution:
       {
-        integrity: sha512-izw9mVKFix6YSnC9eLgV6g1opl9DUlRio9ZNcq+Wu9Ujn2UwF+8Nl0B8nz22kEC+CTZCvinkxwJ0DeFbb6NwcQ==,
+        integrity: sha512-/c4P7U7aGpiNu2Rl08q525q2zECkUpSaf2zQPgIStCcAjHAkkQQKwD4sTyi3l91mGcLQrKzL1syXPHymo+Ogtw==,
       }
-    engines: { node: '>=6.0.0' }
+    engines: { node: '>=20.0.0' }
 
   npm-run-path@4.0.1:
     resolution:
@@ -5810,6 +5812,22 @@ packages:
         integrity: sha512-nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==,
       }
     engines: { node: '>=8' }
+
+  playwright-core@1.63.0:
+    resolution:
+      {
+        integrity: sha512-rYCsBF/M5HjUch52bbtVONEFjv6Xu8sm8h72dNlR5bzIE1fvC/bxgspzkjSfU+MweEMmPM8KJebG6nnyxo5mCg==,
+      }
+    engines: { node: '>=20' }
+    hasBin: true
+
+  playwright@1.63.0:
+    resolution:
+      {
+        integrity: sha512-+7ziBLidS4NaNCdt57SUDT+wYmmd5fmiQejUic/kb+YsYSCPyOOE9sebzMjNmQrsnNpDJqd4WHvV/8lfKfUDUg==,
+      }
+    engines: { node: '>=20' }
+    hasBin: true
 
   possible-typed-array-names@1.1.0:
     resolution:
@@ -7980,6 +7998,10 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
+  '@playwright/test@1.63.0':
+    dependencies:
+      playwright: 1.63.0
+
   '@pnpm/deps.graph-sequencer@1100.0.1': {}
 
   '@radix-ui/react-compose-refs@1.1.5(@types/react@19.3.0)(react@19.2.3)':
@@ -8425,10 +8447,6 @@ snapshots:
   '@types/node@20.19.43':
     dependencies:
       undici-types: 6.21.0
-
-  '@types/nodemailer@8.0.2':
-    dependencies:
-      '@types/node': 20.19.43
 
   '@types/react-dom@19.3.0(@types/react@19.3.0)':
     dependencies:
@@ -10349,7 +10367,7 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  next@16.3.6(@babel/core@7.29.7(supports-color@7.2.0))(@types/node@20.19.43)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  next@16.3.6(@babel/core@7.29.7(supports-color@7.2.0))(@playwright/test@1.63.0)(@types/node@20.19.43)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       '@next/env': 16.3.6
       '@swc/helpers': 0.5.23
@@ -10368,6 +10386,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.3.6
       '@next/swc-win32-arm64-msvc': 16.3.6
       '@next/swc-win32-x64-msvc': 16.3.6
+      '@playwright/test': 1.63.0
       babel-plugin-react-compiler: 1.0.0
       sharp: 0.35.4(@types/node@20.19.43)
     transitivePeerDependencies:
@@ -10384,7 +10403,7 @@ snapshots:
 
   node-releases@2.0.55: {}
 
-  nodemailer@9.1.1: {}
+  nodemailer@10.0.11: {}
 
   npm-run-path@4.0.1:
     dependencies:
@@ -10566,6 +10585,12 @@ snapshots:
   pkg-up@3.1.0:
     dependencies:
       find-up: 3.0.0
+
+  playwright-core@1.63.0: {}
+
+  playwright@1.63.0:
+    dependencies:
+      playwright-core: 1.63.0
 
   possible-typed-array-names@1.1.0: {}
 
