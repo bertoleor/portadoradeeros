@@ -1,5 +1,7 @@
 # AUDITORÍA DEL PANEL DE ADMINISTRACIÓN
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-admin]] · [[PLAN_CORRECCIONES]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-admin]]
+> · [[PLAN_CORRECCIONES]]
 
 **Fecha:** 11 de Marzo 2026  
 **Ámbito:** Panel de Administración ("/admin/\*")
@@ -57,7 +59,7 @@ No existe `/admin/mensajes` ni `/admin/contacto` para gestionar todos los mensaj
 
 ```typescript
 if (seguridad.newPassword.length < 8) {
-  error("La contraseña debe tener al menos 8 caracteres");
+  error('La contraseña debe tener al menos 8 caracteres');
   return;
 }
 ```
@@ -79,14 +81,15 @@ if (seguridad.newPassword.length < 8) {
 ```typescript
 const [config, setConfig] = useState({
   // ...
-  instagram: "https://instagram.com/portadoradeeros", // ❌ Hardcodeado
-  whatsapp: "https://wa.me/5491100000000", // ❌ Hardcodeado
-  email: "contacto@portadoradeeros.com", // ❌ Hardcodeado
+  instagram: 'https://instagram.com/portadoradeeros', // ❌ Hardcodeado
+  whatsapp: 'https://wa.me/5491100000000', // ❌ Hardcodeado
+  email: 'contacto@portadoradeeros.com', // ❌ Hardcodeado
   // ...
 });
 ```
 
-Esto causa que si la DB tiene valores vacíos, muestre estos defaults en el input en lugar de campos vacíos.
+Esto causa que si la DB tiene valores vacíos, muestre estos defaults en el input en lugar de campos
+vacíos.
 
 ---
 
@@ -96,12 +99,17 @@ Esto causa que si la DB tiene valores vacíos, muestre estos defaults en el inpu
 
 En [`supabase_schema.sql`](../portadora-eros/supabase_schema.sql):
 
+> ⚠️ **Nota 2026-09-30 (EROS-D4):** el link y el archivo citados son LEGACY — hoy el schema canónico
+> es `migrations/0001_canonical_schema.sql` y el RLS es
+> `migrations/migration_security_rls_allowlist.sql` (linaje: `migrations/README.md`).
+
 ```sql
 CREATE POLICY "Admins pueden gestionar todos los servicios"
 ON public.services FOR ALL USING (auth.role() = 'authenticated');
 ```
 
-**Problema:** `FOR ALL` incluye DELETE. Si un usuario autenticado (no admin) se registra, podría borrar servicios.
+**Problema:** `FOR ALL` incluye DELETE. Si un usuario autenticado (no admin) se registra, podría
+borrar servicios.
 
 **Recomendación:** Separar políticas:
 

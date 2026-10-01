@@ -7,7 +7,11 @@
 
 > Estado del proyecto y dónde vive cada fuente de verdad. Solo documentación. Actualizado:
 > 2026-09-30 · Rama: `feat/eros-deps` (HEAD 8827e8a) · Verificado contra `src/`, `package.json`,
-> `supabase_schema.sql`, `supabase_seed.sql` y `docs/F0-2026-09-27.md`.
+> `migrations/` (schema canónico: `0001_canonical_schema.sql` +
+> `migration_security_rls_allowlist.sql`
+>
+> - `add_rls_phase10.sql`, linaje en `migrations/README.md`), `supabase_seed.sql` y
+>   `docs/F0-2026-09-27.md`.
 
 ## Stack (resumen rápido)
 

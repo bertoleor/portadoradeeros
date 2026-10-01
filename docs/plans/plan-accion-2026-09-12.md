@@ -1,5 +1,7 @@
 # EROS — Plan de acción 2026-09-12 (UNVERIFIED)
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[projects/eros/STATUS|STATUS]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] ·
+> [[INDICE-PLANS]] · [[projects/eros/STATUS|STATUS]]
 
 > Fuente: consolidado 2026-09-12 + `docs/eros-reporte-producto-marketing-estilo-2026-09-12.md` +
 > gaps EROS. Branch `feat/security-audit-remediation`. Nada aplicado sin OK de Jacque.
@@ -13,6 +15,12 @@
 - **Gate:** un solo camino de reserva con test de colisión + rate-limit verificado con curl.
 
 ## Fase 2 — DB viva + prettier · due 2026-09-26 · dueño: DBA senior + Frontend Developer senior
+
+> ⚠️ **Nota 2026-09-30 (EROS-D4):** Fase 2 ejecutada y cerrada por otra vía — el item de
+> `migration_phase10.sql` nació del drift de leer el schema legacy como canónico. Hoy:
+> `migration_phase10.sql` es SUPERSEDED (columna inline en `migrations/0001_canonical_schema.sql`) y
+> el RLS canónico es `migrations/migration_security_rls_allowlist.sql` + `add_rls_phase10.sql`
+> (linaje: `migrations/README.md`).
 
 - `migration_phase10.sql`: agregar policies faltantes (riesgo RLS); alinear schema canónico con
   `contact_messages`/`push_subscriptions`/`admin_users`.

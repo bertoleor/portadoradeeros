@@ -22,7 +22,9 @@ We will acknowledge receipt within 48 hours and provide a timeline for fix withi
 
 ## Security Measures Implemented (verificado contra `src/` — 2026-09-30)
 
-- **Authentication**: Supabase Auth + RLS (`supabase_schema.sql`, migraciones en `migrations/`).
+- **Authentication**: Supabase Auth + RLS (canónico:
+  `migrations/migration_security_rls_allowlist.sql` + `migrations/add_rls_phase10.sql`; linaje
+  completo en `migrations/README.md`).
 - **Authorization (admin)**: gate doble — `src/proxy.ts` + `requireAdmin()`
   (`src/lib/auth/requireAdmin.ts`) con allowlist vía función SQL `is_admin()` → ADR-0001.
 - **Anti-spam**: rate-limit sliding-window in-memory por IP+form (`src/lib/spam-protection.ts`, 5

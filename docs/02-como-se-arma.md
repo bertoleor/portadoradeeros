@@ -1,8 +1,12 @@
 # EROS — Cómo se arma (build, run, deploy)
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[03-stack]] · [[0001-admin-allowlist-is-admin]] · [[projects/eros/STATUS|STATUS]]
 
-> Fuente: `package.json`, `next.config.ts`, `vercel.json`, `supabase_schema.sql`, `migrations/*`,
-> `src/proxy.ts`. Verificado 2026-09-15. Solo docs, no toca código.
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[03-stack]] ·
+> [[0001-admin-allowlist-is-admin]] · [[projects/eros/STATUS|STATUS]]
+
+> Fuente: `package.json`, `next.config.ts`, `vercel.json`, `migrations/` (canónico:
+> `0001_canonical_schema.sql` + `migration_security_rls_allowlist.sql` + `add_rls_phase10.sql` —
+> linaje en `migrations/README.md`), `src/proxy.ts`. Verificado 2026-09-30. Solo docs, no toca
+> código.
 
 ## Requisitos
 
@@ -21,13 +25,17 @@ pnpm dev        # http://localhost:3000
 
 ## Esquema DB (orden de aplicación)
 
-1. `supabase_schema.sql` — tablas `services`, `appointments`, `admin_settings` + RLS + bucket
-   `public-images`.
-2. `supabase_seed.sql` — 4 servicios iniciales.
-3. `migrations/*` — canónica `0001_canonical_schema.sql`, `blocked_times`, `contact_messages`,
-   `push_subscriptions`, `clients`, `service_images`, RLS allowlist, `business_hours` (phase10).
-4. Crear usuario admin manual en Supabase Auth (signup público deshabilitado) + insertar UID en
+1. `migrations/0001_canonical_schema.sql` — snapshot autoritativo del PUBLIC schema vivo (8 tablas +
+   índices + constraints, idempotente).
+2. `migrations/migration_security_rls_allowlist.sql` — RLS/policies autoritativas + allowlist
+   `admin_users` + `is_admin()` (Slice 1).
+3. `migrations/add_rls_phase10.sql` — RLS lectura `admin_users` (solo admins, ORN-77).
+4. `supabase_seed.sql` — 4 servicios iniciales (seed, no schema).
+5. Crear usuario admin manual en Supabase Auth (signup público deshabilitado) + insertar UID en
    `public.admin_users` (ver ADR-0001).
+
+⚠️ `supabase_schema.sql` y `migration_phase10.sql` (raíz) son LEGACY/superseded — NO usarlos para
+reproducir el schema (linaje completo en `migrations/README.md`).
 
 ## Comandos
 

@@ -5,7 +5,8 @@
 > [[projects/eros/README|README]] · [[PRD-eros-minimo]] · [[F0-2026-09-27]] ·
 > [[docs/proyectos/eros|eros]]
 
-> Fuente: `src/app/*`, `src/components/client/*`, `src/lib/api/*`, `supabase_schema.sql`,
+> Fuente: `src/app/*`, `src/components/client/*`, `src/lib/api/*`,
+> `migrations/0001_canonical_schema.sql` (schema canónico, linaje en `migrations/README.md`),
 > `supabase_seed.sql`, `public/manifest.json`. Verificado 2026-09-30.
 
 ## Qué es

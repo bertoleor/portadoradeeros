@@ -1,6 +1,17 @@
 -- ==============================================================
--- SCHEMA SUPABASE PARA PORTADORA DE EROS
--- Ejecutar todo este código en el "SQL Editor" de Supabase
+-- ⚠️ DEPRECATED — LEGACY (desde 2026-09-13, commit c2a495a)
+-- ==============================================================
+-- NO USAR como fuente del schema. Este archivo NO refleja la DB viva:
+--   - Usa el modelo de autorización viejo `auth.role() = 'authenticated'`
+--     (reemplazado por `is_admin()` en migration_security_rls_allowlist.sql).
+--   - No incluye `clients` ni `contact_messages`.
+-- Fuente canónica del schema público y RLS:
+--   migrations/0001_canonical_schema.sql + migration_security_rls_allowlist.sql
+--   (+ migrations/add_rls_phase10.sql — RLS lectura admin_users)
+-- Índice y linaje completo: migrations/README.md
+-- Retenido solo como referencia histórica. NO re-ejecutar contra live.
+-- ==============================================================
+-- SCHEMA SUPABASE PARA PORTADORA DE EROS (histórico)
 -- ==============================================================
 -- 1. CREACIÓN DE TABLAS
 -- Tabla: services (Servicios ofrecidos)
