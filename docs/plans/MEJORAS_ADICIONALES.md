@@ -1,7 +1,10 @@
 # MEJORAS ADICIONALES PARA SITIO PREMIUM
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[PLAN_CORRECCIONES]] · [[PROPUESTAS_MEJORAS]] · [[EROS-plan-2026-09-14]]
 
-Basándome en mejores prácticas de sitios web profesionales de wellness/espirituales, propongo las siguientes mejoras adicionales:
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[PLAN_CORRECCIONES]] ·
+> [[PROPUESTAS_MEJORAS]] · [[EROS-plan-2026-09-14]]
+
+Basándome en mejores prácticas de sitios web profesionales de wellness/espirituales, propongo las
+siguientes mejoras adicionales:
 
 ---
 
@@ -79,7 +82,7 @@ Basándome en mejores prácticas de sitios web profesionales de wellness/espirit
 
 .bg-noise {
   /* Textura sutil de ruido para dar profundidad */
-  background-image: url("data:image/svg+xml,...");
+  background-image: url('data:image/svg+xml,...');
 }
 
 .gradient-mesh {
@@ -256,7 +259,7 @@ const iconProps = {
 
 .divider-symbol::before,
 .divider-symbol::after {
-  content: "";
+  content: '';
   flex: 1;
   height: 1px;
   background: rgba(255, 255, 255, 0.1);
@@ -279,10 +282,10 @@ export const metadata: Metadata = {
   // ... existente
   openGraph: {
     // ... existente
-    images: ["/og-image.jpg"],
+    images: ['/og-image.jpg'],
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
   },
 };
 ```

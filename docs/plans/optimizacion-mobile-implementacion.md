@@ -10,7 +10,8 @@
 
 ### 1.1 Fondo Dinámico - Optimización de Rendimiento
 
-El [`BackgroundMesh.tsx`](portadora-eros/src/components/client/BackgroundMesh.tsx) es el componente más problemático para móviles.
+El [`BackgroundMesh.tsx`](portadora-eros/src/components/client/BackgroundMesh.tsx) es el componente
+más problemático para móviles.
 
 **Problemas identificados:**
 
@@ -23,9 +24,9 @@ El [`BackgroundMesh.tsx`](portadora-eros/src/components/client/BackgroundMesh.ts
 
 ```typescript
 // BackgroundMesh.tsx - Optimizado
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 
 // Configuración optimizada para móvil
 const MOBILE_FRAMES_PER_PAIR = 210; // ~3.5s en móvil (mitad de desktop)
@@ -42,28 +43,25 @@ export default function BackgroundMesh(): React.JSX.Element {
   useEffect(() => {
     // Detectar móvil
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
     };
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener('resize', checkMobile);
 
     // Detectar preferencia de movimiento reducido
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setPrefersReducedMotion(mediaQuery.matches);
-    const handler = (e: MediaQueryListEvent) =>
-      setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener("change", handler);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handler);
 
     return () => {
-      window.removeEventListener("resize", checkMobile);
-      mediaQuery.removeEventListener("change", handler);
+      window.removeEventListener('resize', checkMobile);
+      mediaQuery.removeEventListener('change', handler);
     };
   }, []);
 
   // Usar configuración según dispositivo
-  const FRAMES_PER_PAIR = isMobile
-    ? MOBILE_FRAMES_PER_PAIR
-    : DESKTOP_FRAMES_PER_PAIR;
+  const FRAMES_PER_PAIR = isMobile ? MOBILE_FRAMES_PER_PAIR : DESKTOP_FRAMES_PER_PAIR;
   const SPEED = prefersReducedMotion
     ? 0
     : isMobile
@@ -88,9 +86,8 @@ export default function BackgroundMesh(): React.JSX.Element {
       }
     };
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () =>
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   // Optimización: Frame skipping para móvil
@@ -170,33 +167,28 @@ En [`globals.css`](portadora-eros/src/app/globals.css), optimizar las transicion
 Optimizar [`next.config.ts`](portadora-eros/next.config.ts):
 
 ```typescript
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
 
   // Optimizaciones de rendimiento
   experimental: {
-    optimizePackageImports: [
-      "lucide-react",
-      "date-fns",
-      "@radix-ui/react-slot",
-      "framer-motion",
-    ],
+    optimizePackageImports: ['lucide-react', 'date-fns', '@radix-ui/react-slot', 'framer-motion'],
   },
 
   // Image optimization mejorada
   images: {
-    formats: ["image/avif", "image/webp"],
+    formats: ['image/avif', 'image/webp'],
     deviceSizes: [320, 420, 640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 días
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "xvwmngtdzuzfnqelcjzf.supabase.co",
-        port: "",
-        pathname: "/storage/v1/object/public/**",
+        protocol: 'https',
+        hostname: 'xvwmngtdzuzfnqelcjzf.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
       },
     ],
     // Indicador de calidad adaptativo
@@ -390,11 +382,11 @@ export function ResponsiveTable({
 Optimizar [`BookingCalendar.tsx`](portadora-eros/src/components/client/BookingCalendar.tsx):
 
 ```typescript
-"use client";
+'use client';
 
-import { useState, useMemo, useCallback } from "react";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useMemo, useCallback } from 'react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export function BookingCalendar({
   selectedDate,
@@ -416,23 +408,19 @@ export function BookingCalendar({
 
   // Memoizar funciones de navegación
   const prevMonth = useCallback(() => {
-    setCurrentMonth(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1),
-    );
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
   }, []);
 
   const nextMonth = useCallback(() => {
-    setCurrentMonth(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1),
-    );
+    setCurrentMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
   }, []);
 
   // Simplificar animación en móvil (Framer Motion puede ser pesado)
   const motionProps = {
     // En móvil: sin animación o animación simple
-    ...(typeof window !== "undefined" && window.innerWidth < 768
+    ...(typeof window !== 'undefined' && window.innerWidth < 768
       ? { transition: { duration: 0.15 } }
-      : { layoutId: "activeDay" }),
+      : { layoutId: 'activeDay' }),
   };
 }
 ```
@@ -505,31 +493,31 @@ const buttonVariants = cva(
 ```javascript
 // public/sw.js - Optimizado
 
-const CACHE_NAME = "portadora-eros-v1";
-const RUNTIME_CACHE = "runtime";
+const CACHE_NAME = 'portadora-eros-v1';
+const RUNTIME_CACHE = 'runtime';
 
 const PRECACHE_URLS = [
-  "/",
-  "/offline",
-  "/manifest.json",
+  '/',
+  '/offline',
+  '/manifest.json',
   // Fonts críticos
-  "/fonts/playfair-display.woff2",
-  "/fonts/geist.woff2",
+  '/fonts/playfair-display.woff2',
+  '/fonts/geist.woff2',
 ];
 
 // Install: precache recursos críticos
-self.addEventListener("install", (event) => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_URLS);
-    }),
+    })
   );
   self.skipWaiting();
 });
 
 // Fetch: stale-while-revalidate para HTML
-self.addEventListener("fetch", (event) => {
-  if (event.request.mode === "navigate") {
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
         return cache.match(event.request).then((cachedResponse) => {
@@ -539,7 +527,7 @@ self.addEventListener("fetch", (event) => {
           });
           return cachedResponse || fetchPromise;
         });
-      }),
+      })
     );
     return;
   }
@@ -556,7 +544,7 @@ self.addEventListener("fetch", (event) => {
           });
         })
       );
-    }),
+    })
   );
 });
 ```
@@ -864,12 +852,16 @@ flowchart TB
 
 ## Notas Adicionales
 
-1. **Bundle Size**: El proyecto ya tiene `optimizePackageImports` para lucide-react y date-fns. Verificar que no se importan módulos completos.
+1. **Bundle Size**: El proyecto ya tiene `optimizePackageImports` para lucide-react y date-fns.
+   Verificar que no se importan módulos completos.
 
-2. **Fonts**: Las fuentes Playfair Display y Geist se cargan con Next.js font optimization - ya optimizado.
+2. **Fonts**: Las fuentes Playfair Display y Geist se cargan con Next.js font optimization - ya
+   optimizado.
 
-3. **SSR**: Las páginas ya usan SSR. Considerar agregar `loading.tsx` donde no existen para mejor UX.
+3. **SSR**: Las páginas ya usan SSR. Considerar agregar `loading.tsx` donde no existen para mejor
+   UX.
 
-4. **Glassmorphism**: El efecto glass usa `backdrop-filter: blur()` - muy costoso en móvil. Ya tiene `@supports` fallback. Considerar deshabilitar en móvil de gama baja.
+4. **Glassmorphism**: El efecto glass usa `backdrop-filter: blur()` - muy costoso en móvil. Ya tiene
+   `@supports` fallback. Considerar deshabilitar en móvil de gama baja.
 
 5. **PWA**: El manifest ya existe y está configurado. El service worker necesita actualización.

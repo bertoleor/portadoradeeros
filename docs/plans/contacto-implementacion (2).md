@@ -70,18 +70,12 @@ La página debe tener:
 ### 2.3 Código Propuesto para contacto/page.tsx
 
 ```tsx
-"use client";
+'use client';
 
-import { useState, FormEvent } from "react";
-import { Button, Input, TextArea } from "@/components/ui";
-import {
-  Send,
-  CheckCircle2,
-  Mail,
-  Instagram,
-  MessageCircle,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { useState, FormEvent } from 'react';
+import { Button, Input, TextArea } from '@/components/ui';
+import { Send, CheckCircle2, Mail, Instagram, MessageCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 // ... (保持现有的 contactInfo y estados)
 
@@ -89,9 +83,7 @@ import { motion } from "framer-motion";
 if (isSubmitted) {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-12rem)] px-4">
-      <div className="max-w-md w-full text-center">
-        {/* ... contenido del éxito ... */}
-      </div>
+      <div className="max-w-md w-full text-center">{/* ... contenido del éxito ... */}</div>
     </div>
   );
 }
@@ -106,9 +98,7 @@ return (
         <span className="text-xs uppercase tracking-[0.5em] text-gray-400 block mb-4">
           Contacto
         </span>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-light">
-          Hablemos
-        </h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-light">Hablemos</h1>
       </div>
 
       {/* Grid de dos columnas - CENTRADO */}
@@ -139,12 +129,7 @@ return (
         <div>
           <form className="space-y-4">
             <Input label="Nombre" placeholder="Tu nombre" required />
-            <Input
-              label="Email"
-              type="email"
-              placeholder="tu@email.com"
-              required
-            />
+            <Input label="Email" type="email" placeholder="tu@email.com" required />
             <Input label="Teléfono" type="tel" placeholder="+54 9..." />
             <TextArea label="Mensaje" rows={4} placeholder="..." required />
             <Button type="submit" fullWidth>

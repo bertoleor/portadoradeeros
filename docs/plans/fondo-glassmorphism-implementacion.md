@@ -272,6 +272,7 @@ El usuario proporcionó un ejemplo funcional con:
 
 ## Siguiente Paso
 
-¿El plan te parece bien? ¿Hay algo que quieras modificar o agregar antes de pasar a la implementación?
+¿El plan te parece bien? ¿Hay algo que quieras modificar o agregar antes de pasar a la
+implementación?
 
 Una vez aprobado, puedo empezar con la Fase 1 (Fondo Mesh Aurora) en modo Code.

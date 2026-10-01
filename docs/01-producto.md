@@ -1,8 +1,12 @@
 # EROS — Producto: qué es y funciones
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[PRD-eros-minimo]] · [[EROS-plan-2026-09-14]] · [[docs/proyectos/eros|eros]]
+
+> **Búsqueda:** keywords: `eros, producto, catalogo, actores, rutas, reserva` · clasificación:
+> `producto` · estado: `canónico` · actualizado: 2026-09-30 Relacionados:
+> [[projects/eros/README|README]] · [[PRD-eros-minimo]] · [[F0-2026-09-27]] ·
+> [[docs/proyectos/eros|eros]]
 
 > Fuente: `src/app/*`, `src/components/client/*`, `src/lib/api/*`, `supabase_schema.sql`,
-> `supabase_seed.sql`, `public/manifest.json`. Verificado 2026-09-15.
+> `supabase_seed.sql`, `public/manifest.json`. Verificado 2026-09-30.
 
 ## Qué es
 
@@ -66,6 +70,8 @@ Cada servicio: página de detalle `/servicios/[slug]` (imagen, descripción, CTA
 
 ## Riesgo conocido
 
-Doble camino de reserva: la server action `createAppointment()` **sí persiste** en DB; el route
-`POST /api/appointments` es **email-only sin persistencia ni rate-limit** → superficie paralela,
-riesgo de drift (ver `reports/project-analysis/eros-producto-g1.md`).
+**Resuelto 2026-09-30 (verificación de este refresh):** el doble camino de reserva fue eliminado —
+la ruta huérfana `POST /api/appointments` ya no existe (`src/app/api/` solo contiene `admin/`,
+`contact/`, `cron/`). Camino canónico único: server action `createAppointment()` con rate-limit +
+honeypot (`src/lib/spam-protection.ts`, 5 req/60s). Historia: ver
+`openspec/changes/remove-orphan-booking-route/` y `reports/project-analysis/eros-producto-g1.md`.
