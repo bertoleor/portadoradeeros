@@ -53,4 +53,7 @@ next-env.d.ts
 # RDD receipts (local-only, no se commitean)
 .rdd/
 
+# scan scratch (EROS-D5: salidas de trivy/audit viven en reports/, el scratch no se commitea)
+/tmp/
+
 !.env.example
