@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
-    "@emailjs/nodejs": "^5.0.2",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-slot": "^1.2.4",
     "@supabase/ssr": "^0.9.0",

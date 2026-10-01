@@ -28,8 +28,8 @@ vi.mock('@/lib/email/smtp', () => ({
   sendAppointmentCancellation: smtpCancellationMock,
 }));
 
-// NOTE (TDD RED): '@/lib/email/index' does not exist yet — these imports must
-// fail until the EMAIL_PROVIDER dispatcher is implemented.
+// NOTE: the imports below must fail loudly if the EMAIL_PROVIDER dispatcher
+// is ever removed — callers depend on '@/lib/email' as the single entry.
 import {
   getEmailProvider,
   sendAppointmentCancellation,

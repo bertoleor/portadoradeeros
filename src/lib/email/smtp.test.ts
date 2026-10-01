@@ -9,9 +9,9 @@ vi.mock('nodemailer', () => ({
   createTransport: vi.fn(() => ({ sendMail: sendMailMock })),
 }));
 
-// NOTE (TDD RED): '@/lib/email/smtp' does not exist yet — these imports must
-// fail until the SMTP fallback transport is implemented. No real emails are
-// ever sent: the nodemailer transport is fully mocked.
+// '@/lib/email/smtp' is the SMTP fallback transport (active only with
+// EMAIL_PROVIDER=smtp, dispatched from '@/lib/email'). No real emails are
+// ever sent here: the nodemailer transport is fully mocked.
 import {
   resetSmtpTransportForTests,
   sendAppointmentCancellation,
