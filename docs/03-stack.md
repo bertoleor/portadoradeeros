@@ -24,7 +24,7 @@
 | Capa                | Elección                                                                          |
 | ------------------- | --------------------------------------------------------------------------------- |
 | DB + Auth + Storage | Supabase (`@supabase/ssr` 0.9, `@supabase/supabase-js` 2.99)                      |
-| Email               | EmailJS (`@emailjs/nodejs` 5) / Resend (plantillas en `src/lib/email-templates/`) |
+| Email               | Resend (`resend` 6.28, default) + fallback SMTP (`nodemailer` 10) vía `EMAIL_PROVIDER` — plantillas en `src/lib/email/resend.ts` / `smtp.ts` |
 | Push admin          | `web-push` 3.6.7 + tabla `push_subscriptions`                                     |
 | Validación          | Zod 4 en formularios y API routes                                                 |
 

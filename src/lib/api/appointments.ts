@@ -10,7 +10,7 @@ import {
   sendAppointmentConfirmation,
   sendAppointmentConfirmed,
   sendNewAppointmentNotification,
-} from '@/lib/email/resend';
+} from '@/lib/email';
 import {
   checkRateLimit,
   HONEYPOT_FIELD,

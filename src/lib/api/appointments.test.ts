@@ -33,12 +33,23 @@ vi.mock('next/headers', () => ({
   headers: vi.fn(async () => new Headers({ 'x-forwarded-for': testClientIp })),
 }));
 
-// Email sender: must never run for a rejected booking.
+// Email sender: must never run for a rejected booking. The route to the
+// provider goes through the real dispatcher (@/lib/email), so this mock
+// only pins the concrete Resend module the dispatcher delegates to.
 vi.mock('@/lib/email/resend', () => ({
   sendAppointmentCancellation: vi.fn(),
   sendAppointmentConfirmation: vi.fn(),
   sendAppointmentConfirmed: vi.fn(),
   sendNewAppointmentNotification: vi.fn(),
+}));
+
+// SMTP provider (EROS-D2): mocked so dispatch tests can assert that
+// EMAIL_PROVIDER=smtp actually reroutes the booking emails.
+vi.mock('@/lib/email/smtp', () => ({
+  sendAppointmentCancellation: vi.fn(),
+  sendAppointmentConfirmation: vi.fn(async () => ({ success: true, id: 'smtp-mock' })),
+  sendAppointmentConfirmed: vi.fn(),
+  sendNewAppointmentNotification: vi.fn(async () => ({ success: true, id: 'smtp-mock' })),
 }));
 
 // requireAdmin: not used by the public path, mocked for safety.
@@ -265,5 +276,26 @@ describe('createAppointment — anti-overbooking (ORN-173)', () => {
     });
     expect(bot.ok).toBe(true);
     expect(insertAttempts).toHaveLength(0);
+  });
+});
+
+describe('createAppointment — email provider dispatch (EROS-D2)', () => {
+  it('reroutes booking emails to SMTP when EMAIL_PROVIDER=smtp', async () => {
+    process.env.EMAIL_PROVIDER = 'smtp';
+    try {
+      const result = await createAppointment(basePayload); // free slot → allowed
+      expect(result.ok).toBe(true);
+
+      const smtp = await import('@/lib/email/smtp');
+      expect(vi.mocked(smtp.sendNewAppointmentNotification)).toHaveBeenCalledTimes(1);
+      expect(vi.mocked(smtp.sendAppointmentConfirmation)).toHaveBeenCalledTimes(1);
+
+      // Resend must NOT be touched when the SMTP provider is selected.
+      const resend = await import('@/lib/email/resend');
+      expect(vi.mocked(resend.sendNewAppointmentNotification)).not.toHaveBeenCalled();
+      expect(vi.mocked(resend.sendAppointmentConfirmation)).not.toHaveBeenCalled();
+    } finally {
+      delete process.env.EMAIL_PROVIDER;
+    }
   });
 });

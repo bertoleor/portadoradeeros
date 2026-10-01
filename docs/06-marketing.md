@@ -24,7 +24,7 @@ transferencia.
 
 - **Web propia** (canal central, `es-AR`, OG `portadoradeeros.com`).
 - **Instagram / TikTok / WhatsApp** — links editables en admin, sin deploy.
-- **Email transaccional** — confirmación al cliente + aviso al admin (EmailJS/Resend).
+- **Email transaccional** — confirmación al cliente + aviso al admin (Resend por defecto, fallback SMTP vía `EMAIL_PROVIDER`).
 - **PWA admin** — atajos a calendario/clientes, respuesta rápida = ventaja de conversión.
 
 ## Mensajes por servicio (seed)

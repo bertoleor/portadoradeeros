@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import type { NextRequest } from 'next/server';
 
-import { sendAppointmentReminder } from '@/lib/email/resend';
+import { sendAppointmentReminder } from '@/lib/email';
 import { createServiceClient } from '@/lib/supabase/service';
 
 export const runtime = 'nodejs';
