@@ -32,7 +32,7 @@ Cada servicio: página de detalle `/servicios/[slug]` (imagen, descripción, CTA
 | Rol            | Capacidad                                                | Mecanismo                                                                                   |
 | -------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | Visitante      | Ve servicios, reserva turno, contacta                    | `ServiceContactForm` → server action `createAppointment()`; `POST /api/contact`             |
-| Cliente        | Recibe confirmación por email + datos bancarios          | EmailJS/Resend, 6 plantillas (`src/lib/email*`)                                             |
+| Cliente        | Recibe confirmación por email + datos bancarios          | Resend/SMTP, 6 plantillas (`src/lib/email/*`)                                               |
 | Admin (Jacque) | Calendario, clientes, mensajes, servicios, configuración | Supabase Auth + allowlist `is_admin()` (ADR-0001), gate doble `proxy.ts` + `requireAdmin()` |
 | Sistema        | Recordatorios, push, storage                             | Cron Vercel `/api/cron/reminders`, `web-push`, Supabase Storage `public-images`             |
 

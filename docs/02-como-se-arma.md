@@ -13,7 +13,8 @@
 - Node 20+ · `pnpm` (hay `pnpm-lock.yaml` + `pnpm-workspace.yaml`) o npm.
 - Proyecto Supabase + claves `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
   `SUPABASE_SERVICE_ROLE_KEY` (solo server, acotada a push).
-- EmailJS/Resend según `src/lib/email*` + clave `web-push` (VAPID) para notificaciones admin.
+- Email según `src/lib/email/*` (Resend/SMTP — EmailJS retirado, hallazgo EROS-D2) + clave
+  `web-push` (VAPID) para notificaciones admin.
 
 ## Setup local
 
