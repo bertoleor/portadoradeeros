@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { NextRequest } from 'next/server';
 
@@ -25,11 +25,20 @@ vi.mock('@/lib/spam-protection', () => ({
   resolveClientIp: vi.fn(() => '127.0.0.1'),
 }));
 
-// Supabase server client: insert succeeds.
+/* ------------------------------------------------------------------ */
+/* Supabase mock (EROS-B3): the insert result is driven per-test via   */
+/* a hoisted mutable holder — default is a successful insert.           */
+/* ------------------------------------------------------------------ */
+const { supabaseState } = vi.hoisted(() => ({
+  supabaseState: {
+    insertError: null as null | { message: string; code?: string },
+  },
+}));
+
 vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(async () => ({
     from: vi.fn(() => ({
-      insert: vi.fn(async () => ({ error: null })),
+      insert: vi.fn(async () => ({ error: supabaseState.insertError })),
     })),
   })),
 }));
@@ -130,5 +139,68 @@ describe('POST /api/contact — email provider dispatch (EROS-D2)', () => {
 
     const resend = await import('@/lib/email/resend');
     expect(vi.mocked(resend.sendContactFormNotification)).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('POST /api/contact — insert persistence flags (EROS-B3)', () => {
+  let errorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    delete process.env.EMAIL_PROVIDER;
+    supabaseState.insertError = null;
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function makeRequest(): NextRequest {
+    return new Request('http://localhost:3000/api/contact', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'Ana',
+        email: 'ana@example.com',
+        message: 'Hola, quiero un turno.',
+      }),
+      headers: { 'content-type': 'application/json' },
+    }) as unknown as NextRequest;
+  }
+
+  it('reports dbSaved: true when the insert succeeds', async () => {
+    const response = await POST(makeRequest());
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.dbSaved).toBe(true);
+    expect(body.emailSent).toBe(true);
+  });
+
+  it('reports dbSaved: false (with 200) when the insert fails — lead not silently lost', async () => {
+    supabaseState.insertError = {
+      message: 'relation "contact_messages" does not exist',
+      code: '42P01',
+    };
+
+    const response = await POST(makeRequest());
+    const body = await response.json();
+
+    // The lead reached the admin by email; only the audit copy failed.
+    expect(response.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.dbSaved).toBe(false);
+    expect(body.emailSent).toBe(true);
+  });
+
+  it('logs the insert failure through logger.error (observable in prod)', async () => {
+    supabaseState.insertError = { message: 'network unreachable', code: 'ECONNREFUSED' };
+
+    await POST(makeRequest());
+
+    expect(errorSpy).toHaveBeenCalled();
+    const out = errorSpy.mock.calls.map((c) => String(c[0])).join('\n');
+    expect(out).toContain('contact_messages');
+    expect(out).toContain('network unreachable');
   });
 });

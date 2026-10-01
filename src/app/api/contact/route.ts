@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { sendContactFormNotification } from '@/lib/email';
+import { logger } from '@/lib/logger';
 import {
   checkRateLimit,
   HONEYPOT_FIELD,
@@ -57,22 +58,33 @@ export async function POST(request: NextRequest) {
     // Send notification to admin
     const result = await sendContactFormNotification(name, email, message);
 
-    // Save to database (Supabase)
+    // Save to database (Supabase). A failed insert must NOT be swallowed:
+    // the admin email still went out, but the lead's audit copy is missing
+    // — surface it via dbSaved so the caller (and /admin/mensajes) can
+    // tell a persisted lead from a silently lost one (EROS-B3).
     const supabase = await createClient();
     const { error: dbError } = await supabase
       .from('contact_messages')
       .insert([{ name, email, phone: phone || null, message }]);
 
+    const dbSaved = !dbError;
     if (dbError) {
-      console.error('Supabase contact save error:', dbError);
+      logger.error('Supabase contact save error', {
+        table: 'contact_messages',
+        code: dbError.code,
+        message: dbError.message,
+      });
     }
     return NextResponse.json({
       success: true,
       message: 'Mensaje enviado exitosamente',
       emailSent: result.success,
+      dbSaved,
     });
   } catch (error) {
-    console.error('Error processing contact form:', error);
+    logger.error('Error processing contact form', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json({ error: 'Error al procesar la solicitud' }, { status: 500 });
   }
 }
