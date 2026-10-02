@@ -2,7 +2,7 @@
 
 > **Búsqueda:** keywords:
 > `timezone, ART, wall-clock, getBookedSlots, CustomTimePicker, booking, timezone-canonical, EROS-D1`
-> · clasificación: `odd-feature` · estado: in-progress · actualizado: 2026-10-01
+> · clasificación: `odd-feature` · estado: completado · actualizado: 2026-10-02
 
 ## Objective
 
@@ -100,3 +100,8 @@ None — feature complete. Close loop via work-unit commit (this run) and move O
 - 2026-10-02: T3–T6 already implemented on the tree from prior run (booking-slots.ts extraction,
   appointments.ts wiring, ServiceContactForm canonical instant); this run verified with full suite
   (137/137 green) + typecheck, marked all tasks complete, committed as one work-unit.
+- 2026-10-02 (run 1052): work-unit committed — `11ce958` (feature, 9 files) + `d3d92d9` (red-proof
+  test + this doc, 2 files). Suite final 17 files / 140/140 green at HEAD.
+  `gentle-ai review assess --base-ref 0f4c2a0` → Risk: medium (963 lines, 10 paths), `review status`
+  next_transition = stop/rdd_disabled (motor determinista, seguido tal cual). Untracked
+  `reports/cron-runs/g0-eros-noche-2026-10-02.md` es del cron nocturno, no de esta tarea.
