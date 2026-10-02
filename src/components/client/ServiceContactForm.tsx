@@ -21,6 +21,7 @@ import { Input, Label } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/TextArea';
 import { createAppointment, getBlockedTimesForDate, getBookedSlots } from '@/lib/api/appointments';
+import { zonedWallClockMs } from '@/lib/timezone';
 
 import { BookingCalendar } from './BookingCalendar';
 import { CustomTimePicker } from './CustomTimePicker';
@@ -584,8 +585,10 @@ export function ServiceContactForm({
     e?.preventDefault();
     setIsLoading(true);
     try {
-      const [y, m, d] = formData.appointmentDate.split('-').map(Number);
-      const [hh, mm] = formData.appointmentTime.split(':').map(Number);
+      // EROS-D1 (ADR-0002): the picker works in ART wall-clock, so the
+      // submitted instant must be built with the canonical helper — never
+      // `new Date(y, m-1, d, hh, mm)`, which resolves in the BROWSER's
+      // local timezone and drifts for any client outside UTC-3.
       const result = await createAppointment({
         serviceId,
         serviceName,
@@ -593,7 +596,9 @@ export function ServiceContactForm({
         clientName: `${formData.name} ${formData.surname}`,
         clientEmail: formData.email,
         clientPhone: formData.phone,
-        appointmentDate: new Date(y, m - 1, d, hh, mm),
+        appointmentDate: new Date(
+          zonedWallClockMs(formData.appointmentDate, formData.appointmentTime)
+        ),
         notes: formData.message,
         company_website: formData.company_website,
       });

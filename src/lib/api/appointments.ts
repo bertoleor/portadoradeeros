@@ -6,6 +6,12 @@ import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
 import {
+  mergeOccupiedLabels,
+  nextAvailableArtSlots,
+  slotsOccupiedByAppointment,
+  toOccupiedAppointments,
+} from '@/lib/booking-slots';
+import {
   sendAppointmentCancellation,
   sendAppointmentConfirmation,
   sendAppointmentConfirmed,
@@ -20,6 +26,7 @@ import {
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { createServiceClient } from '@/lib/supabase/service';
+import { artDayBounds, zonedDateStr, zonedWallClockMs } from '@/lib/timezone';
 import { headers } from 'next/headers';
 
 import type { Database } from '@/types/database';
@@ -325,36 +332,30 @@ export async function getBookedSlots(dateStr: string, durationMinutes = 60) {
   // Privileged (service-role) read: RLS now denies anon SELECT on
   // `appointments` (Slice 1), so the public booking form must source
   // availability from a server-only path that selects ONLY non-PII columns.
+  //
+  // EROS-D1 (ADR-0002): the query window is the ART CALENDAR DAY of
+  // `dateStr`, not the UTC day — a 22:00 ART booking (01:00Z next UTC
+  // date) belongs to the ART day. Slot labels are ART wall-clock, the
+  // same zone the picker compares them in.
+  const { startMs, endExclusiveMs } = artDayBounds(dateStr);
   const { data, error } = await supabase
     .from('appointments')
     .select('appointment_date, service_id, services:service_id(duration)')
-    .filter('appointment_date', 'gte', `${dateStr}T00:00:00Z`)
-    .filter('appointment_date', 'lte', `${dateStr}T23:59:59Z`)
+    .filter('appointment_date', 'gte', new Date(startMs).toISOString())
+    .filter('appointment_date', 'lt', new Date(endExclusiveMs).toISOString())
     .neq('status', 'cancelled');
 
   if (error) {
     throw new AppError('DB', `Failed to fetch booked slots: ${error.message}`);
   }
 
-  // Generate all time slots that would be occupied based on duration
-  const occupiedSlots: string[] = [];
-
-  for (const app of data ?? []) {
-    const startDate = new Date(app.appointment_date);
-    const duration = (app.services as { duration?: number } | null)?.duration || durationMinutes;
-
-    // Generate slots every 15 minutes for the duration of the appointment
-    const slotsCount = Math.ceil(duration / 15);
-    for (let i = 0; i < slotsCount; i++) {
-      const slotTime = new Date(startDate.getTime() + i * 15 * 60 * 1000);
-      const timeStr = `${slotTime.getUTCHours().toString().padStart(2, '0')}:${slotTime.getUTCMinutes().toString().padStart(2, '0')}`;
-      if (!occupiedSlots.includes(timeStr)) {
-        occupiedSlots.push(timeStr);
-      }
-    }
-  }
-
-  return occupiedSlots.sort((a, b) => a.localeCompare(b));
+  // Generate all time slots that would be occupied based on duration —
+  // ART wall-clock labels via the canonical helpers (booking-slots.ts).
+  return mergeOccupiedLabels(
+    toOccupiedAppointments(data ?? [], durationMinutes).map((apt) =>
+      slotsOccupiedByAppointment(apt.appointmentDate, apt.durationMinutes)
+    )
+  );
 }
 
 export async function confirmAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
@@ -819,14 +820,15 @@ export async function getNextAvailableSlots(
   count = 5
 ): Promise<AvailableSlot[]> {
   const availableSlots: AvailableSlot[] = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const slotDurationMs = durationMinutes * 60000;
+  const nowMs = Date.now();
 
-  // Single 30-day window (no per-day queries → no N+1, P2/P5).
-  const windowEnd = new Date(today);
-  windowEnd.setDate(windowEnd.getDate() + 30);
-  const windowEndDateStr = windowEnd.toISOString().split('T')[0];
+  // EROS-D1 (ADR-0002): window bounds and all labels are ART canonical.
+  // The 30-day walk starts at the ART "today" of now, not the server's
+  // local midnight — on a UTC server the old code produced date strings
+  // 21:00 ART "yesterday" and shifted every label by the TZ offset.
+  const nowDateStr = zonedDateStr(nowMs);
+  const { startMs: windowStartMs, endExclusiveMs: windowEndExclMs } = artDayBounds(nowDateStr);
+  const windowEndDateStr = zonedDateStr(windowEndExclMs + 29 * 24 * 60 * 60 * 1000);
 
   // 1. Appointments for the whole window — ONE range query on the indexed
   //    `appointment_date` column, SELECTing only non-PII columns (Slice 1
@@ -835,8 +837,8 @@ export async function getNextAvailableSlots(
   const { data: apts, error: aptErr } = await svc
     .from('appointments')
     .select('appointment_date, service_id, services:service_id(duration)')
-    .gte('appointment_date', today.toISOString())
-    .lte('appointment_date', `${windowEndDateStr}T23:59:59Z`)
+    .gte('appointment_date', new Date(windowStartMs).toISOString())
+    .lt('appointment_date', new Date(windowEndExclMs + 29 * 24 * 60 * 60 * 1000).toISOString())
     .neq('status', 'cancelled');
 
   if (aptErr) {
@@ -844,78 +846,48 @@ export async function getNextAvailableSlots(
   }
 
   // 2. Blocked times for the whole window — ONE range query (public read).
+  //    `date` is an ART calendar date (ADR-0002), so the window bounds are
+  //    ART dates too — not the server-local date slice of the instant.
   const anon = await createClient();
   const { data: blockedRows, error: blockedErr } = await anon
     .from('blocked_times')
     .select('*')
-    .gte('date', today.toISOString().split('T')[0])
+    .gte('date', nowDateStr)
     .lte('date', windowEndDateStr);
 
   if (blockedErr) {
     throw new AppError('DB', `Failed to fetch blocked times: ${blockedErr.message}`);
   }
 
-  // 3. Flatten both sources into a single in-memory occupancy list.
+  // 3. Flatten both sources into a single in-memory occupancy list of
+  //    ABSOLUTE windows (epoch ms) — appointments as stored instants,
+  //    blocked times as ART wall-clock day+time resolved via the canonical.
   const occupied: OccupiedWindow[] = [];
-  for (const apt of apts ?? []) {
-    const start = new Date(apt.appointment_date).getTime();
-    const dur = (apt.services as { duration?: number } | null)?.duration ?? durationMinutes;
-    occupied.push({ start, end: start + dur * 60000 });
+  for (const apt of toOccupiedAppointments(apts ?? [], durationMinutes)) {
+    const start = new Date(apt.appointmentDate).getTime();
+    occupied.push({ start, end: start + apt.durationMinutes * 60000 });
   }
   for (const bt of blockedRows ?? []) {
-    const dayMs = new Date(`${bt.date}T00:00:00`).getTime();
     if (bt.is_all_day === true) {
-      occupied.push({ start: dayMs, end: dayMs + 24 * 60 * 60 * 1000 });
+      const b = artDayBounds(bt.date);
+      occupied.push({ start: b.startMs, end: b.endExclusiveMs });
     } else if (bt.time_start && bt.time_end) {
-      const [sh, sm] = bt.time_start.split(':').map(Number);
-      const [eh, em] = bt.time_end.split(':').map(Number);
       occupied.push({
-        start: dayMs + sh * 3600000 + sm * 60000,
-        end: dayMs + eh * 3600000 + em * 60000,
+        start: zonedWallClockMs(bt.date, bt.time_start),
+        end: zonedWallClockMs(bt.date, bt.time_end),
       });
     }
   }
 
-  // 4. Walk days/business-hours in memory (no DB), matching existing output.
-  for (let d = 0; d < 30 && availableSlots.length < count; d++) {
-    const checkDate = new Date(today);
-    checkDate.setDate(checkDate.getDate() + d);
-    const dateStr = checkDate.toISOString().split('T')[0];
-    const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
-      checkDate.getDay()
-    ];
-    // HISTÓRICO: `dayName` is bounded to the 7 hardcoded day-name strings above
-    // (indexed by Date.getDay(), which returns 0–6). `businessHours[dayName]`
-    // can therefore never be asked for an arbitrary attacker-chosen key; even
-    // the matching tested by `if (!bh || bh.closed)` cannot reach a prototype
-    // shadow. The object content comes from admin settings, not client input.
-    // eslint-disable-next-line security/detect-object-injection
-    const bh = businessHours[dayName];
-
-    if (!bh || bh.closed) {
-      continue;
-    }
-
-    const [sH, sM] = bh.start.split(':').map(Number);
-    const [eH, eM] = bh.end.split(':').map(Number);
-    const dayStartMs = checkDate.getTime() + sH * 3600000 + sM * 60000;
-    const dayEndMs = checkDate.getTime() + eH * 3600000 + eM * 60000;
-
-    for (
-      let cur = dayStartMs;
-      cur + slotDurationMs <= dayEndMs && availableSlots.length < count;
-      cur += 1800000
-    ) {
-      if (!occupied.some((w) => cur < w.end && cur + slotDurationMs > w.start)) {
-        const sd = new Date(cur);
-        availableSlots.push({
-          date: dateStr,
-          time: `${sd.getUTCHours().toString().padStart(2, '0')}:${sd.getUTCMinutes().toString().padStart(2, '0')}`,
-          datetime: sd.toISOString(),
-        });
-      }
-    }
-  }
+  // 4. Walk ART business days in memory (no DB), canonical labels.
+  const slots = nextAvailableArtSlots({
+    nowMs,
+    businessHours,
+    durationMinutes,
+    occupied,
+    count,
+  });
+  availableSlots.push(...slots);
   return availableSlots;
 }
 
