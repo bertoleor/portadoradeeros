@@ -76,7 +76,7 @@ export default async function ServicioDetalle({
             </div>
 
             {/* Badge */}
-            <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-3">
+            <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-medium block mb-3">
               Servicio
             </span>
 
@@ -87,11 +87,11 @@ export default async function ServicioDetalle({
 
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <div className="flex items-center gap-1.5 text-sm text-black/40">
+              <div className="flex items-center gap-1.5 text-sm text-black/60">
                 <Clock size={15} />
                 <span>{service.duration} minutos</span>
               </div>
-              <div className="flex items-center gap-1.5 text-sm text-black/40">
+              <div className="flex items-center gap-1.5 text-sm text-black/60">
                 <Sparkles size={15} />
                 <span>Sesión individual</span>
               </div>
@@ -192,7 +192,7 @@ export default async function ServicioDetalle({
               <h2 className="text-xl sm:text-2xl font-light tracking-tight text-[rgba(15,15,20,0.85)] mb-2">
                 ¿Te interesa este servicio?
               </h2>
-              <p className="text-sm sm:text-base text-[rgba(15,15,20,0.5)] mb-8 font-light">
+              <p className="text-sm sm:text-base text-[rgba(15,15,20,0.65)] mb-8 font-light">
                 Completá el formulario para agendar tu consulta o solicitar más información.
               </p>
               <ServiceContactForm

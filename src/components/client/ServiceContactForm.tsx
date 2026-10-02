@@ -78,7 +78,7 @@ const StepIntro = ({ nextStep, serviceName }: { nextStep: () => void; serviceNam
     <h3 className="text-2xl md:text-3xl font-light text-[rgba(15,15,20,0.9)] tracking-tight mb-4">
       Agendar {serviceName}
     </h3>
-    <p className="text-[rgba(15,15,20,0.5)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">
+    <p className="text-[rgba(15,15,20,0.65)] text-sm md:text-base font-light max-w-sm mb-12 leading-relaxed">
       Inicia el proceso para reservar tu sesión personalizada en simples pasos.
     </p>
     <Button
@@ -102,12 +102,12 @@ const StepClientInfo = ({
   <div className="space-y-8">
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.35)] block mb-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.65)] block mb-2">
           Paso 1 de 4
         </span>
         <h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">Tus Datos</h3>
       </div>
-      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]">
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.65)]">
         <User size={20} />
       </div>
     </div>
@@ -121,7 +121,7 @@ const StepClientInfo = ({
         <div key={f.id} className="space-y-2">
           <Label
             htmlFor={f.id}
-            className="text-[10px] font-medium text-[rgba(15,15,20,0.5)] uppercase tracking-widest ml-1"
+            className="text-[10px] font-medium text-[rgba(15,15,20,0.65)] uppercase tracking-widest ml-1"
           >
             {f.label}
           </Label>
@@ -141,7 +141,7 @@ const StepClientInfo = ({
     <div className="space-y-2">
       <Label
         htmlFor="message"
-        className="text-[10px] font-medium text-[rgba(15,15,20,0.4)] uppercase tracking-widest ml-1 flex items-center gap-1.5"
+        className="text-[10px] font-medium text-[rgba(15,15,20,0.65)] uppercase tracking-widest ml-1 flex items-center gap-1.5"
       >
         <MessageSquare size={12} /> Notas (opcional)
       </Label>
@@ -157,7 +157,7 @@ const StepClientInfo = ({
     <div className="pt-8 flex justify-between items-center">
       <button
         onClick={prevStep}
-        className="text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"
+        className="text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] text-xs font-medium transition-colors"
       >
         Cancelar
       </button>
@@ -204,14 +204,14 @@ const StepDateSelection = ({
   <div className="space-y-8">
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.65)] block mb-2">
           Paso 2 de 4
         </span>
         <h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">
           Seleccionar Día
         </h3>
       </div>
-      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]">
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.65)]">
         <CalendarIcon size={20} />
       </div>
     </div>
@@ -228,7 +228,7 @@ const StepDateSelection = ({
     <div className="pt-8 flex justify-between items-center">
       <button
         onClick={prevStep}
-        className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"
+        className="flex items-center text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] text-xs font-medium transition-colors"
       >
         <ChevronLeft size={14} className="mr-1" /> Atrás
       </button>
@@ -262,14 +262,14 @@ const StepTimeSelection = ({
   <div className="space-y-8">
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.65)] block mb-2">
           Paso 3 de 4
         </span>
         <h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">
           Horarios Disponibles
         </h3>
       </div>
-      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]">
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.65)]">
         <Clock size={20} />
       </div>
     </div>
@@ -298,7 +298,7 @@ const StepTimeSelection = ({
     <div className="pt-8 flex justify-between items-center">
       <button
         onClick={prevStep}
-        className="flex items-center text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors"
+        className="flex items-center text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] text-xs font-medium transition-colors"
       >
         <ChevronLeft size={14} className="mr-1" /> Atrás
       </button>
@@ -339,14 +339,14 @@ const StepFinal = ({
   <div className="space-y-10">
     <div className="flex items-center justify-between">
       <div>
-        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.3)] block mb-2">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[rgba(15,15,20,0.65)] block mb-2">
           Finalizar Reserva
         </span>
         <h3 className="text-2xl font-light text-[rgba(15,15,20,0.9)] tracking-tight">
           Confirmación y Pago
         </h3>
       </div>
-      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.4)]">
+      <div className="w-10 h-10 rounded-xl bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.65)]">
         <CreditCard size={20} />
       </div>
     </div>
@@ -355,7 +355,7 @@ const StepFinal = ({
       {/* Resumen del Turno */}
       <div className="bg-[rgba(15,15,20,0.03)] border border-[rgba(15,15,20,0.1)] rounded-[2rem] p-8 text-center space-y-3 relative overflow-hidden group">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[rgba(15,15,20,0.1)] to-transparent" />
-        <p className="text-[10px] font-bold text-[rgba(15,15,20,0.2)] uppercase tracking-[0.3em]">
+        <p className="text-[10px] font-bold text-[rgba(15,15,20,0.65)] uppercase tracking-[0.3em]">
           Resumen de tu Sesión
         </p>
         <h4 className="text-xl text-[rgba(15,15,20,0.9)] font-light tracking-wide">
@@ -363,7 +363,7 @@ const StepFinal = ({
         </h4>
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
           <div className="flex items-center gap-2 text-[rgba(15,15,20,0.6)] text-xs font-light">
-            <CalendarIcon size={14} className="text-[rgba(15,15,20,0.3)]" />
+            <CalendarIcon size={14} className="text-[rgba(15,15,20,0.65)]" />
             {parseLocalDate(formData.appointmentDate).toLocaleDateString('es-AR', {
               weekday: 'long',
               day: 'numeric',
@@ -371,7 +371,7 @@ const StepFinal = ({
             })}
           </div>
           <div className="flex items-center gap-2 text-[rgba(15,15,20,0.6)] text-xs font-light">
-            <Clock size={14} className="text-[rgba(15,15,20,0.3)]" />
+            <Clock size={14} className="text-[rgba(15,15,20,0.65)]" />
             {formData.appointmentTime} hs
           </div>
         </div>
@@ -380,7 +380,7 @@ const StepFinal = ({
       {/* Datos de Transferencia */}
       <div className="bg-[rgba(15,15,20,0.03)] border border-[rgba(15,15,20,0.1)] rounded-[2rem] p-8 space-y-6">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-8 h-8 rounded-lg bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.3)]">
+          <div className="w-8 h-8 rounded-lg bg-[rgba(15,15,20,0.06)] flex items-center justify-center text-[rgba(15,15,20,0.65)]">
             <CreditCard size={16} />
           </div>
           <h4 className="text-sm font-medium text-[rgba(15,15,20,0.9)] tracking-tight">
@@ -390,7 +390,7 @@ const StepFinal = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="bg-[rgba(15,15,20,0.04)] rounded-2xl p-4 border border-[rgba(15,15,20,0.05)]">
-            <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-1">
+            <p className="text-[10px] text-[rgba(15,15,20,0.65)] uppercase tracking-widest mb-1">
               Titular
             </p>
             <p className="text-sm text-[rgba(15,15,20,0.9)] font-medium">
@@ -398,7 +398,7 @@ const StepFinal = ({
             </p>
           </div>
           <div className="bg-[rgba(15,15,20,0.04)] rounded-2xl p-4 border border-[rgba(15,15,20,0.05)]">
-            <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-1">
+            <p className="text-[10px] text-[rgba(15,15,20,0.65)] uppercase tracking-widest mb-1">
               Banco
             </p>
             <p className="text-sm text-[rgba(15,15,20,0.9)] font-medium">
@@ -413,7 +413,7 @@ const StepFinal = ({
             { id: 'alias', label: 'Alias', value: bankDetails.alias },
           ].map((field) => (
             <div key={field.id} className="relative group">
-              <p className="text-[10px] text-[rgba(15,15,20,0.3)] uppercase tracking-widest mb-2 ml-1">
+              <p className="text-[10px] text-[rgba(15,15,20,0.65)] uppercase tracking-widest mb-2 ml-1">
                 {field.label}
               </p>
               <div className="flex items-center justify-between bg-[rgba(15,15,20,0.06)] rounded-2xl border border-[rgba(15,15,20,0.1)] px-5 py-4 transition-all group-hover:border-[rgba(15,15,20,0.2)]">
@@ -430,7 +430,7 @@ const StepFinal = ({
                   ) : (
                     <Copy
                       size={16}
-                      className="text-[rgba(15,15,20,0.2)] group-hover:text-[rgba(15,15,20,0.4)]"
+                      className="text-[rgba(15,15,20,0.65)] group-hover:text-[rgba(15,15,20,0.85)]"
                     />
                   )}
                 </button>
@@ -476,7 +476,7 @@ const StepFinal = ({
             </span>
           </label>
           {!acceptedLegal && (
-            <p className="text-[10px] text-[rgba(15,15,20,0.4)] mt-2 ml-7">
+            <p className="text-[10px] text-[rgba(15,15,20,0.65)] mt-2 ml-7">
               Debes aceptar los términos para continuar
             </p>
           )}
@@ -498,7 +498,7 @@ const StepFinal = ({
             )}
           </Button>
 
-          <p className="text-[10px] text-[rgba(15,15,20,0.3)] text-center mt-8 leading-relaxed font-light max-w-xs uppercase tracking-widest">
+          <p className="text-[10px] text-[rgba(15,15,20,0.65)] text-center mt-8 leading-relaxed font-light max-w-xs uppercase tracking-widest">
             Recibirás un email con los detalles. El turno será validado al recibir el comprobante.
           </p>
         </div>
@@ -508,7 +508,7 @@ const StepFinal = ({
     <div className="pt-6">
       <button
         onClick={prevStep}
-        className="flex items-center gap-2 text-[rgba(15,15,20,0.38)] hover:text-[rgba(15,15,20,0.70)] text-xs font-medium transition-colors group"
+        className="flex items-center gap-2 text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] text-xs font-medium transition-colors group"
       >
         <ChevronLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
         Volver atrás

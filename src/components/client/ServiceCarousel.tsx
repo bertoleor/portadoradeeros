@@ -45,14 +45,18 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
       className={cn(
         'group relative flex flex-col md:flex-row h-auto min-h-[340px] md:min-h-[380px] md:h-[380px]',
         'rounded-[32px] border border-[rgba(255,255,255,0.3)]',
-        'glass transition-all duration-500 overflow-hidden outline-none w-full',
+        'glass transition-all duration-500 overflow-hidden w-full',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,15,20,0.55)] focus-visible:ring-offset-2',
         isActive
           ? 'bg-white/45 shadow-[0_20px_50px_rgba(0,0,0,0.08)] cursor-pointer'
           : 'bg-white/20 cursor-pointer backdrop-blur-sm opacity-70 hover:opacity-85'
       )}
     >
       {/* Número */}
-      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-[rgba(15,15,20,0.15)] select-none">
+      <span
+        aria-hidden="true"
+        className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-[rgba(15,15,20,0.9)] select-none"
+      >
         {String(displayIndex + 1).padStart(2, '0')}
       </span>
 
@@ -77,7 +81,7 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
         <p
           className={cn(
             'text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-2 md:line-clamp-4',
-            isActive ? 'text-[rgba(15,15,20,0.6)]' : 'text-[rgba(15,15,20,0.5)]'
+            isActive ? 'text-[rgba(15,15,20,0.65)]' : 'text-[rgba(15,15,20,0.6)]'
           )}
         >
           {service.shortDescription}
@@ -88,7 +92,7 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
             <span
               className={cn(
                 'text-[10px] uppercase tracking-[0.2em] font-medium transition-colors duration-500',
-                isActive ? 'text-[rgba(15,15,20,0.4)]' : 'text-[rgba(15,15,20,0.3)]'
+                isActive ? 'text-[rgba(15,15,20,0.65)]' : 'text-[rgba(15,15,20,0.6)]'
               )}
             >
               Duración
@@ -307,12 +311,12 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
       {/* Header */}
       <div className="px-4 md:px-8 mb-8 md:mb-16 flex items-end justify-between gap-8 max-w-[1200px] mx-auto">
         <div className="max-w-xl">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-3 md:mb-4">
+          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.65)] font-semibold block mb-3 md:mb-4">
             Servicios Exclusivos
           </span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
             Guía y Claridad <br />
-            <span className="text-[rgba(15,15,20,0.4)]">en tu camino.</span>
+            <span className="text-[rgba(15,15,20,0.65)]">en tu camino.</span>
           </h2>
         </div>
 
@@ -398,7 +402,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
         <Link
           href="/servicios"
-          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-[rgba(15,15,20,0.5)] hover:text-[rgba(15,15,20,0.85)] transition-all duration-300"
+          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] transition-all duration-300"
         >
           Ver todos los servicios
           <div className="w-8 h-[1px] bg-[rgba(15,15,20,0.15)] group-hover:w-12 group-hover:bg-[rgba(15,15,20,0.8)] transition-all duration-300" />

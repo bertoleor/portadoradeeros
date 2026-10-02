@@ -59,13 +59,13 @@ export default async function SobreMiPage() {
       <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="text-center mb-16 md:mb-24">
-          <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-medium block mb-4">
             Sobre Mí
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight text-black mb-6">
             Portadora de Eros
           </h1>
-          <p className="text-base md:text-lg text-black/50 leading-relaxed font-light max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-black/60 leading-relaxed font-light max-w-2xl mx-auto">
             Guía espiritual, canalizadora y puente entre lo terrenal y lo místico.
           </p>
         </div>
@@ -132,7 +132,7 @@ export default async function SobreMiPage() {
         {/* CTA */}
         <FadeIn delay={0.2} direction="up" distance={20}>
           <div className="text-center">
-            <p className="text-base text-black/50 font-light mb-6">
+            <p className="text-base text-black/60 font-light mb-6">
               ¿Querés saber más o agendar una sesión?
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

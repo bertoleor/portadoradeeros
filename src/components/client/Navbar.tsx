@@ -133,7 +133,7 @@ export function Navbar() {
                     className={`block text-3xl font-light transition-all ${
                       isActive(link.href)
                         ? 'text-[rgba(15,15,20,0.9)] font-normal'
-                        : 'text-[rgba(15,15,20,0.5)]'
+                        : 'text-[rgba(15,15,20,0.6)]'
                     }`}
                     onClick={handleLinkClick}
                   >
@@ -148,7 +148,7 @@ export function Navbar() {
                 transition={{ delay: 0.3 }}
                 className="mt-12 pt-8 border-t border-[rgba(15,15,20,0.1)]"
               >
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.5)] font-medium mb-4">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.65)] font-medium mb-4">
                   Redes
                 </p>
                 <div className="flex gap-6 justify-center">

@@ -199,7 +199,7 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-10"
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-3">
+          <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-medium block mb-3">
             Contacto
           </span>
           <h1 className="text-4xl sm:text-5xl font-light tracking-tight text-black">Hablemos</h1>
@@ -246,7 +246,7 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="name"
-                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.6)] mb-2 font-medium"
                     >
                       Nombre
                     </Label>
@@ -265,7 +265,7 @@ export default function ContactPage() {
                   <div className="space-y-2">
                     <Label
                       htmlFor="email"
-                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                      className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.6)] mb-2 font-medium"
                     >
                       Email
                     </Label>
@@ -286,7 +286,7 @@ export default function ContactPage() {
                 <div className="space-y-2">
                   <Label
                     htmlFor="phone"
-                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.6)] mb-2 font-medium"
                   >
                     Teléfono (opcional)
                   </Label>
@@ -304,7 +304,7 @@ export default function ContactPage() {
                 <div className="space-y-2 flex flex-col">
                   <Label
                     htmlFor="message"
-                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.38)] mb-2 font-medium"
+                    className="block text-[10px] uppercase tracking-[0.2em] text-[rgba(15,15,20,0.6)] mb-2 font-medium"
                   >
                     Mensaje
                   </Label>
@@ -348,7 +348,7 @@ export default function ContactPage() {
 
               {/* Social links */}
               <div className="space-y-2">
-                <h4 className="text-xs uppercase tracking-widest text-[rgba(15,15,20,0.45)] mb-4">
+                <h4 className="text-xs uppercase tracking-widest text-[rgba(15,15,20,0.6)] mb-4">
                   Conectar
                 </h4>
                 {contactLinks.map((social) => (
@@ -373,7 +373,7 @@ export default function ContactPage() {
                       )}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)] group-hover:text-[rgba(15,15,20,0.6)] mb-0.5">
+                      <div className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.65)] group-hover:text-[rgba(15,15,20,0.85)] mb-0.5">
                         {social.label}
                       </div>
                       <div className="text-sm font-medium text-[rgba(15,15,20,0.75)] group-hover:text-[rgba(15,15,20,0.9)] truncate transition-colors">

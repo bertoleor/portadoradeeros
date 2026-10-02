@@ -57,7 +57,7 @@ export default function ServiciosPage() {
       <section className="py-16 md:py-24 px-4 md:px-8">
         <div className="max-w-[1200px] mx-auto">
           <div className="mb-14 md:mb-20">
-            <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
+            <span className="text-[11px] uppercase tracking-[0.3em] text-black/60 font-medium block mb-4">
               Servicios
             </span>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight text-black">
@@ -81,7 +81,7 @@ export default function ServiciosPage() {
       <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="mb-14 md:mb-20">
-          <span className="text-[11px] uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
+          <span className="text-[11px] uppercase tracking-[0.3em] text-black/60 font-medium block mb-4">
             Servicios
           </span>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-light tracking-tight text-black">

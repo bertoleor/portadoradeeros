@@ -12,8 +12,8 @@
  * Implemented with zero dependencies: node:http + manual JSON responses.
  */
 
-import http from 'node:http';
 import { spawn } from 'node:child_process';
+import http from 'node:http';
 
 const STUB_PORT = 54321;
 
@@ -51,15 +51,10 @@ const services = [
 ];
 
 const openEveryDay = Object.fromEntries(
-  [
-    'sunday',
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-  ].map((day) => [day, { closed: false, start: '09:00', end: '18:00' }])
+  ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map((day) => [
+    day,
+    { closed: false, start: '09:00', end: '18:00' },
+  ])
 );
 
 const settingsRow = {
@@ -196,6 +191,13 @@ const server = http.createServer((req, res) => {
 server.listen(STUB_PORT, '127.0.0.1', () => {
   // eslint-disable-next-line no-console -- stub server diagnostics
   console.log(`[supabase-stub] listening on http://127.0.0.1:${STUB_PORT}`);
+
+  // Optional standalone mode: when E2E_STUB_ONLY is set the stub does NOT
+  // spawn `next dev` — used by tests/e2e/a11y-scan.mjs, which boots its own
+  // `next start` (production build) against this stub instead.
+  if (process.env.E2E_STUB_ONLY) {
+    return;
+  }
 
   // Start Next dev as a child so both servers share the webServer lifecycle.
   const next = spawn('npx', ['next', 'dev'], {
