@@ -1,42 +1,54 @@
-# G0 Ciclo nocturno EROS — 2026-10-02 (vuelta única)
+# G0 Ciclo nocturno EROS — 2026-10-04 (vuelta única, 5ta corrida consecutiva sin tarea — turno noche)
 
 ## F0.a clasificación
-**DIRTY-TREE bloqueado** — worktree `feat/eros-deps` tiene 26 archivos modificados sin commit (a11y kickoff 10-uiux+15-a11y: `src/app/*`, `src/components/client/*`, `src/components/ui/*`, `tests/e2e/a11y-scan.mjs`, `tsconfig.a11ygate.json`, `src/__tests__/a11y-wcag-guards.test.ts`) **más** `src/lib/timezone.test.ts` del loop anterior (T1 RED de eros-d1). HEAD cd6026d ya tiene B3 commit; los 26 archivos a11y son trabajo posterior sin commitear y sin dueño visible en kanban. Stash list tiene 9 backups lint-staged — señal de commits parciales repetidos.
+
+**SANO** — HEAD `364536f` (D1 cerrado, suite 140/140, RDD medium/stop). Dirty tree = solo
+`reports/cron-runs/g0-eros-*` (artefacto de observación, no código). `feat/eros-deps` sincronizada
+con `origin`.
 
 ## Delta vs baseline.md
-Sin baseline — gap conocido, fuera de scope sin ticket.
 
-## Kanban board=eros (estado previo a esta vuelta)
-- **ready**: t_9568aa22 (F4 audit, assignee 34-auditor — NO es del 24); t_7fd8ca75, t_39959ccd (zombies sin `Avanza:` — per §0.3, no actionable).
-- **review**: 4 tarjetas esperan LGTM humano (t_88026a54 ORN-196, t_16a437a4 RDD boundary, t_23dbcd04 ORN-133 odd-doc, t_g0n_20260928_e2e). Siguen acumulando edad.
-- **Nueva**: t_aa3a9eb6 `[EROS-D1] timezone-canonical BLOQUEADO por dirty tree a11y sin dueño` — status `blocked`, assignee 34-auditor (ruteo), `Avanza: F5.construccion`.
+Sin baseline — gap conocido. **5ta corrida consecutiva sin ticket F2.baseline-md** adjudicado.
 
-## Linear EROS
-Sin cambios detectables vs corrida anterior (ORN-196 sigue Backlog + commits en rama).
+## Kanban EROS (estado REAL, kanban.db %LocalAppData%/hermes)
 
-## Decisión
-1. NO tomar F4 (t_9568aa22 es de 34-auditor).
-2. NO tomar zombies.
-3. NO retomar `eros-d1-timezone-canonical` (T2 GREEN) aunque el ODD doc esté en progreso: el tree tiene 25 archivos ajenos al slice; commitear D1 encima viola "un commit = una unidad de trabajo". **Conflicto de ownership** → per contrato: tarjeta `blocked` + seguir. No hay otra tarea sin-owner con `Avanza:` en board.
-4. Creada t_aa3a9eb6 documentando bloqueo + decisión humana requerida sobre los 26 archivos a11y.
+- **ready/running/review EROS ∪ ORN: 323 tarjetas** — **0 llevan `Avanza: F<n>.<criterio>`**
+  (esquema pre-28/09, heredado del batch ORN-XXX original 14/09). Muestreo: ORN-157 a ORN-208
+  (pagos, booking, RLS, MP, design) — todas p0 ready sin criterio.
+- **blocked EROS (3)**: t_f9a893f0 EROS-LINT (16-backend, 143h), t_d35f99aa EROS-DOMAIN (32-email,
+  437h), t_ba308e06 EROS-DEPS-P0 (16-backend, 97h). Todas >48h → escaladas al digest por contrato,
+  no se trabajan acá.
+- Las ORN-* listadas en el foco "pagos y booking" (ORN-160 gateway, ORN-170 RPC create_booking,
+  ORN-172 MP seña, ORN-164 doble camino reserva) existen pero **sin `Avanza:`** → devuelve al 24.
+
+## Linear EROS (mirror dry-run)
+
+Sin crear nuevos. Estado consistente con turno anterior.
+
+## Decisión (contrato 28/09: "Ticket sin Avanza: lo devuelve el 24")
+
+1. NO tomar mirrors ORN-XXX: 0/323 con `Avanza:` — regla estricta.
+2. NO tomar blocked: otras owners + >48h (escaladas a digest).
+3. NO hay ready asignable a 24-orquestador con criterio.
+4. → **5ta corrida consecutiva sin tarea ejecutable.** Señal estructural definitiva.
 
 ## Sin commit/push
-No se mutó el repo del proyecto (no se tomó tarea con criterio). Step 4 del contrato no aplica.
 
-## Bugs / observaciones
-- Stash contaminants (9 entradas lint-staged) sugieren que un proceso auto-commit quedó interrumpido. Posible causa raíz del tree sucio — investigar antes de más turnos F5 en esta rama.
-- El loop no baja a otra rama: la rama de trabajo del proyecto es `feat/eros-deps` y cualquier cambio allí colisiona con el trabajo a11y sin dueño.
+No se mutó código. Solo este reporte (git -M). `git push` → nothing new.
 
-## Sugerencia al 24-humano (prioridad)
-1. **Decidir ownership de los 26 archivos a11y** (¿commit a `feat/eros-deps` con mensaje a11y, ¿mover a rama separada, ¿descartar?). Esto desbloquea EROS-D1.
-2. LGTM/rechazo de las 4 tarjetas en review.
-3. Borrar zombies t_39959ccd y t_7fd8ca75.
-4. SGTM en t_9568aa22 → dispara F4 (34-auditor); si F4 limpio y tree desbloqueado → considerar bajar frecuencia de este cron a semanal.
-5. Crear `docs/baseline.md` con criterio `Avanza: F2.baseline-md`.
+## Sugerencias al 24-humano (URGE acción)
 
-[estatus] sin tarea con criterio ejecutada por este agente — bloqueo real detectado y ticketeado (t_aa3a9eb6)
-[resumen] tree sucio con 26 archivos a11y sin dueño; F4 audit sigue ready para 34-auditor; 4 review acumulan edad; ODD eros-d1 pausado por conflicto de ownership, no por fallo técnico
-[riesgo] medio — regresión timezone-canonical (D1) sigue sin fix; tree sucio puede empeorar con próximos turnos de otros agentes; reviews acumulan edad
-[archivos] E:/Hermes/projects/eros/reports/cron-runs/g0-eros-noche-ultimo.md (este); E:/Hermes/reports/cron-runs/g0-eros-noche-ultimo.md (mirror); kanban t_aa3a9eb6 creada (blocked, 34-auditor)
-[tests] no aplica — no se tocó código
-[sigue] humano decide ruteo de los 26 archivos a11y → próximo turno retoma T2 (GREEN src/lib/timezone.ts) del ODD eros-d1-booking-timezone-canonical; LGTM de 4 en review; borrar zombies; SGTM t_9568aa22 dispara F4.
+1. **Triaje batch** sobre las ~323 tarjetas legacy: marcar done/archivar las ya resueltas
+   implícitamente por D1/ORN-99/122/133/196 y EPICs duplicados.
+2. **Crear ticket** `Avanza: F2.baseline-md` para destrabar gap baseline.
+3. **Reencauzar ORN-160 / ORN-170 / ORN-172** (foco pagos+booking contrato) con `Avanza: F5.x` y
+   owner real.
+4. **Bajar frecuencia de este cron** a semanal o pausar hasta que el board tenga señal. 5 corridas
+   sin output = costo sin valor.
+
+[estatus] sin tarea con criterio ejecutada por este agente (5ta corrida consecutiva) [resumen] HEAD
+364536f sano; 323 ready/review EROS-ORN legacy 0-con-Avanza; 3 blocked ajenas >48h escaladas
+[riesgo] bajo código / ALTO proceso — el board requiere intervención humana urgente o el cron sigue
+vacío [archivos] E:/Hermes/projects/eros/reports/cron-runs/g0-eros-noche-ultimo.md (este) [tests] no
+aplica — no se tocó código [sigue] humano: triaje batch board EROS + crear ticket F2.baseline-md +
+reencauzar ORN-160/170/172 con Avanza: real
