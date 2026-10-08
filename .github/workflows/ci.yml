@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, feat/eros-deps]
   pull_request:
     branches: [main, develop]
 
@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: [lint-and-typecheck]
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feat/eros-deps'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Run npm audit
-        run: npm audit --audit-level=high || true
+        run: npm audit --audit-level=high
 
   secrets:
     name: Gitleaks
