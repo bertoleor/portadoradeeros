@@ -169,8 +169,8 @@ export default function AdminServicios() {
   };
 
   const renderMobileCards = () => {
-    if (isLoading) return <div className="py-12 text-center text-black/20">Cargando oráculo...</div>;
-    if (servicios.length === 0) return <div className="py-12 text-center text-black/20 italic">Buzón de servicios vacío.</div>;
+    if (isLoading) {return <div className="py-12 text-center text-black/20">Cargando oráculo...</div>;}
+    if (servicios.length === 0) {return <div className="py-12 text-center text-black/20 italic">Buzón de servicios vacío.</div>;}
     
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-4">

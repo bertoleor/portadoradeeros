@@ -58,7 +58,7 @@ export function DatePicker({
   };
 
   const isSelected = (day: number) => {
-    if (!value) return false;
+    if (!value) {return false;}
     const d = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     return d.toISOString().split('T')[0] === value;
   };
@@ -70,7 +70,7 @@ export function DatePicker({
   };
 
   const isDisabled = (day: number) => {
-    if (!min) return false;
+    if (!min) {return false;}
     const d = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     return d.toISOString().split('T')[0] < min;
   };

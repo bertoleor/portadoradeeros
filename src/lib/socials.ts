@@ -16,7 +16,7 @@ export const DEFAULT_SOCIAL_LINKS: SocialLinks = {
 
 // Helper to get display URL
 export const getSocialUrl = (platform: keyof SocialLinks, username: string): string => {
-  if (!username) return '';
+  if (!username) {return '';}
   
   switch (platform) {
     case 'instagram':

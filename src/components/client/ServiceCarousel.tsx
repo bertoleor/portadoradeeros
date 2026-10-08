@@ -31,8 +31,8 @@ interface ServiceCardProps {
 
 function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: ServiceCardProps) {
   const handleClick = () => {
-    if (isActive) onNavigate();
-    else onClick();
+    if (isActive) {onNavigate();}
+    else {onClick();}
   };
 
   return (
@@ -40,7 +40,7 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
       type="button"
       onClick={handleClick}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') handleClick();
+        if (e.key === 'Enter' || e.key === ' ') {handleClick();}
       }}
       className={cn(
         'group relative flex flex-col md:flex-row h-auto min-h-[340px] md:min-h-[380px] md:h-[380px]',
@@ -170,7 +170,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   // ── Medir ancho de card con ResizeObserver (exacto, sin cálculos en %)
   useLayoutEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!wrapper) {return;}
 
     const measure = () => {
       const isMobile = typeof globalThis !== 'undefined' && globalThis.innerWidth < 768;
@@ -195,7 +195,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const getOffset = useCallback((idx: number) => {
     const cw = cardWidthRef.current;
     const wrapper = wrapperRef.current;
-    if (!wrapper || cw === 0) return 0;
+    if (!wrapper || cw === 0) {return 0;}
     const viewCenter = wrapper.clientWidth / 2;
     const cardCenter = idx * (cw + GAP_PX) + cw / 2;
     return viewCenter - cardCenter;
@@ -205,7 +205,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const applyTransform = useCallback(
     (idx: number, withTransition: boolean) => {
       const track = trackRef.current;
-      if (!track) return;
+      if (!track) {return;}
       track.style.transition = withTransition
         ? `transform ${DURATION_MS}ms cubic-bezier(0.32, 0.72, 0, 1)`
         : 'none';
@@ -216,7 +216,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Navegar a un índice (con animación)
   const goTo = useCallback((nextIdx: number) => {
-    if (isJumping.current) return;
+    if (isJumping.current) {return;}
     setRealIndex(nextIdx);
     setAnimated(true);
   }, []);
@@ -231,7 +231,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Teleport silencioso al terminar la transición (onTransitionEnd)
   const handleTransitionEnd = useCallback(() => {
-    if (!animated) return;
+    if (!animated) {return;}
     const normalized = ((realIndex % total) + total) % total;
     const middle = normalized + total; // equivalente en la copia del medio
     if (realIndex !== middle) {
@@ -248,7 +248,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Autoplay
   const startTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {clearInterval(timerRef.current);}
     timerRef.current = setInterval(() => {
       if (!isPaused.current && !isJumping.current) {
         goTo(realIndex + 1);
@@ -261,7 +261,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   useEffect(() => {
     startTimer();
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {clearInterval(timerRef.current);}
     };
   }, [startTimer]);
 
@@ -278,21 +278,21 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const onTouchMove = (e: React.TouchEvent) => {
     const dx = Math.abs(touchStartX.current - e.touches[0].clientX);
     const dy = Math.abs(touchStartY.current - e.touches[0].clientY);
-    if (dx > dy && e.cancelable) e.preventDefault();
+    if (dx > dy && e.cancelable) {e.preventDefault();}
   };
 
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = touchStartX.current - e.changedTouches[0].clientX;
     const dy = touchStartY.current - e.changedTouches[0].clientY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx > 0) next();
-      else prev();
+      if (dx > 0) {next();}
+      else {prev();}
     }
     isPaused.current = false;
   };
 
   // ── Guardia: sin datos → skeleton
-  if (total === 0) return <CarouselSkeleton />;
+  if (total === 0) {return <CarouselSkeleton />;}
 
   // ── Índice real normalizado (para dots y ServiceCard.displayIndex)
   const currentActual = ((realIndex % total) + total) % total;

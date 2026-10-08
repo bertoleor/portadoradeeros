@@ -107,7 +107,7 @@ export function RichTextEditor({
       return;
     }
     const url = globalThis.window.prompt('URL:');
-    if (url === null) return;
+    if (url === null) {return;}
     if (url === '') {
       editor.chain().focus().unsetLink().run();
       return;

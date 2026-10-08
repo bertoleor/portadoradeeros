@@ -123,4 +123,62 @@ describe('email/resend (test mode, resend mocked)', () => {
     expect(a).toBe(b);
     expect(a).not.toBe(c);
   });
+
+  /* H3 hardening — structured logger instead of raw console.error (F4-refresh 2026-10-07) */
+
+  it('logs "credentials missing" through the structured logger (warn, observable)', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      setApiKey(undefined);
+      const result = await sendAppointmentConfirmation(sample);
+      expect(result.success).toBe(false);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      const out = String(warnSpy.mock.calls[0]?.[0]);
+      expect(out).toContain('[WARN]');
+      expect(out).toContain('Resend credentials missing');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('logs send failures through the structured logger (error + provider context)', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      setApiKey('re_test_key');
+      sendMock.mockResolvedValueOnce({ data: null, error: { message: 'rejected by API' } });
+      const result = await sendAppointmentReminder(sample);
+      expect(result.success).toBe(false);
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      const out = String(errorSpy.mock.calls[0]?.[0]);
+      expect(out).toContain('[ERROR]');
+      expect(out).toContain('Error sending Resend email');
+      // structured context must carry the provider + failure detail
+      expect(out).toContain('provider');
+      expect(out).toContain('resend');
+      expect(out).toContain('rejected by API');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it('logs transport throws through the structured logger (error + provider context)', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      setApiKey('re_test_key');
+      sendMock.mockRejectedValueOnce(new Error('network down'));
+      const result = await sendAppointmentReminder(sample);
+      expect(result.success).toBe(false);
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      const out = String(errorSpy.mock.calls[0]?.[0]);
+      expect(out).toContain('[ERROR]');
+      expect(out).toContain('network down');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
 });

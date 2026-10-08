@@ -47,7 +47,7 @@ export default function AdminLogin() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    if (globalThis.window === undefined) return;
+    if (globalThis.window === undefined) {return;}
     
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
@@ -59,7 +59,7 @@ export default function AdminLogin() {
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {return;}
     void deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === 'accepted') {

@@ -57,7 +57,7 @@ export function Navbar() {
   };
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+    if (href === '/') {return pathname === '/';}
     return pathname.startsWith(href);
   };
 

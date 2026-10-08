@@ -35,7 +35,7 @@ export default function AdminMensajes() {
   }, []);
 
   const filteredMessages = messages.filter(msg => {
-    if (filter === 'all') return true;
+    if (filter === 'all') {return true;}
     return msg.status === filter;
   });
 

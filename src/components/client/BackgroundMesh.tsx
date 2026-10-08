@@ -71,7 +71,7 @@ function getPairOpacities(globalTick: number, pairCount: number): number[] {
   for (let i = 0; i < pairCount; i++) {
     const start = i * FRAMES_PER_PAIR;
     const local = t - start;
-    if (local < 0 || local >= FRAMES_PER_PAIR) continue;
+    if (local < 0 || local >= FRAMES_PER_PAIR) {continue;}
 
     let alpha: number;
     if (local < FADE_FRAMES) {
@@ -119,10 +119,10 @@ function updateAndDrawParticle(
   p.size = p.baseSize + Math.sin(p.tick) * p.baseSize * BREATH_AMOUNT;
   p.x += p.vx;
   p.y += p.vy;
-  if (p.x < -p.size) p.x = w + p.size;
-  if (p.x > w + p.size) p.x = -p.size;
-  if (p.y < -p.size) p.y = h + p.size;
-  if (p.y > h + p.size) p.y = -p.size;
+  if (p.x < -p.size) {p.x = w + p.size;}
+  if (p.x > w + p.size) {p.x = -p.size;}
+  if (p.y < -p.size) {p.y = h + p.size;}
+  if (p.y > h + p.size) {p.y = -p.size;}
 
   const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
   const { r, g, b } = color;
@@ -159,9 +159,9 @@ export default function BackgroundMesh(): React.JSX.Element {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {return;}
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     const reducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const speed = reducedMotion ? 0 : PARTICLE_SPEED;
@@ -174,7 +174,7 @@ export default function BackgroundMesh(): React.JSX.Element {
     let resizeTimeout: ReturnType<typeof setTimeout>;
 
     const drawFrame = () => {
-      if (!ctx) return;
+      if (!ctx) {return;}
       ctx.fillStyle = BG_COLOR;
       ctx.fillRect(0, 0, width, height);
       globalTick++;

@@ -116,7 +116,7 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
   };
 
   const handleDelete = async () => {
-    if (!service.id) return;
+    if (!service.id) {return;}
     try {
       await deleteService(service.id);
       success('Servicio eliminado.');
@@ -207,7 +207,7 @@ export default function AdminEditServicio({ params }: AdminEditServicioProps) {
                     onChange={(e) => {
                       const newTitle = e.target.value;
                       setService(prev => {
-                        if (!prev) return null;
+                        if (!prev) {return null;}
                         // Auto-sync slug solo si:
                         // 1. Es un servicio nuevo
                         // 2. El slug actual coincide con el slugificado del titulo previo (no fue editado manualmente)
