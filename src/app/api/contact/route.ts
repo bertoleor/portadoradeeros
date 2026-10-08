@@ -15,10 +15,12 @@ import { createClient } from '@/lib/supabase/server';
 import type { NextRequest } from 'next/server';
 
 export const contactSchema = z.object({
-  name: z.string().min(1, 'Nombre requerido'),
-  email: z.email('Email inválido'),
-  message: z.string().min(1, 'Mensaje requerido'),
-  phone: z.string().optional(),
+  // H3 hardening — payload caps + server-side trim on a public form:
+  // bounds request size and strips padding before persistence/notify.
+  name: z.string().trim().min(1, 'Nombre requerido').max(200),
+  email: z.email('Email inválido').max(320),
+  message: z.string().trim().min(1, 'Mensaje requerido').max(5000),
+  phone: z.string().trim().max(50).optional(),
   [HONEYPOT_FIELD]: z.string().optional(),
 });
 

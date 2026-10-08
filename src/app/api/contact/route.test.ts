@@ -93,6 +93,40 @@ describe('contactSchema', () => {
   it('rejects a fully empty payload', () => {
     expect(contactSchema.safeParse({}).success).toBe(false);
   });
+
+  /* H3 hardening — payload caps + server-side trim (F4-refresh 2026-10-07) */
+
+  it('rejects over-long fields (payload cap on a public form)', () => {
+    const base = { name: 'Ana', email: 'a@b.com', message: 'Hola' };
+    expect(
+      contactSchema.safeParse({ ...base, name: 'x'.repeat(201) }).success
+    ).toBe(false);
+    expect(
+      contactSchema.safeParse({ ...base, message: 'x'.repeat(5001) }).success
+    ).toBe(false);
+    expect(
+      contactSchema.safeParse({ ...base, phone: '5'.repeat(51) }).success
+    ).toBe(false);
+  });
+
+  it('trims surrounding whitespace server-side', () => {
+    const r = contactSchema.safeParse({
+      name: '  Ana  ',
+      email: 'ana@example.com',
+      message: '  Hola  ',
+    });
+    expect(r.success).toBe(true);
+    if (r.success) {
+      expect(r.data.name).toBe('Ana');
+      expect(r.data.message).toBe('Hola');
+    }
+  });
+
+  it('rejects a name that is only whitespace after trim', () => {
+    expect(
+      contactSchema.safeParse({ name: '   ', email: 'a@b.com', message: 'Hola' }).success
+    ).toBe(false);
+  });
 });
 
 describe('POST /api/contact — email provider dispatch (EROS-D2)', () => {
