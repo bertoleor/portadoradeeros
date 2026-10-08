@@ -3,9 +3,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const sendMock = vi.fn();
 
 vi.mock('resend', () => ({
-  Resend: vi.fn().mockImplementation(() => ({
-    emails: { send: sendMock },
-  })),
+  // vitest 4: mock used as constructor must use `function` in its
+  // implementation (arrow functions are not constructable anymore).
+  Resend: vi.fn().mockImplementation(function Resend() {
+    return {
+      emails: { send: sendMock },
+    };
+  }),
 }));
 
 import {

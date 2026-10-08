@@ -199,7 +199,7 @@ describe('POST /api/contact — insert persistence flags (EROS-B3)', () => {
     await POST(makeRequest());
 
     expect(errorSpy).toHaveBeenCalled();
-    const out = errorSpy.mock.calls.map((c) => String(c[0])).join('\n');
+    const out = errorSpy.mock.calls.map((c: unknown[]) => String(c[0])).join('\n');
     expect(out).toContain('contact_messages');
     expect(out).toContain('network unreachable');
   });
