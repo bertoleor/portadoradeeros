@@ -1,12 +1,12 @@
 ---
 name: tailwind-4
 description: >
-  Tailwind CSS 4 patterns and best practices.
-  Trigger: When styling with Tailwind - cn(), theme variables, no var() in className.
+  Tailwind CSS 4 patterns and best practices. Trigger: When styling with Tailwind - cn(), theme
+  variables, no var() in className.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.1"
+  version: '1.1'
 ---
 
 ## Styling Decision Tree
@@ -48,8 +48,8 @@ Library can't use class?→ style prop with var() constants
 ## The cn() Utility
 
 ```typescript
-import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

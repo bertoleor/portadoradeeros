@@ -1,12 +1,12 @@
 ---
 name: typescript
 description: >
-  TypeScript strict patterns and best practices.
-  Trigger: When writing TypeScript code - types, interfaces, generics.
+  TypeScript strict patterns and best practices. Trigger: When writing TypeScript code - types,
+  interfaces, generics.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
 ---
 
 ## Const Types Pattern (REQUIRED)
@@ -14,15 +14,15 @@ metadata:
 ```typescript
 // ✅ ALWAYS: Create const object first, then extract type
 const STATUS = {
-  ACTIVE: "active",
-  INACTIVE: "inactive",
-  PENDING: "pending",
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+  PENDING: 'pending',
 } as const;
 
 type Status = (typeof STATUS)[keyof typeof STATUS];
 
 // ❌ NEVER: Direct union types
-type Status = "active" | "inactive" | "pending";
+type Status = 'active' | 'inactive' | 'pending';
 ```
 
 **Why?** Single source of truth, runtime values, autocomplete, easier refactoring.
@@ -60,7 +60,7 @@ function parse(input: unknown): User {
   if (isUser(input)) {
     return input;
   }
-  throw new Error("Invalid input");
+  throw new Error('Invalid input');
 }
 
 // ✅ Use generics for flexible types
@@ -75,14 +75,14 @@ function parse(input: any): any {}
 ## Utility Types
 
 ```typescript
-Pick<User, "id" | "name">; // Select fields
-Omit<User, "id">; // Exclude fields
+Pick<User, 'id' | 'name'>; // Select fields
+Omit<User, 'id'>; // Exclude fields
 Partial<User>; // All optional
 Required<User>; // All required
 Readonly<User>; // All readonly
 Record<string, User>; // Object type
-Extract<Union, "a" | "b">; // Extract from union
-Exclude<Union, "a">; // Exclude from union
+Extract<Union, 'a' | 'b'>; // Extract from union
+Exclude<Union, 'a'>; // Exclude from union
 NonNullable<T | null>; // Remove null/undefined
 ReturnType<typeof fn>; // Function return type
 Parameters<typeof fn>; // Function params tuple
@@ -92,15 +92,15 @@ Parameters<typeof fn>; // Function params tuple
 
 ```typescript
 function isUser(value: unknown): value is User {
-  return typeof value === "object" && value !== null && "id" in value && "name" in value;
+  return typeof value === 'object' && value !== null && 'id' in value && 'name' in value;
 }
 ```
 
 ## Import Types
 
 ```typescript
-import type { User } from "./types";
-import { createUser, type Config } from "./utils";
+import type { User } from './types';
+import { createUser, type Config } from './utils';
 ```
 
 ## Keywords

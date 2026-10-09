@@ -2,13 +2,16 @@
 
 ## Purpose
 
-Cerrar el registro público y restringir el acceso administrativo a una allowlist explícita, preservando al usuario legítimo existente como admin. Todo acceso admin fuera de la allowlist queda bloqueado.
+Cerrar el registro público y restringir el acceso administrativo a una allowlist explícita,
+preservando al usuario legítimo existente como admin. Todo acceso admin fuera de la allowlist queda
+bloqueado.
 
 ## Requirements
 
 ### Requirement: Signup cerrado
 
-El sistema MUST mantener el registro público deshabilitado (`disable_signup=true`), de modo que NO nuevos usuarios puedan auto-registrarse.
+El sistema MUST mantener el registro público deshabilitado (`disable_signup=true`), de modo que NO
+nuevos usuarios puedan auto-registrarse.
 
 (Previously: signup abierto a cualquier visitante — hallazgo S3)
 
@@ -20,7 +23,9 @@ El sistema MUST mantener el registro público deshabilitado (`disable_signup=tru
 
 ### Requirement: Allowlist admin explícita
 
-El acceso administrativo MUST estar restringido a una lista explícita de UIDs autorizados. El UID del usuario legítimo existente SHALL estar incluido en la allowlist; cualquier otra identidad, autenticada o no, MUST NOT obtener privilegios admin.
+El acceso administrativo MUST estar restringido a una lista explícita de UIDs autorizados. El UID
+del usuario legítimo existente SHALL estar incluido en la allowlist; cualquier otra identidad,
+autenticada o no, MUST NOT obtener privilegios admin.
 
 (Previously: privilegios admin asignados por error via `auth.role()` — hallazgos S2/S3)
 

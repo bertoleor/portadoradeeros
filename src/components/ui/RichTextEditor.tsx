@@ -4,11 +4,20 @@ import Image from '@tiptap/extension-image';
 import LinkExtension from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { 
-  Bold, Italic, Strikethrough, Heading2, 
-  AlignLeft, AlignCenter, AlignRight, List, ListOrdered, Link as LinkIcon, ImagePlus
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  Bold,
+  Heading2,
+  ImagePlus,
+  Italic,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Strikethrough,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -28,14 +37,23 @@ interface ToolbarButtonProps {
   readonly title: string;
 }
 
-const ToolbarButton = ({ onClick, isActive, disabled = false, children, title }: ToolbarButtonProps) => (
+const ToolbarButton = ({
+  onClick,
+  isActive,
+  disabled = false,
+  children,
+  title,
+}: ToolbarButtonProps) => (
   <button
-    onClick={(e) => { e.preventDefault(); onClick(); }}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick();
+    }}
     disabled={disabled}
     title={title}
     className={`p-1.5 rounded-lg transition-all duration-200 ${
-      isActive 
-        ? 'bg-white/60 backdrop-blur-sm text-[rgba(15,15,20,0.85)] shadow-sm border border-white/50' 
+      isActive
+        ? 'bg-white/60 backdrop-blur-sm text-[rgba(15,15,20,0.85)] shadow-sm border border-white/50'
         : 'text-[rgba(15,15,20,0.45)] hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30'
     } ${disabled ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'}`}
   >
@@ -43,12 +61,12 @@ const ToolbarButton = ({ onClick, isActive, disabled = false, children, title }:
   </button>
 );
 
-export function RichTextEditor({ 
-  content, 
-  onChange, 
-  placeholder = "Escribe aquí...", 
-  className = "",
-  editable = true
+export function RichTextEditor({
+  content,
+  onChange,
+  placeholder = 'Escribe aquí...',
+  className = '',
+  editable = true,
 }: RichTextEditorProps) {
   // Prevent hydration errors by rendering empty untill mounted
   const [mounted, setMounted] = useState(false);
@@ -66,12 +84,14 @@ export function RichTextEditor({
       }),
       Placeholder.configure({
         placeholder,
-        emptyEditorClass: 'is-editor-empty before:content-[attr(data-placeholder)] before:text-black/30 before:float-left before:pointer-events-none before:h-0',
+        emptyEditorClass:
+          'is-editor-empty before:content-[attr(data-placeholder)] before:text-black/30 before:float-left before:pointer-events-none before:h-0',
       }),
       LinkExtension.configure({
         openOnClick: false,
         HTMLAttributes: {
-          class: 'text-black underline underline-offset-4 decoration-black/20 hover:decoration-black/60 transition-colors cursor-pointer',
+          class:
+            'text-black underline underline-offset-4 decoration-black/20 hover:decoration-black/60 transition-colors cursor-pointer',
         },
       }),
       TextAlign.configure({
@@ -88,7 +108,8 @@ export function RichTextEditor({
     editorProps: {
       attributes: {
         // Minimalist iOS style typography for the content
-        class: 'min-h-[150px] w-full bg-transparent px-5 py-4 outline-none [&>p]:mb-4 last:[&>p]:mb-0 [&>h2]:text-2xl [&>h2]:font-light [&>h2]:tracking-tight [&>h2]:mb-4 [&>h2]:mt-6 first:[&>h2]:mt-0 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:mb-3 [&>h3]:mt-5 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&>li]:mb-1 text-black/80 font-light leading-relaxed',
+        class:
+          'min-h-[150px] w-full bg-transparent px-5 py-4 outline-none [&>p]:mb-4 last:[&>p]:mb-0 [&>h2]:text-2xl [&>h2]:font-light [&>h2]:tracking-tight [&>h2]:mb-4 [&>h2]:mt-6 first:[&>h2]:mt-0 [&>h3]:text-xl [&>h3]:font-medium [&>h3]:mb-3 [&>h3]:mt-5 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-4 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-4 [&>li]:mb-1 text-black/80 font-light leading-relaxed',
       },
     },
     onUpdate: ({ editor }) => {
@@ -97,7 +118,11 @@ export function RichTextEditor({
   });
 
   if (!mounted || !editor) {
-    return <div className={`min-h-[200px] rounded-2xl border border-black/10 bg-white/50 ${className}`} />;
+    return (
+      <div
+        className={`min-h-[200px] rounded-2xl border border-black/10 bg-white/50 ${className}`}
+      />
+    );
   }
 
   const toggleLink = () => {
@@ -107,7 +132,9 @@ export function RichTextEditor({
       return;
     }
     const url = globalThis.window.prompt('URL:');
-    if (url === null) return;
+    if (url === null) {
+      return;
+    }
     if (url === '') {
       editor.chain().focus().unsetLink().run();
       return;
@@ -122,56 +149,100 @@ export function RichTextEditor({
     }
   };
 
-
   return (
-    <div className={`rounded-2xl border border-black/10 overflow-hidden bg-white focus-within:border-black/30 focus-within:ring-4 focus-within:ring-black/5 transition-all duration-300 ${className}`}>
-      
+    <div
+      className={`rounded-2xl border border-black/10 overflow-hidden bg-white focus-within:border-black/30 focus-within:ring-4 focus-within:ring-black/5 transition-all duration-300 ${className}`}
+    >
       {/* Toolbar */}
       {editable && (
         <div className="flex flex-wrap items-center gap-1 p-2 border-b border-[rgba(15,15,20,0.08)] bg-white/20 backdrop-blur-sm">
-          <ToolbarButton onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')} title="Negrita">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            isActive={editor.isActive('bold')}
+            title="Negrita"
+          >
             <Bold size={16} strokeWidth={editor.isActive('bold') ? 2.5 : 2} />
           </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')} title="Cursiva">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            isActive={editor.isActive('italic')}
+            title="Cursiva"
+          >
             <Italic size={16} />
           </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().toggleStrike().run()} isActive={editor.isActive('strike')} title="Tachado">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            isActive={editor.isActive('strike')}
+            title="Tachado"
+          >
             <Strikethrough size={16} />
           </ToolbarButton>
 
           <div className="w-px h-5 bg-black/10 mx-1.5" />
 
-          <ToolbarButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="Título">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            isActive={editor.isActive('heading', { level: 2 })}
+            title="Título"
+          >
             <Heading2 size={16} />
           </ToolbarButton>
 
           <div className="w-px h-5 bg-black/10 mx-1.5" />
 
-          <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('left').run()} isActive={editor.isActive({ textAlign: 'left' })} title="Alinear a la izquierda">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            isActive={editor.isActive({ textAlign: 'left' })}
+            title="Alinear a la izquierda"
+          >
             <AlignLeft size={16} />
           </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('center').run()} isActive={editor.isActive({ textAlign: 'center' })} title="Centrar">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            isActive={editor.isActive({ textAlign: 'center' })}
+            title="Centrar"
+          >
             <AlignCenter size={16} />
           </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().setTextAlign('right').run()} isActive={editor.isActive({ textAlign: 'right' })} title="Alinear a la derecha">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            isActive={editor.isActive({ textAlign: 'right' })}
+            title="Alinear a la derecha"
+          >
             <AlignRight size={16} />
           </ToolbarButton>
 
           <div className="w-px h-5 bg-black/10 mx-1.5" />
 
-          <ToolbarButton onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} title="Lista con viñetas">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            isActive={editor.isActive('bulletList')}
+            title="Lista con viñetas"
+          >
             <List size={16} />
           </ToolbarButton>
-          <ToolbarButton onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} title="Lista numerada">
+          <ToolbarButton
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            isActive={editor.isActive('orderedList')}
+            title="Lista numerada"
+          >
             <ListOrdered size={16} />
           </ToolbarButton>
 
           <div className="w-px h-5 bg-black/10 mx-1.5" />
 
-          <ToolbarButton onClick={toggleLink} isActive={editor.isActive('link')} title="Insertar enlace">
+          <ToolbarButton
+            onClick={toggleLink}
+            isActive={editor.isActive('link')}
+            title="Insertar enlace"
+          >
             <LinkIcon size={16} />
           </ToolbarButton>
-          <ToolbarButton onClick={addImage} isActive={editor.isActive('image')} title="Insertar imagen (URL)">
+          <ToolbarButton
+            onClick={addImage}
+            isActive={editor.isActive('image')}
+            title="Insertar imagen (URL)"
+          >
             <ImagePlus size={16} />
           </ToolbarButton>
         </div>

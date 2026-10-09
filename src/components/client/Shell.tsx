@@ -17,8 +17,17 @@ export function Shell({ children }: { readonly children: ReactNode }) {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Saltar al contenido principal
+      </a>
       <Navbar />
-      <main className="flex-grow flex flex-col pt-20 min-h-[calc(100vh-8rem)]">{children}</main>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="flex-grow flex flex-col pt-20 min-h-[calc(100vh-8rem)] focus:outline-none"
+      >
+        {children}
+      </main>
       <Footer />
     </>
   );

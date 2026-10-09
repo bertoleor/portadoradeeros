@@ -1,7 +1,9 @@
 ## Description
+
 <!-- What does this PR do? Link to issue if applicable. -->
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
@@ -12,6 +14,7 @@
 - [ ] Dependencies
 
 ## Testing
+
 - [ ] Unit tests pass (`npm test` / `pnpm test`)
 - [ ] E2E tests pass (`npm run test:e2e` / `pnpm e2e`)
 - [ ] Typecheck passes (`tsc --noEmit` / `turbo run typecheck`)
@@ -20,6 +23,7 @@
 - [ ] Manual testing done (describe below)
 
 ## Security Checklist
+
 - [ ] No secrets or credentials in code
 - [ ] No new SQL injection / XSS vectors
 - [ ] Auth/authorization verified for new endpoints
@@ -28,12 +32,15 @@
 - [ ] Webhook signatures verified (if applicable)
 
 ## Breaking Changes
+
 <!-- List any breaking changes and migration path -->
 
 ## Screenshots / Recordings
+
 <!-- For UI changes -->
 
 ## Checklist
+
 - [ ] Code follows project conventions (ESLint, Prettier)
 - [ ] Self-review completed
 - [ ] Comments added for complex logic

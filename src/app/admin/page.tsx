@@ -1,22 +1,27 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Sparkles, 
-  Calendar, 
-  CheckCircle, 
-  Clock, 
-  MoreHorizontal,
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Calendar,
+  CheckCircle,
+  Clock,
   Mail,
-  X,
+  MoreHorizontal,
   Phone,
+  Sparkles,
+  X,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
-import { getAppointments, confirmAppointment, getContactMessages, updateContactStatus } from '@/lib/api/appointments';
+import {
+  confirmAppointment,
+  getAppointments,
+  getContactMessages,
+  updateContactStatus,
+} from '@/lib/api/appointments';
 import { logger } from '@/lib/logger';
 import { createClient } from '@/lib/supabase/client';
 
@@ -52,7 +57,8 @@ export default function AdminDashboard() {
     // Check if PWA is installed
     const checkPwa = () => {
       const isStandalone = globalThis.window?.matchMedia('(display-mode: standalone)').matches;
-      const isInWebAppiOS = (globalThis.window?.navigator as { standalone?: boolean })?.standalone === true;
+      const isInWebAppiOS =
+        (globalThis.window?.navigator as { standalone?: boolean })?.standalone === true;
       // We could use isPwaInstalled to show/hide certain UI if needed later
       logger.debug('PWA status:', { installed: isStandalone || isInWebAppiOS });
     };
@@ -71,8 +77,11 @@ export default function AdminDashboard() {
     if (isLoading) {
       return (
         <div className="space-y-3">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="flex items-center gap-4 p-4 rounded-xl bg-white/30 backdrop-blur-sm">
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="flex items-center gap-4 p-4 rounded-xl bg-white/30 backdrop-blur-sm"
+            >
               <div className="w-10 h-10 rounded-lg bg-gray-200 animate-pulse" />
               <div className="flex-1 space-y-2">
                 <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
@@ -90,22 +99,33 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-3">
         {appointments.slice(0, 5).map((app) => (
-          <div key={app.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-all gap-4">
+          <div
+            key={app.id}
+            className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg bg-white/30 backdrop-blur-sm hover:bg-white/50 transition-all gap-4"
+          >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-gray-200 flex flex-col items-center justify-center shrink-0">
-                <span className="text-[8px] font-medium text-gray-500 uppercase">{new Date(app.appointment_date).toLocaleDateString('es-AR', { month: 'short' })}</span>
-                <span className="text-xs font-semibold text-gray-700">{new Date(app.appointment_date).getDate()}</span>
+                <span className="text-[8px] font-medium text-gray-500 uppercase">
+                  {new Date(app.appointment_date).toLocaleDateString('es-AR', { month: 'short' })}
+                </span>
+                <span className="text-xs font-semibold text-gray-700">
+                  {new Date(app.appointment_date).getDate()}
+                </span>
               </div>
               <div className="min-w-0">
                 <p className="font-medium text-sm text-gray-900 truncate">{app.client_name}</p>
                 <p className="text-xs text-gray-500 truncate">{app.services?.title}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-0 border-gray-100">
               <div className="text-left sm:text-right">
-                <p className="text-xs font-medium text-gray-600">{new Date(app.appointment_date).getHours()}:00 hs</p>
-                <span className={`text-[9px] font-medium ${app.status === 'confirmed' ? 'text-green-600' : 'text-orange-500'}`}>
+                <p className="text-xs font-medium text-gray-600">
+                  {new Date(app.appointment_date).getHours()}:00 hs
+                </p>
+                <span
+                  className={`text-[9px] font-medium ${app.status === 'confirmed' ? 'text-green-600' : 'text-orange-500'}`}
+                >
                   {app.status === 'confirmed' ? 'Confirmado' : 'Pendiente'}
                 </span>
               </div>
@@ -123,7 +143,7 @@ export default function AdminDashboard() {
                 )}
                 <Button
                   onClick={() => setSelectedAppointment(app)}
-                  variant="outline" 
+                  variant="outline"
                   size="icon-xs"
                   className="w-8 h-8"
                 >
@@ -141,7 +161,7 @@ export default function AdminDashboard() {
     if (isLoading) {
       return (
         <div className="space-y-3">
-          {[1, 2].map(i => (
+          {[1, 2].map((i) => (
             <div key={i} className="h-20 bg-white/30 backdrop-blur-sm rounded-xl animate-pulse" />
           ))}
         </div>
@@ -164,14 +184,15 @@ export default function AdminDashboard() {
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-gray-500 uppercase">{msg.name}</span>
-              <span className="text-[10px] text-gray-400">{new Date(msg.created_at).toLocaleDateString()}</span>
+              <span className="text-[10px] text-gray-400">
+                {new Date(msg.created_at).toLocaleDateString()}
+              </span>
             </div>
-            <p className="text-xs text-gray-600 line-clamp-2 mb-2">
-              {msg.message}
-            </p>
+            <p className="text-xs text-gray-600 line-clamp-2 mb-2">{msg.message}</p>
             {msg.status === 'unread' && (
               <div className="flex items-center gap-1 text-[10px] font-medium text-gray-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />Sin leer
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                Sin leer
               </div>
             )}
           </motion.div>
@@ -182,10 +203,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function loadData() {
-      const [appts, msgs] = await Promise.all([
-        getAppointments(),
-        getContactMessages()
-      ]);
+      const [appts, msgs] = await Promise.all([getAppointments(), getContactMessages()]);
       setAppointments(appts || []);
       setMessages(msgs || []);
       setIsLoading(false);
@@ -197,7 +215,7 @@ export default function AdminDashboard() {
     const messageChannel = supabase
       .channel('dashboard-messages')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'contact_messages' }, () => {
-        void getContactMessages().then(msgs => setMessages(msgs || []));
+        void getContactMessages().then((msgs) => setMessages(msgs || []));
       })
       .subscribe();
 
@@ -205,7 +223,7 @@ export default function AdminDashboard() {
     const appointmentChannel = supabase
       .channel('dashboard-appointments')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
-        void getAppointments().then(appts => setAppointments(appts || []));
+        void getAppointments().then((appts) => setAppointments(appts || []));
       })
       .subscribe();
 
@@ -223,7 +241,9 @@ export default function AdminDashboard() {
     try {
       const result = await confirmAppointment(id);
       if (result.ok) {
-        setAppointments(prev => prev.map(app => app.id === id ? { ...app, status: 'confirmed' } : app));
+        setAppointments((prev) =>
+          prev.map((app) => (app.id === id ? { ...app, status: 'confirmed' } : app))
+        );
         success('Turno confirmado y email enviado.');
       } else {
         error(`Error: ${result.error.message || 'Intenta nuevamente.'}`);
@@ -238,7 +258,7 @@ export default function AdminDashboard() {
     try {
       const res = await updateContactStatus(id, 'read');
       if (res.ok) {
-        setMessages(prev => prev.map(m => m.id === id ? { ...m, status: 'read' } : m));
+        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status: 'read' } : m)));
       }
     } catch {
       // best-effort: ignore failures updating the read flag
@@ -248,11 +268,11 @@ export default function AdminDashboard() {
   const getServicePopularity = () => {
     const counts: Record<string, number> = {};
     appointments
-      .filter(app => {
+      .filter((app) => {
         const d = new Date(app.appointment_date);
         return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
       })
-      .forEach(a => {
+      .forEach((a) => {
         const title = a.services?.title || 'Otros';
         counts[title] = (counts[title] || 0) + 1;
       });
@@ -263,25 +283,57 @@ export default function AdminDashboard() {
 
   const getEstimatedIncome = () => {
     return appointments
-      .filter(app => {
+      .filter((app) => {
         const d = new Date(app.appointment_date);
-        return d.getMonth() === selectedMonth && 
-               d.getFullYear() === selectedYear && 
-               (app.status === 'confirmed' || app.status === 'completed');
+        return (
+          d.getMonth() === selectedMonth &&
+          d.getFullYear() === selectedYear &&
+          (app.status === 'confirmed' || app.status === 'completed')
+        );
       })
       .reduce((sum, app) => sum + (app.services?.price || 0), 0);
   };
 
   const monthNames = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
   ];
 
   const stats = [
-    { label: 'Servicio Popular', value: getServicePopularity()[0]?.[0] || 'Sin datos', icon: Sparkles, sublabel: monthNames[selectedMonth] },
-    { label: 'Ingresos Est.', value: `$${getEstimatedIncome().toLocaleString('es-AR')}`, icon: CheckCircle, sublabel: 'Confirmados/OK' },
-    { label: 'Pendientes', value: appointments.filter(a => a.status === 'pending').length.toString(), icon: Clock, sublabel: 'Por confirmar' },
-    { label: 'Total Turnos', value: appointments.length.toString(), icon: Calendar, sublabel: 'Histórico' },
+    {
+      label: 'Servicio Popular',
+      value: getServicePopularity()[0]?.[0] || 'Sin datos',
+      icon: Sparkles,
+      sublabel: monthNames[selectedMonth],
+    },
+    {
+      label: 'Ingresos Est.',
+      value: `$${getEstimatedIncome().toLocaleString('es-AR')}`,
+      icon: CheckCircle,
+      sublabel: 'Confirmados/OK',
+    },
+    {
+      label: 'Pendientes',
+      value: appointments.filter((a) => a.status === 'pending').length.toString(),
+      icon: Clock,
+      sublabel: 'Por confirmar',
+    },
+    {
+      label: 'Total Turnos',
+      value: appointments.length.toString(),
+      icon: Calendar,
+      sublabel: 'Histórico',
+    },
   ];
 
   const yearOptions = Array.from({ length: 3 }, (_, i) => new Date().getFullYear() - 1 + i);
@@ -302,32 +354,37 @@ export default function AdminDashboard() {
               Gestión de métricas y turnos próximos
             </p>
           </div>
-          
+
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center bg-white/50 backdrop-blur-sm border border-black/5 rounded-xl p-1">
-              <select 
+              <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
                 className="bg-transparent text-xs font-medium px-2 py-1 focus:outline-none cursor-pointer"
                 aria-label="Seleccionar mes"
               >
                 {monthNames.map((name, i) => (
-                  <option key={name} value={i}>{name}</option>
+                  <option key={name} value={i}>
+                    {name}
+                  </option>
                 ))}
               </select>
-              <select 
+              <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
                 className="bg-transparent text-xs font-medium px-2 py-1 border-l border-black/5 focus:outline-none cursor-pointer"
                 aria-label="Seleccionar año"
               >
-                {yearOptions.map(y => (
-                  <option key={y} value={y}>{y}</option>
+                {yearOptions.map((y) => (
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium bg-white/30 px-3 py-1.5 rounded-full border border-white/50">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />Sincronizado
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              Sincronizado
             </div>
           </div>
         </div>
@@ -343,7 +400,10 @@ export default function AdminDashboard() {
               className="bg-white/35 backdrop-blur-xl border border-white/50 p-4 md:p-5 rounded-lg group hover:bg-white/45 transition-all"
             >
               <div className="flex items-center gap-2 mb-3">
-                <stat.icon size={16} className="text-gray-400 group-hover:text-black transition-colors" />
+                <stat.icon
+                  size={16}
+                  className="text-gray-400 group-hover:text-black transition-colors"
+                />
                 <p className="text-xs font-medium text-gray-500">{stat.label}</p>
               </div>
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
@@ -353,7 +413,9 @@ export default function AdminDashboard() {
                   stat.value
                 )}
               </h3>
-              <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">{stat.sublabel}</p>
+              <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider">
+                {stat.sublabel}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -367,7 +429,12 @@ export default function AdminDashboard() {
                   <Calendar size={18} className="text-gray-400" />
                   Próximas Sesiones
                 </h2>
-                <Link href="/admin/calendario" className="text-xs text-gray-500 hover:text-gray-700">Ver todo</Link>
+                <Link
+                  href="/admin/calendario"
+                  className="text-xs text-gray-500 hover:text-gray-700"
+                >
+                  Ver todo
+                </Link>
               </div>
 
               {renderAppointments()}
@@ -393,8 +460,8 @@ export default function AdminDashboard() {
               <p className="text-xs text-[rgba(15,15,20,0.50)] leading-relaxed mb-4">
                 ¿Necesitas ayuda? Escríbenos y te orientamos.
               </p>
-              <a 
-                href="https://wa.me/5491173643504" 
+              <a
+                href="https://wa.me/5491173643504"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary w-full text-center block text-xs py-2.5"
@@ -425,8 +492,8 @@ export default function AdminDashboard() {
             >
               <div className="p-4 border-b border-[rgba(15,15,20,0.08)] flex items-center justify-between">
                 <h3 className="font-medium text-gray-900">Detalles del Turno</h3>
-                <button 
-                  onClick={() => setSelectedAppointment(null)} 
+                <button
+                  onClick={() => setSelectedAppointment(null)}
                   className="p-1.5 hover:bg-gray-100 rounded-lg"
                   aria-label="Cerrar"
                 >
@@ -443,25 +510,34 @@ export default function AdminDashboard() {
                     <p className="text-sm text-gray-500">{selectedAppointment.client_email}</p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-3 p-3 bg-gray-50 rounded-lg">
                   <div>
                     <p className="text-xs text-gray-500">Fecha</p>
                     <p className="text-sm font-medium text-gray-900">
-                      {new Date(selectedAppointment.appointment_date).toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'short' })}
+                      {new Date(selectedAppointment.appointment_date).toLocaleDateString('es-AR', {
+                        weekday: 'short',
+                        day: 'numeric',
+                        month: 'short',
+                      })}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-500">Hora</p>
                     <p className="text-sm font-medium text-gray-900">
-                      {new Date(selectedAppointment.appointment_date).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(selectedAppointment.appointment_date).toLocaleTimeString('es-AR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </p>
                   </div>
                 </div>
 
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Servicio</p>
-                  <p className="text-sm font-medium text-gray-900">{selectedAppointment.services?.title}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {selectedAppointment.services?.title}
+                  </p>
                 </div>
 
                 {selectedAppointment.client_phone && (
@@ -474,15 +550,19 @@ export default function AdminDashboard() {
                 {selectedAppointment.notes && (
                   <div>
                     <p className="text-xs text-gray-500 mb-1">Notas</p>
-                    <p className="text-sm text-gray-600 bg-gray-50 p-2.5 rounded-lg">{selectedAppointment.notes}</p>
+                    <p className="text-sm text-gray-600 bg-gray-50 p-2.5 rounded-lg">
+                      {selectedAppointment.notes}
+                    </p>
                   </div>
                 )}
 
-                <div className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
-                  selectedAppointment.status === 'confirmed' 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-orange-100 text-orange-700'
-                }`}>
+                <div
+                  className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium ${
+                    selectedAppointment.status === 'confirmed'
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-orange-100 text-orange-700'
+                  }`}
+                >
                   {selectedAppointment.status === 'confirmed' ? 'Confirmado' : 'Pendiente'}
                 </div>
               </div>

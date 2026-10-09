@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { sendContactFormNotification } from '@/lib/email';
+import { logger } from '@/lib/logger';
 import {
   checkRateLimit,
   HONEYPOT_FIELD,
@@ -13,11 +14,13 @@ import { createClient } from '@/lib/supabase/server';
 
 import type { NextRequest } from 'next/server';
 
-const contactSchema = z.object({
-  name: z.string().min(1, 'Nombre requerido'),
-  email: z.email('Email inválido'),
-  message: z.string().min(1, 'Mensaje requerido'),
-  phone: z.string().optional(),
+export const contactSchema = z.object({
+  // H3 hardening — payload caps + server-side trim on a public form:
+  // bounds request size and strips padding before persistence/notify.
+  name: z.string().trim().min(1, 'Nombre requerido').max(200),
+  email: z.email('Email inválido').max(320),
+  message: z.string().trim().min(1, 'Mensaje requerido').max(5000),
+  phone: z.string().trim().max(50).optional(),
   [HONEYPOT_FIELD]: z.string().optional(),
 });
 
@@ -57,22 +60,33 @@ export async function POST(request: NextRequest) {
     // Send notification to admin
     const result = await sendContactFormNotification(name, email, message);
 
-    // Save to database (Supabase)
+    // Save to database (Supabase). A failed insert must NOT be swallowed:
+    // the admin email still went out, but the lead's audit copy is missing
+    // — surface it via dbSaved so the caller (and /admin/mensajes) can
+    // tell a persisted lead from a silently lost one (EROS-B3).
     const supabase = await createClient();
     const { error: dbError } = await supabase
       .from('contact_messages')
       .insert([{ name, email, phone: phone || null, message }]);
 
+    const dbSaved = !dbError;
     if (dbError) {
-      console.error('Supabase contact save error:', dbError);
+      logger.error('Supabase contact save error', {
+        table: 'contact_messages',
+        code: dbError.code,
+        message: dbError.message,
+      });
     }
     return NextResponse.json({
       success: true,
       message: 'Mensaje enviado exitosamente',
       emailSent: result.success,
+      dbSaved,
     });
   } catch (error) {
-    console.error('Error processing contact form:', error);
+    logger.error('Error processing contact form', {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return NextResponse.json({ error: 'Error al procesar la solicitud' }, { status: 500 });
   }
 }

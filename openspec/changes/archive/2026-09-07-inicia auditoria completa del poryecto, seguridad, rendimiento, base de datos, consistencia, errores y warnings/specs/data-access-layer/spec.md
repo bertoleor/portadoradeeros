@@ -2,13 +2,16 @@
 
 ## Purpose
 
-Eliminar full-scans y N+1 en acceso a datos, introducir queries indexadas y caching RSC con revalidación, y consolidar un contrato de error único en la capa de API.
+Eliminar full-scans y N+1 en acceso a datos, introducir queries indexadas y caching RSC con
+revalidación, y consolidar un contrato de error único en la capa de API.
 
 ## Requirements
 
 ### Requirement: findClient por índice, no scan
 
-`findClient()` MUST consultar directamente por `email`/`phone` (indexado) en lugar de cargar todos los registros y filtrar en memoria. Un índice/constraint de unicidad SHOULD respaldar la búsqueda por email.
+`findClient()` MUST consultar directamente por `email`/`phone` (indexado) en lugar de cargar todos
+los registros y filtrar en memoria. Un índice/constraint de unicidad SHOULD respaldar la búsqueda
+por email.
 
 (Previously: carga-toda-y-filtra con N+1 — hallazgo P1)
 
@@ -26,7 +29,8 @@ Eliminar full-scans y N+1 en acceso a datos, introducir queries indexadas y cach
 
 ### Requirement: Slots calculados sin loops 30d
 
-`getNextAvailableSlots` y `getBookedSlots` MUST resolver disponibilidad/ocupación mediante queries de rango sobre `appointment_date` (indexado) en vez de iterar 30 días en JS y filtrar en memoria.
+`getNextAvailableSlots` y `getBookedSlots` MUST resolver disponibilidad/ocupación mediante queries
+de rango sobre `appointment_date` (indexado) en vez de iterar 30 días en JS y filtrar en memoria.
 
 (Previously: loops de 30 días + filtro en JS — hallazgos P2/P5; índice D3)
 
@@ -38,7 +42,8 @@ Eliminar full-scans y N+1 en acceso a datos, introducir queries indexadas y cach
 
 ### Requirement: Caching RSC con revalidación
 
-Los endpoints de `src/lib/api/*` en paths calientes SHOULD cachear respuestas RSC y revalidar por mutación (no solo por tiempo), evitando refetch global del calendario admin.
+Los endpoints de `src/lib/api/*` en paths calientes SHOULD cachear respuestas RSC y revalidar por
+mutación (no solo por tiempo), evitando refetch global del calendario admin.
 
 (Previously: refetch global — hallazgos P3/P4)
 
@@ -56,7 +61,8 @@ Los endpoints de `src/lib/api/*` en paths calientes SHOULD cachear respuestas RS
 
 ### Requirement: Contrato de error único
 
-La capa de API MUST emitir errores mediante throw + error boundary, eliminando los mixes `{success, error}` y silencios vacíos.
+La capa de API MUST emitir errores mediante throw + error boundary, eliminando los mixes
+`{success, error}` y silencios vacíos.
 
 (Previously: mix de éxito/error y fail-open — hallazgo C4)
 

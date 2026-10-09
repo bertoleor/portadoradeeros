@@ -1,10 +1,20 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { LayoutDashboard, Calendar, Settings, Sparkles, LogOut, Menu, X, MessageSquare, Users } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Calendar,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Settings,
+  Sparkles,
+  Users,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ToastProvider } from '@/components/ui/ToastProvider';
 import { createClient } from '@/lib/supabase/client';
@@ -17,7 +27,6 @@ const adminLinks = [
   { href: '/admin/mensajes', label: 'Mensajes', icon: MessageSquare },
   { href: '/admin/configuracion', label: 'Configuración', icon: Settings },
 ];
-
 
 export default function AdminLayout({ children }: { readonly children: React.ReactNode }) {
   const router = useRouter();
@@ -36,11 +45,15 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
         { event: 'INSERT', schema: 'public', table: 'appointments' },
         (payload) => {
           const clientName = (payload.new as { client_name?: string }).client_name ?? 'Un cliente';
-          setNewAppointmentCount(n => n + 1);
+          setNewAppointmentCount((n) => n + 1);
           // Show browser notification if SW + permission granted
-          if (globalThis.window !== undefined && 'Notification' in globalThis && Notification.permission === 'granted') {
-            void navigator.serviceWorker.ready.then(sw => {
-              void sw.showNotification('Nuevo turno agendado ✨', {
+          if (
+            globalThis.window !== undefined &&
+            'Notification' in globalThis &&
+            Notification.permission === 'granted'
+          ) {
+            void navigator.serviceWorker.ready.then((sw) => {
+              return sw.showNotification('Nuevo turno agendado ✨', {
                 body: `${clientName} agendó una consulta.`,
                 icon: '/icons/icon-192x192.png',
                 badge: '/icons/icon-192x192.png',
@@ -51,7 +64,9 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
         }
       )
       .subscribe();
-    return () => { void supabase.removeChannel(channel); };
+    return () => {
+      void supabase.removeChannel(channel);
+    };
   }, []);
 
   // ── Auth Logic ───────────────────────────────────────────────────────
@@ -60,12 +75,18 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
     let cleanup: (() => void) | void;
 
     const checkAuth = async () => {
-      if (isAuthenticated === true && pathname !== '/admin/login') return;
+      if (isAuthenticated === true && pathname !== '/admin/login') {
+        return;
+      }
 
       const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!active) return;
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!active) {
+        return;
+      }
 
       if (session) {
         setIsAuthenticated(true);
@@ -79,9 +100,11 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
     };
 
     void checkAuth();
-    return () => { 
-      active = false; 
-      if (cleanup) cleanup();
+    return () => {
+      active = false;
+      if (cleanup) {
+        cleanup();
+      }
     };
   }, [pathname, router, setupRealtime, isAuthenticated]);
 
@@ -90,15 +113,19 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
   }
 
   if (isAuthenticated === null) {
-    return <div className="min-h-screen bg-white flex items-center justify-center p-4 text-black"><div className="w-5 h-5 rounded-full border-2 border-gray-300 border-t-gray-600 animate-spin"/></div>;
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4 text-black">
+        <div className="w-5 h-5 rounded-full border-2 border-gray-300 border-t-gray-600 animate-spin" />
+      </div>
+    );
   }
 
   return (
     <div className="flex min-h-screen text-[rgba(15,15,20,0.85)]">
       <aside className="hidden lg:flex w-56 flex-col fixed inset-y-0 z-50 bg-white/35 backdrop-blur-xl border-r border-white/50">
-        <SidebarContent 
-          setIsMobileMenuOpen={setIsMobileMenuOpen} 
-          newCount={newAppointmentCount} 
+        <SidebarContent
+          setIsMobileMenuOpen={setIsMobileMenuOpen}
+          newCount={newAppointmentCount}
           onRead={() => setNewAppointmentCount(0)}
         />
       </aside>
@@ -136,9 +163,9 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
               transition={{ type: 'tween', duration: 0.25 }}
               className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-white/45 backdrop-blur-2xl border-r border-white/50"
             >
-              <SidebarContent 
-                setIsMobileMenuOpen={setIsMobileMenuOpen} 
-                newCount={newAppointmentCount} 
+              <SidebarContent
+                setIsMobileMenuOpen={setIsMobileMenuOpen}
+                newCount={newAppointmentCount}
                 onRead={() => setNewAppointmentCount(0)}
               />
             </motion.aside>
@@ -148,9 +175,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
 
       <main className="flex-1 lg:pl-56 flex flex-col min-h-screen pt-14 lg:pt-0 overflow-x-hidden text-black">
         <ToastProvider>
-          <div className="flex-1 w-full">
-            {children}
-          </div>
+          <div className="flex-1 w-full">{children}</div>
         </ToastProvider>
       </main>
     </div>
@@ -195,11 +220,11 @@ function SidebarContent({
       <div className="px-6 py-8 flex flex-col items-center border-b border-white/10 mb-4">
         <div className="relative group mb-3">
           {settings?.avatar ? (
-            <motion.img 
+            <motion.img
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              src={settings.avatar} 
-              alt="Admin" 
+              src={settings.avatar}
+              alt="Admin"
               className="w-16 h-16 rounded-2xl object-cover ring-2 ring-white/20 grayscale hover:grayscale-0 transition-all duration-500"
             />
           ) : (
@@ -223,23 +248,34 @@ function SidebarContent({
 
       <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
         {adminLinks.map((link) => {
-          const isActive = pathname === link.href || (pathname.startsWith(link.href) && link.href !== '/admin');
+          const isActive =
+            pathname === link.href || (pathname.startsWith(link.href) && link.href !== '/admin');
           const hasNewBadge = link.href === '/admin' && newCount > 0;
           return (
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => { setIsMobileMenuOpen(false); if (hasNewBadge) onRead?.(); }}
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                if (hasNewBadge) {
+                  onRead?.();
+                }
+              }}
               className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-[rgba(15,15,20,0.08)] text-[rgba(15,15,20,0.90)] shadow-sm'
                   : 'text-[rgba(15,15,20,0.55)] hover:text-[rgba(15,15,20,0.85)] hover:bg-[rgba(15,15,20,0.06)]'
               }`}
             >
-              <link.icon size={18} className={isActive ? 'text-[rgba(15,15,20,0.85)]' : 'text-[rgba(15,15,20,0.40)]'} />
+              <link.icon
+                size={18}
+                className={isActive ? 'text-[rgba(15,15,20,0.85)]' : 'text-[rgba(15,15,20,0.40)]'}
+              />
               {link.label}
               {hasNewBadge && (
-                <span className={`ml-auto w-5 h-5 rounded-full ${isActive ? 'bg-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.85)]' : 'bg-red-500/80 text-white'} text-[9px] font-bold flex items-center justify-center`}>
+                <span
+                  className={`ml-auto w-5 h-5 rounded-full ${isActive ? 'bg-[rgba(15,15,20,0.15)] text-[rgba(15,15,20,0.85)]' : 'bg-red-500/80 text-white'} text-[9px] font-bold flex items-center justify-center`}
+                >
                   {newCount > 9 ? '9+' : newCount}
                 </span>
               )}

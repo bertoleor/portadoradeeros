@@ -1,2 +1,11 @@
-ALTER TABLE public.admin_settings
+-- ==============================================================
+-- ⚠️ SUPERSEDED (desde 2026-09-13, commit c2a495a)
+-- ==============================================================
+-- La columna `admin_settings.business_hours` YA ESTÁ inline en
+-- migrations/0001_canonical_schema.sql. Este ALTER parcial quedó
+-- histórico: NO re-ejecutar contra live.
+-- Fuente canónica: migrations/0001_canonical_schema.sql
+-- Índice y linaje completo: migrations/README.md
+-- RLS de admin_settings: migrations/migration_security_rls_allowlist.sql
+-- ==============================================================
 ADD COLUMN IF NOT EXISTS business_hours JSONB DEFAULT '{"monday": {"end": "18:00", "start": "09:00", "closed": false}, "friday": {"end": "18:00", "start": "09:00", "closed": false}, "sunday": {"end": "", "start": "", "closed": true}, "tuesday": {"end": "18:00", "start": "09:00", "closed": false}, "saturday": {"end": "14:00", "start": "10:00", "closed": false}, "thursday": {"end": "18:00", "start": "09:00", "closed": false}, "wednesday": {"end": "18:00", "start": "09:00", "closed": false}}'::jsonb;

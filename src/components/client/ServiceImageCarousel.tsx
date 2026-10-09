@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Expand, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -42,7 +42,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
   };
 
   const handleImageLoad = (index: number) => {
-    setIsLoaded(prev => ({ ...prev, [index]: true }));
+    setIsLoaded((prev) => ({ ...prev, [index]: true }));
   };
 
   // Drag constraints and power for swipe
@@ -55,7 +55,12 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
   if (images.length === 1) {
     return (
       <>
-        <div className={cn('relative rounded-3xl overflow-hidden aspect-[4/3] cursor-pointer group bg-black/5', className)}>
+        <div
+          className={cn(
+            'relative rounded-3xl overflow-hidden aspect-[4/3] cursor-pointer group bg-black/5',
+            className
+          )}
+        >
           {!isLoaded[0] && (
             <div className="absolute inset-0 flex items-center justify-center">
               <Loader2 className="w-8 h-8 text-black/10 animate-spin" />
@@ -66,8 +71,8 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
             alt="Servicio"
             fill
             className={cn(
-              "object-cover transition-all duration-700 group-hover:scale-105",
-              isLoaded[0] ? "opacity-100" : "opacity-0"
+              'object-cover transition-all duration-700 group-hover:scale-105',
+              isLoaded[0] ? 'opacity-100' : 'opacity-0'
             )}
             onLoad={() => handleImageLoad(0)}
             sizes="(max-width: 768px) 100vw, 800px"
@@ -75,7 +80,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
           />
           {/* Overlay on hover */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-          
+
           {/* Expand button */}
           <button
             onClick={() => setIsModalOpen(true)}
@@ -105,7 +110,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
               >
                 <Expand size={24} className="rotate-180" />
               </button>
-              
+
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -132,7 +137,9 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
   // Multiple images - iOS style carousel with swipe
   return (
     <>
-      <div className={cn('relative rounded-3xl overflow-hidden aspect-[4/3] bg-black/5', className)}>
+      <div
+        className={cn('relative rounded-3xl overflow-hidden aspect-[4/3] bg-black/5', className)}
+      >
         {/* Main image with Swipe support */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -165,8 +172,8 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
               alt={`Servicio ${currentIndex + 1}`}
               fill
               className={cn(
-                "object-cover transition-all duration-700 group-hover:scale-105",
-                isLoaded[currentIndex] ? "opacity-100" : "opacity-0"
+                'object-cover transition-all duration-700 group-hover:scale-105',
+                isLoaded[currentIndex] ? 'opacity-100' : 'opacity-0'
               )}
               onLoad={() => handleImageLoad(currentIndex)}
               sizes="(max-width: 768px) 100vw, 800px"
@@ -288,7 +295,7 @@ export function ServiceImageCarousel({ images, className = '' }: ServiceImageCar
                 sizes="100vw"
                 priority
               />
-              
+
               {/* Image counter */}
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-black/60 backdrop-blur-sm rounded-full text-white text-sm">
                 {currentIndex + 1} / {images.length}

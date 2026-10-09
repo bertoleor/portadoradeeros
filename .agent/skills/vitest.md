@@ -1,11 +1,12 @@
 ---
 name: vitest
 description: >
-  Vitest testing patterns for PAEONIA. Trigger: When writing, reviewing, or running unit/integration tests.
+  Vitest testing patterns for PAEONIA. Trigger: When writing, reviewing, or running unit/integration
+  tests.
 license: Apache-2.0
 metadata:
   author: paeonia
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Vitest Testing Patterns for PAEONIA
@@ -20,16 +21,16 @@ metadata:
 ## AAA Pattern (Obligatorio)
 
 ```typescript
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from 'vitest';
 
-describe("calculateAspectOrb", () => {
-  it("should return exact orb for conjunction at same degree", () => {
+describe('calculateAspectOrb', () => {
+  it('should return exact orb for conjunction at same degree', () => {
     // Arrange
     const planet1 = 15.0 as Degree;
     const planet2 = 15.0 as Degree;
 
     // Act
-    const orb = calculateAspectOrb(planet1, planet2, "conjunction");
+    const orb = calculateAspectOrb(planet1, planet2, 'conjunction');
 
     // Assert
     expect(orb).toBe(0.0);
@@ -65,7 +66,7 @@ expect(normalizeAngle(-90)).toBe(270);
 ## Mocking Supabase
 
 ```typescript
-vi.mock("@/lib/supabase/client", () => ({
+vi.mock('@/lib/supabase/client', () => ({
   createClient: () => ({
     from: vi.fn().mockReturnThis(),
     select: vi.fn().mockReturnThis(),
@@ -77,10 +78,10 @@ vi.mock("@/lib/supabase/client", () => ({
 ## Testing Server Actions
 
 ```typescript
-it("should create booking with valid data", async () => {
+it('should create booking with valid data', async () => {
   const formData = new FormData();
-  formData.append("serviceId", "123");
-  formData.append("date", "2026-04-01");
+  formData.append('serviceId', '123');
+  formData.append('date', '2026-04-01');
 
   const result = await createBookingAction(formData);
 

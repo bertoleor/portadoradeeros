@@ -1,20 +1,17 @@
 'use client';
 
-import { 
-  ArrowLeft, 
-  Phone, 
-  Mail, 
-  Calendar, 
-  Plus,
-  Edit2,
-  X
-} from 'lucide-react';
+import { ArrowLeft, Calendar, Edit2, Mail, Phone, Plus, X } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+import { Button, DatePicker, Select, TimePicker } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
-import { getClientById, updateClient, createAppointmentAdmin, type Client } from '@/lib/api/appointments';
+import {
+  createAppointmentAdmin,
+  getClientById,
+  updateClient,
+  type Client,
+} from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
 
 import type { Service } from '@/types';
@@ -39,22 +36,36 @@ export default function ClientDetailPage() {
   const router = useRouter();
   const clientId = params.id as string;
   const { success, error: toastError } = useToast();
-  
-  const [client, setClient] = useState<Client & {
-    upcoming: Appointment[];
-    history: Appointment[];
-    cancelled: Appointment[];
-    stats: { total: number; completed: number; cancelled: number; lastAppointment: string | null };
-  } | null>(null);
+
+  const [client, setClient] = useState<
+    | (Client & {
+        upcoming: Appointment[];
+        history: Appointment[];
+        cancelled: Appointment[];
+        stats: {
+          total: number;
+          completed: number;
+          cancelled: number;
+          lastAppointment: string | null;
+        };
+      })
+    | null
+  >(null);
   const [services, setServices] = useState<Service[]>([]);
   const [activeTab, setActiveTab] = useState<'upcoming' | 'history' | 'cancelled'>('upcoming');
   const [isLoading, setIsLoading] = useState(true);
   const [showNewAppt, setShowNewAppt] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  
+
   // Edit form
-  const [editForm, setEditForm] = useState({ name: '', surname: '', email: '', phone: '', notes: '' });
-  
+  const [editForm, setEditForm] = useState({
+    name: '',
+    surname: '',
+    email: '',
+    phone: '',
+    notes: '',
+  });
+
   // New appointment form
   const [apptForm, setApptForm] = useState({
     serviceId: '',
@@ -68,7 +79,7 @@ export default function ClientDetailPage() {
     try {
       const [clientData, servicesData] = await Promise.all([
         getClientById(clientId),
-        getServices()
+        getServices(),
       ]);
       if (clientData) {
         setClient(clientData);
@@ -80,7 +91,7 @@ export default function ClientDetailPage() {
           notes: clientData.notes || '',
         });
       }
-      setServices(servicesData.filter(s => s.isVisible));
+      setServices(servicesData.filter((s) => s.isVisible));
     } catch (err) {
       toastError('Error al cargar datos');
       console.error(err);
@@ -120,9 +131,9 @@ export default function ClientDetailPage() {
       return;
     }
 
-    const selectedService = services.find(s => s.id === apptForm.serviceId);
+    const selectedService = services.find((s) => s.id === apptForm.serviceId);
     const fullName = `${editForm.name} ${editForm.surname}`.trim();
-    
+
     try {
       const result = await createAppointmentAdmin({
         serviceId: apptForm.serviceId,
@@ -181,10 +192,14 @@ export default function ClientDetailPage() {
 
   const getAppointmentsByTab = () => {
     switch (activeTab) {
-      case 'upcoming': return client.upcoming;
-      case 'history': return client.history;
-      case 'cancelled': return client.cancelled;
-      default: return [];
+      case 'upcoming':
+        return client.upcoming;
+      case 'history':
+        return client.history;
+      case 'cancelled':
+        return client.cancelled;
+      default:
+        return [];
     }
   };
 
@@ -194,7 +209,7 @@ export default function ClientDetailPage() {
     <div className="max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <button 
+        <button
           onClick={() => router.push('/admin/clientes')}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           title="Volver a la lista de clientes"
@@ -212,9 +227,12 @@ export default function ClientDetailPage() {
             <h2 className="text-xl font-medium">
               {client.name} {client.surname}
             </h2>
-            <p className="text-sm text-black/40">Cliente desde {client.created_at ? new Date(client.created_at).toLocaleDateString('es-AR') : '—'}</p>
+            <p className="text-sm text-black/40">
+              Cliente desde{' '}
+              {client.created_at ? new Date(client.created_at).toLocaleDateString('es-AR') : '—'}
+            </p>
           </div>
-          <button 
+          <button
             onClick={() => setShowEdit(true)}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             title="Editar cliente"
@@ -259,7 +277,12 @@ export default function ClientDetailPage() {
           </div>
           <div className="text-center">
             <div className="text-2xl font-medium">
-              {client.stats.lastAppointment ? new Date(client.stats.lastAppointment).toLocaleDateString('es-AR', { month: 'short', day: 'numeric' }) : '-'}
+              {client.stats.lastAppointment
+                ? new Date(client.stats.lastAppointment).toLocaleDateString('es-AR', {
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                : '-'}
             </div>
             <div className="text-xs text-black/40">Último turno</div>
           </div>
@@ -268,13 +291,13 @@ export default function ClientDetailPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 mb-4">
-        {(['upcoming', 'history', 'cancelled'] as const).map(tab => (
+        {(['upcoming', 'history', 'cancelled'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              activeTab === tab 
-                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+              activeTab === tab
+                ? 'btn-primary py-2 px-4 text-sm min-h-0'
                 : 'bg-white/20 text-[rgba(15,15,20,0.55)] hover:bg-white/35 border border-[rgba(15,15,20,0.08)]'
             }`}
           >
@@ -283,7 +306,7 @@ export default function ClientDetailPage() {
             {tab === 'cancelled' && `Cancelados (${client.cancelled.length})`}
           </button>
         ))}
-        <button 
+        <button
           onClick={() => setShowNewAppt(true)}
           className="btn-primary ml-auto px-4 py-2 text-sm min-h-0 flex items-center gap-2"
         >
@@ -302,8 +325,8 @@ export default function ClientDetailPage() {
           appointments.map((appt, idx) => {
             const config = statusConfig[appt.status ?? 'pending'] || statusConfig.pending;
             return (
-              <div 
-                key={appt.id} 
+              <div
+                key={appt.id}
                 className={`p-4 flex items-center gap-4 ${idx > 0 ? 'border-t border-black/5' : ''}`}
               >
                 <div className={`w-2 h-2 rounded-full ${config.dot}`} />
@@ -324,16 +347,16 @@ export default function ClientDetailPage() {
       {/* Edit Modal */}
       {showEdit && (
         <>
-          <div 
-            className="fixed inset-0 bg-black/30 z-[60]" 
-            onClick={() => setShowEdit(false)} 
+          <div
+            className="fixed inset-0 bg-black/30 z-[60]"
+            onClick={() => setShowEdit(false)}
             aria-hidden="true"
           />
           <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] p-6 border border-white/60">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium">Editar Cliente</h3>
-              <button 
-                onClick={() => setShowEdit(false)} 
+              <button
+                onClick={() => setShowEdit(false)}
                 className="p-1 hover:bg-gray-100 rounded"
                 title="Cerrar"
                 aria-label="Cerrar"
@@ -344,56 +367,66 @@ export default function ClientDetailPage() {
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label htmlFor="edit-name" className="text-xs text-black/60 block mb-1">Nombre</label>
-                  <input 
+                  <label htmlFor="edit-name" className="text-xs text-black/60 block mb-1">
+                    Nombre
+                  </label>
+                  <input
                     id="edit-name"
-                    type="text" 
+                    type="text"
                     value={editForm.name}
-                    onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
+                    onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
                     className="w-full p-2 border rounded-lg"
                     placeholder="Nombre"
                   />
                 </div>
                 <div>
-                  <label htmlFor="edit-surname" className="text-xs text-black/60 block mb-1">Apellido</label>
-                  <input 
+                  <label htmlFor="edit-surname" className="text-xs text-black/60 block mb-1">
+                    Apellido
+                  </label>
+                  <input
                     id="edit-surname"
-                    type="text" 
+                    type="text"
                     value={editForm.surname}
-                    onChange={e => setEditForm(f => ({ ...f, surname: e.target.value }))}
+                    onChange={(e) => setEditForm((f) => ({ ...f, surname: e.target.value }))}
                     className="w-full p-2 border rounded-lg"
                     placeholder="Apellido"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="edit-email" className="text-xs text-black/60 block mb-1">Email</label>
-                <input 
+                <label htmlFor="edit-email" className="text-xs text-black/60 block mb-1">
+                  Email
+                </label>
+                <input
                   id="edit-email"
-                  type="email" 
+                  type="email"
                   value={editForm.email}
-                  onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))}
+                  onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
                   className="w-full p-2 border rounded-lg"
                   placeholder="email@ejemplo.com"
                 />
               </div>
               <div>
-                <label htmlFor="edit-phone" className="text-xs text-black/60 block mb-1">Teléfono</label>
-                <input 
+                <label htmlFor="edit-phone" className="text-xs text-black/60 block mb-1">
+                  Teléfono
+                </label>
+                <input
                   id="edit-phone"
-                  type="tel" 
+                  type="tel"
                   value={editForm.phone}
-                  onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))}
+                  onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
                   className="w-full p-2 border rounded-lg"
                   placeholder="Teléfono"
                 />
               </div>
               <div>
-                <label htmlFor="edit-notes" className="text-xs text-black/60 block mb-1">Notas</label>
-                <textarea 
+                <label htmlFor="edit-notes" className="text-xs text-black/60 block mb-1">
+                  Notas
+                </label>
+                <textarea
                   id="edit-notes"
                   value={editForm.notes}
-                  onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))}
+                  onChange={(e) => setEditForm((f) => ({ ...f, notes: e.target.value }))}
                   className="w-full p-2 border rounded-lg"
                   rows={2}
                   placeholder="Notas internas..."
@@ -415,16 +448,16 @@ export default function ClientDetailPage() {
       {/* New Appointment Modal */}
       {showNewAppt && (
         <>
-          <div 
-            className="fixed inset-0 bg-black/30 z-[60]" 
-            onClick={() => setShowNewAppt(false)} 
+          <div
+            className="fixed inset-0 bg-black/30 z-[60]"
+            onClick={() => setShowNewAppt(false)}
             aria-hidden="true"
           />
           <div className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] p-6 border border-white/60">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-medium">Nuevo Turno</h3>
-              <button 
-                onClick={() => setShowNewAppt(false)} 
+              <button
+                onClick={() => setShowNewAppt(false)}
                 className="p-1 hover:bg-gray-100 rounded"
                 title="Cerrar"
                 aria-label="Cerrar"
@@ -436,28 +469,33 @@ export default function ClientDetailPage() {
               <Select
                 label="Servicio *"
                 value={apptForm.serviceId}
-                onChange={v => setApptForm(f => ({ ...f, serviceId: v }))}
-                options={services.map(s => ({ value: s.id, label: `${s.title} (${s.duration} min)` }))}
+                onChange={(v) => setApptForm((f) => ({ ...f, serviceId: v }))}
+                options={services.map((s) => ({
+                  value: s.id,
+                  label: `${s.title} (${s.duration} min)`,
+                }))}
               />
               <div className="grid grid-cols-2 gap-3">
                 <DatePicker
                   label="Fecha *"
                   value={apptForm.date}
-                  onChange={v => setApptForm(f => ({ ...f, date: v }))}
+                  onChange={(v) => setApptForm((f) => ({ ...f, date: v }))}
                   min={new Date().toISOString().split('T')[0]}
                 />
                 <TimePicker
                   label="Hora *"
                   value={apptForm.time}
-                  onChange={v => setApptForm(f => ({ ...f, time: v }))}
+                  onChange={(v) => setApptForm((f) => ({ ...f, time: v }))}
                 />
               </div>
               <div>
-                <label htmlFor="appt-notes" className="text-xs text-black/60 block mb-1">Notas</label>
-                <textarea 
+                <label htmlFor="appt-notes" className="text-xs text-black/60 block mb-1">
+                  Notas
+                </label>
+                <textarea
                   id="appt-notes"
                   value={apptForm.notes}
-                  onChange={e => setApptForm(f => ({ ...f, notes: e.target.value }))}
+                  onChange={(e) => setApptForm((f) => ({ ...f, notes: e.target.value }))}
                   className="w-full p-2 border rounded-lg"
                   rows={2}
                   placeholder="Notas para el turno..."

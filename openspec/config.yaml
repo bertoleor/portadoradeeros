@@ -2,7 +2,7 @@ schema: spec-driven
 
 context: |
   Tech stack: Next.js 16 (App Router) + React 19 + TypeScript 5 (strict), Tailwind CSS 4, shadcn/ui (Radix/base-ui).
-  Backend: Supabase (Postgres) via @supabase/ssr + supabase-js; EmailJS for email; web-push for notifications.
+  Backend: Supabase (Postgres) via @supabase/ssr + supabase-js; Resend (default) with SMTP fallback via EMAIL_PROVIDER for email; web-push for notifications.
   Architecture: App Router route groups, client/server components, path alias `@/*` -> `./src/*`, SQL migrations in `migrations/`.
   Testing: Vitest 3 (unit/smoke), strict_tdd disabled.
   Style: ESLint (next config), TypeScript strict, no formatter configured.
@@ -12,10 +12,10 @@ strict_tdd: false
 testing:
   strict_tdd: false
   test_runner: vitest
-  test_command: "npm run test"
-  coverage: "npm run test -- --coverage"
-  linter: "npx eslint"
-  type_checker: "npx tsc --noEmit"
+  test_command: 'npm run test'
+  coverage: 'npm run test -- --coverage'
+  linter: 'npx eslint'
+  type_checker: 'npx tsc --noEmit'
 
 rules:
   proposal:
@@ -31,10 +31,10 @@ rules:
   apply:
     - Follow existing code patterns
     - tdd: false
-    - test_command: ""
+    - test_command: ''
   verify:
-    test_command: "npm run test"
-    build_command: "npm run build"
+    test_command: 'npm run test'
+    build_command: 'npm run build'
     coverage_threshold: 0
   archive:
     - Warn before merging destructive deltas

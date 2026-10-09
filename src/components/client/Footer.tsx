@@ -75,7 +75,7 @@ export function Footer() {
             >
               portadora de eros
             </Link>
-            <p className="text-[11px] text-[rgba(15,15,20,0.45)] font-light leading-relaxed max-w-[200px] uppercase tracking-wider">
+            <p className="text-[11px] text-[rgba(15,15,20,0.65)] font-light leading-relaxed max-w-[200px] uppercase tracking-wider">
               Sabiduría ancestral para el camino del alma.
             </p>
           </div>
@@ -137,7 +137,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 flex items-center justify-center rounded-full text-[rgba(15,15,20,0.5)] hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30 border border-[rgba(255,255,255,0.3)] transition-all duration-300"
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] hover:bg-white/30 border border-[rgba(255,255,255,0.3)] transition-all duration-300"
                   aria-label={social.label}
                 >
                   <SocialIcon platform={social.platform} size={18} />
@@ -149,12 +149,12 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-6 md:pt-8 border-t border-[rgba(15,15,20,0.1)] flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-center md:text-left px-2">
-          <p className="text-xs text-[rgba(15,15,20,0.35)] font-light tracking-wide leading-relaxed flex flex-wrap justify-center md:justify-start">
+          <p className="text-sm text-[rgba(15,15,20,0.65)] font-light tracking-wide leading-relaxed flex flex-wrap justify-center md:justify-start">
             © {currentYear} Portadora de Eros. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-2">
             <span className="w-1 h-1 rounded-full bg-[rgba(15,15,20,0.15)]"></span>
-            <p className="text-[10px] text-[rgba(15,15,20,0.25)] font-medium tracking-[0.2em] uppercase">
+            <p className="text-[11px] text-[rgba(15,15,20,0.65)] font-medium tracking-[0.2em] uppercase">
               Buenos Aires, Argentina
             </p>
           </div>

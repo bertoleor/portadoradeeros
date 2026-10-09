@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import { AppError, ok, fail } from './error';
+import { AppError, fail, ok } from './error';
 
 describe('Result/AppError contract', () => {
   it('ok() returns ok:true with the payload', () => {

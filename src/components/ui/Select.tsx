@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Check } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Check, ChevronDown } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 interface SelectOption {
   readonly value: string;
   readonly label: string;
@@ -25,12 +25,12 @@ export function Select({
   placeholder = 'Seleccionar...',
   label,
   id,
-  className = ''
+  className = '',
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find(opt => opt.value === value);
+  const selectedOption = options.find((opt) => opt.value === value);
 
   // Close on outside click
   useEffect(() => {
@@ -46,14 +46,14 @@ export function Select({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {label && (
-        <label 
-          htmlFor={id} 
+        <label
+          htmlFor={id}
           className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/35 mb-2"
         >
           {label}
         </label>
       )}
-      
+
       <button
         type="button"
         id={id}
@@ -67,11 +67,9 @@ export function Select({
           ${selectedOption ? 'text-black' : 'text-black/40'}
         `}
       >
-        <span className="truncate">
-          {selectedOption?.label || placeholder}
-        </span>
-        <ChevronDown 
-          size={16} 
+        <span className="truncate">{selectedOption?.label || placeholder}</span>
+        <ChevronDown
+          size={16}
           className={`text-black/30 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
         />
       </button>
@@ -105,12 +103,8 @@ export function Select({
                   without-ring
                 "
               >
-                <span className={option.value === value ? 'font-medium' : ''}>
-                  {option.label}
-                </span>
-                {option.value === value && (
-                  <Check size={14} className="text-black" />
-                )}
+                <span className={option.value === value ? 'font-medium' : ''}>{option.label}</span>
+                {option.value === value && <Check size={14} className="text-black" />}
               </button>
             ))}
           </motion.div>

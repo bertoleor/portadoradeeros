@@ -1,12 +1,12 @@
 ---
 name: supabase-migrations
 description: >
-  Supabase migration authoring and review for PAEONIA.
-  Trigger: When creating, editing, or reviewing Supabase migrations - schema, RLS, seeds.
+  Supabase migration authoring and review for PAEONIA. Trigger: When creating, editing, or reviewing
+  Supabase migrations - schema, RLS, seeds.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
 ---
 
 ## Migration Decision Tree
@@ -122,7 +122,8 @@ npx tsc --noEmit        # Types still align after replay
 
 ## Never Edit Applied Migrations (REQUIRED)
 
-Once a migration has run anywhere shared (preview, staging, prod), it is immutable. Fix forward with a new migration. Editing history breaks every environment that already applied it.
+Once a migration has run anywhere shared (preview, staging, prod), it is immutable. Fix forward with
+a new migration. Editing history breaks every environment that already applied it.
 
 ## Keywords
 

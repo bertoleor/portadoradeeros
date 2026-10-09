@@ -13,6 +13,12 @@
 # testing
 /coverage
 
+# playwright e2e
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
 # next.js
 /.next/
 /out/
@@ -43,3 +49,11 @@ next-env.d.ts
 .changeset/
 .husky/
 .eslintcache
+
+# RDD receipts (local-only, no se commitean)
+.rdd/
+
+# scan scratch (EROS-D5: salidas de trivy/audit viven en reports/, el scratch no se commitea)
+/tmp/
+
+!.env.example

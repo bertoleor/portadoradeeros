@@ -21,7 +21,11 @@ export default function BienvenidaPage() {
     // navegar al dashboard
     const t3 = setTimeout(() => router.replace('/admin'), SPLASH_MS);
 
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
   }, [router]);
 
   return (
@@ -34,7 +38,6 @@ export default function BienvenidaPage() {
       <div className="absolute inset-0 bg-white/40 backdrop-blur-sm" />
 
       <div className="relative z-10 flex flex-col items-center gap-8 text-center px-8">
-
         {/* Logo / nombre */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -85,7 +88,6 @@ export default function BienvenidaPage() {
             />
           ))}
         </motion.div>
-
       </div>
     </motion.div>
   );

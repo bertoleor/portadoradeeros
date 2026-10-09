@@ -17,9 +17,24 @@ import sanitizeHtml from 'sanitize-html';
 export function sanitizeBioContent(html: string): string {
   return sanitizeHtml(html, {
     allowedTags: [
-      'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's',
-      'ul', 'ol', 'li', 'h2', 'h3', 'h4', 'blockquote',
-      'span', 'div', 'a',
+      'p',
+      'br',
+      'strong',
+      'b',
+      'em',
+      'i',
+      'u',
+      's',
+      'ul',
+      'ol',
+      'li',
+      'h2',
+      'h3',
+      'h4',
+      'blockquote',
+      'span',
+      'div',
+      'a',
     ],
     allowedAttributes: {
       a: ['href', 'title', 'target', 'rel'],

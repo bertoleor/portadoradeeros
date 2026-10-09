@@ -21,13 +21,13 @@ export function Hero() {
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center gap-2"
         >
-          <span className="inline-block text-[rgba(15,15,20,0.5)] font-medium text-xs uppercase tracking-[0.2em]">
+          <span className="inline-block text-[rgba(15,15,20,0.65)] font-medium text-xs uppercase tracking-[0.2em]">
             Tarot y Lectura de Cartas
           </span>
 
           <h1 className="text-3xl sm:text-6xl md:text-7xl text-[rgba(15,15,20,0.85)] font-light tracking-tight leading-[1.1]">
             <span className="block">portadora</span>
-            <span className="block text-[rgba(15,15,20,0.45)]">de eros</span>
+            <span className="block text-[rgba(15,15,20,0.65)]">de eros</span>
           </h1>
         </motion.div>
 
@@ -62,7 +62,7 @@ export function Hero() {
         transition={{ delay: 0.8, duration: 0.5 }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-0"
       >
-        <span className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.4)]">
+        <span className="text-[10px] uppercase tracking-widest text-[rgba(15,15,20,0.65)]">
           Scroll
         </span>
         <div className="w-px h-6 bg-[rgba(15,15,20,0.2)]" />
@@ -84,7 +84,7 @@ export function AboutPreview() {
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-xs uppercase tracking-[0.3em] text-[rgba(15,15,20,0.5)] font-medium block mb-3">
+          <span className="text-xs uppercase tracking-[0.3em] text-[rgba(15,15,20,0.65)] font-medium block mb-3">
             Sobre Mí
           </span>
           <h2 className="text-2xl sm:text-4xl font-light tracking-tight mb-5 md:mb-6 text-[rgba(15,15,20,0.85)]">

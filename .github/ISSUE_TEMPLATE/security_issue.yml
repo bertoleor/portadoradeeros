@@ -1,13 +1,13 @@
 name: Security Issue
 description: Report a security vulnerability (use private advisory instead if possible)
-title: "[Security]: "
-labels: ["security", "triage"]
+title: '[Security]: '
+labels: ['security', 'triage']
 body:
   - type: markdown
     attributes:
       value: |
         ⚠️ **For critical security issues, please use GitHub Private Security Advisory instead of this form.**
-        
+
         See [SECURITY.md](../../SECURITY.md) for our security policy.
   - type: textarea
     id: description

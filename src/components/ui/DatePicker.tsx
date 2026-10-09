@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DatePickerProps {
   readonly value: string;
@@ -13,14 +13,7 @@ interface DatePickerProps {
   readonly className?: string;
 }
 
-export function DatePicker({
-  value,
-  onChange,
-  label,
-  id,
-  min,
-  className = ''
-}: DatePickerProps) {
+export function DatePicker({ value, onChange, label, id, min, className = '' }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(() => {
     const d = value ? new Date(value + 'T12:00:00') : new Date();
@@ -39,7 +32,8 @@ export function DatePicker({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const daysInMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const daysInMonth = (date: Date) =>
+    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = (date: Date) => new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
   const handlePrevMonth = () => {
@@ -58,7 +52,9 @@ export function DatePicker({
   };
 
   const isSelected = (day: number) => {
-    if (!value) return false;
+    if (!value) {
+      return false;
+    }
     const d = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     return d.toISOString().split('T')[0] === value;
   };
@@ -70,14 +66,26 @@ export function DatePicker({
   };
 
   const isDisabled = (day: number) => {
-    if (!min) return false;
+    if (!min) {
+      return false;
+    }
     const d = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     return d.toISOString().split('T')[0] < min;
   };
 
   const monthNames = [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
   ];
 
   const dayLabels = ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'];
@@ -92,14 +100,14 @@ export function DatePicker({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       {label && (
-        <label 
-          htmlFor={id} 
+        <label
+          htmlFor={id}
           className="block text-[10px] font-bold uppercase tracking-[0.2em] text-black/35 mb-2"
         >
           {label}
         </label>
       )}
-      
+
       <button
         type="button"
         id={id}
@@ -115,10 +123,16 @@ export function DatePicker({
       >
         <span className="flex items-center gap-2">
           <CalendarIcon size={16} className="text-black/30" />
-          {value ? new Date(value + 'T12:00:00').toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Seleccionar fecha...'}
+          {value
+            ? new Date(value + 'T12:00:00').toLocaleDateString('es-AR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
+            : 'Seleccionar fecha...'}
         </span>
-        <ChevronRight 
-          size={16} 
+        <ChevronRight
+          size={16}
           className={`text-black/30 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}`}
         />
       </button>
@@ -144,8 +158,8 @@ export function DatePicker({
               <div>
                 <fieldset className="grid grid-cols-5 sm:grid-cols-10 gap-3">
                   <legend className="sr-only">Seleccionar icono</legend>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={handlePrevMonth}
                     aria-label="Mes anterior"
                     title="Mes anterior"
@@ -153,8 +167,8 @@ export function DatePicker({
                   >
                     <ChevronLeft size={16} />
                   </button>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={handleNextMonth}
                     aria-label="Mes siguiente"
                     title="Mes siguiente"
@@ -168,13 +182,18 @@ export function DatePicker({
 
             {/* Calendar Grid */}
             <div className="grid grid-cols-7 gap-1">
-              {dayLabels.map(label => (
-                <div key={label} className="text-[10px] font-bold text-black/20 text-center py-1 uppercase">
+              {dayLabels.map((label) => (
+                <div
+                  key={label}
+                  className="text-[10px] font-bold text-black/20 text-center py-1 uppercase"
+                >
                   {label}
                 </div>
               ))}
               {calendarDays.map((day, i) => {
-                const dayId = day ? `day-${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${day}` : `empty-${i}`;
+                const dayId = day
+                  ? `day-${currentMonth.getFullYear()}-${currentMonth.getMonth()}-${day}`
+                  : `empty-${i}`;
                 const disabled = !day || isDisabled(day);
                 const selected = Boolean(day && isSelected(day));
                 const today = Boolean(day && isToday(day));

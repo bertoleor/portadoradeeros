@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 
@@ -12,7 +12,13 @@ interface Props {
   readonly services: Service[];
 }
 
-function ServiceMobileCard({ service, index }: { readonly service: Service; readonly index: number }) {
+function ServiceMobileCard({
+  service,
+  index,
+}: {
+  readonly service: Service;
+  readonly index: number;
+}) {
   return (
     <Link
       href={`/servicios/${service.slug}`}
@@ -64,16 +70,11 @@ export function ServicesMobileCarousel({ services }: Props) {
 
   return (
     <div className="px-6 overflow-hidden">
-      <div
-        ref={trackRef}
-        className="relative"
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-      >
+      <div ref={trackRef} className="relative" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <motion.div
           className="flex"
           animate={{ x: `calc(-${active * 100}% - ${active * 12}px)` }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
+          transition={{ duration: 0.4, ease: 'easeInOut' }}
           style={{ gap: '12px' } as React.CSSProperties}
         >
           {services.map((s, i) => (

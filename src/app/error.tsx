@@ -30,13 +30,13 @@ export default function Error({
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-6 md:px-10">
       <div className="max-w-md mx-auto text-center py-16">
-        <span className="text-xs uppercase tracking-[0.3em] text-black/40 font-medium block mb-4">
+        <span className="text-xs uppercase tracking-[0.3em] text-black/60 font-medium block mb-4">
           Algo salió mal
         </span>
         <h1 className="text-3xl sm:text-4xl font-light tracking-tight text-black mb-6">
           Ocurrió un error inesperado
         </h1>
-        <p className="text-base text-black/50 leading-relaxed font-light mb-10">
+        <p className="text-base text-black/60 leading-relaxed font-light mb-10">
           No fue tu culpa. Podés intentar de nuevo o volver al inicio.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -47,10 +47,7 @@ export default function Error({
           >
             Reintentar
           </button>
-          <Link
-            href="/"
-            className={buttonVariants({ variant: 'outline', size: 'lg' })}
-          >
+          <Link href="/" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
             Volver al inicio
           </Link>
         </div>

@@ -31,8 +31,11 @@ interface ServiceCardProps {
 
 function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: ServiceCardProps) {
   const handleClick = () => {
-    if (isActive) onNavigate();
-    else onClick();
+    if (isActive) {
+      onNavigate();
+    } else {
+      onClick();
+    }
   };
 
   return (
@@ -40,19 +43,25 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
       type="button"
       onClick={handleClick}
       onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') handleClick();
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick();
+        }
       }}
       className={cn(
         'group relative flex flex-col md:flex-row h-auto min-h-[340px] md:min-h-[380px] md:h-[380px]',
         'rounded-[32px] border border-[rgba(255,255,255,0.3)]',
-        'glass transition-all duration-500 overflow-hidden outline-none w-full',
+        'glass transition-all duration-500 overflow-hidden w-full',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(15,15,20,0.55)] focus-visible:ring-offset-2',
         isActive
           ? 'bg-white/45 shadow-[0_20px_50px_rgba(0,0,0,0.08)] cursor-pointer'
           : 'bg-white/20 cursor-pointer backdrop-blur-sm opacity-70 hover:opacity-85'
       )}
     >
       {/* Número */}
-      <span className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-[rgba(15,15,20,0.15)] select-none">
+      <span
+        aria-hidden="true"
+        className="absolute top-8 right-8 text-[11px] font-mono tracking-[0.3em] text-[rgba(15,15,20,0.9)] select-none"
+      >
         {String(displayIndex + 1).padStart(2, '0')}
       </span>
 
@@ -77,7 +86,7 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
         <p
           className={cn(
             'text-base leading-relaxed font-light transition-colors duration-500 flex-1 line-clamp-2 md:line-clamp-4',
-            isActive ? 'text-[rgba(15,15,20,0.6)]' : 'text-[rgba(15,15,20,0.5)]'
+            isActive ? 'text-[rgba(15,15,20,0.65)]' : 'text-[rgba(15,15,20,0.6)]'
           )}
         >
           {service.shortDescription}
@@ -88,7 +97,7 @@ function ServiceCard({ service, displayIndex, isActive, onNavigate, onClick }: S
             <span
               className={cn(
                 'text-[10px] uppercase tracking-[0.2em] font-medium transition-colors duration-500',
-                isActive ? 'text-[rgba(15,15,20,0.4)]' : 'text-[rgba(15,15,20,0.3)]'
+                isActive ? 'text-[rgba(15,15,20,0.65)]' : 'text-[rgba(15,15,20,0.6)]'
               )}
             >
               Duración
@@ -166,7 +175,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   // ── Medir ancho de card con ResizeObserver (exacto, sin cálculos en %)
   useLayoutEffect(() => {
     const wrapper = wrapperRef.current;
-    if (!wrapper) return;
+    if (!wrapper) {
+      return;
+    }
 
     const measure = () => {
       const isMobile = typeof globalThis !== 'undefined' && globalThis.innerWidth < 768;
@@ -191,7 +202,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const getOffset = useCallback((idx: number) => {
     const cw = cardWidthRef.current;
     const wrapper = wrapperRef.current;
-    if (!wrapper || cw === 0) return 0;
+    if (!wrapper || cw === 0) {
+      return 0;
+    }
     const viewCenter = wrapper.clientWidth / 2;
     const cardCenter = idx * (cw + GAP_PX) + cw / 2;
     return viewCenter - cardCenter;
@@ -201,7 +214,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const applyTransform = useCallback(
     (idx: number, withTransition: boolean) => {
       const track = trackRef.current;
-      if (!track) return;
+      if (!track) {
+        return;
+      }
       track.style.transition = withTransition
         ? `transform ${DURATION_MS}ms cubic-bezier(0.32, 0.72, 0, 1)`
         : 'none';
@@ -212,7 +227,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Navegar a un índice (con animación)
   const goTo = useCallback((nextIdx: number) => {
-    if (isJumping.current) return;
+    if (isJumping.current) {
+      return;
+    }
     setRealIndex(nextIdx);
     setAnimated(true);
   }, []);
@@ -227,7 +244,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Teleport silencioso al terminar la transición (onTransitionEnd)
   const handleTransitionEnd = useCallback(() => {
-    if (!animated) return;
+    if (!animated) {
+      return;
+    }
     const normalized = ((realIndex % total) + total) % total;
     const middle = normalized + total; // equivalente en la copia del medio
     if (realIndex !== middle) {
@@ -244,7 +263,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
   // ── Autoplay
   const startTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
     timerRef.current = setInterval(() => {
       if (!isPaused.current && !isJumping.current) {
         goTo(realIndex + 1);
@@ -257,7 +278,9 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   useEffect(() => {
     startTimer();
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
   }, [startTimer]);
 
@@ -274,21 +297,28 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
   const onTouchMove = (e: React.TouchEvent) => {
     const dx = Math.abs(touchStartX.current - e.touches[0].clientX);
     const dy = Math.abs(touchStartY.current - e.touches[0].clientY);
-    if (dx > dy && e.cancelable) e.preventDefault();
+    if (dx > dy && e.cancelable) {
+      e.preventDefault();
+    }
   };
 
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = touchStartX.current - e.changedTouches[0].clientX;
     const dy = touchStartY.current - e.changedTouches[0].clientY;
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-      if (dx > 0) next();
-      else prev();
+      if (dx > 0) {
+        next();
+      } else {
+        prev();
+      }
     }
     isPaused.current = false;
   };
 
   // ── Guardia: sin datos → skeleton
-  if (total === 0) return <CarouselSkeleton />;
+  if (total === 0) {
+    return <CarouselSkeleton />;
+  }
 
   // ── Índice real normalizado (para dots y ServiceCard.displayIndex)
   const currentActual = ((realIndex % total) + total) % total;
@@ -307,12 +337,12 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
       {/* Header */}
       <div className="px-4 md:px-8 mb-8 md:mb-16 flex items-end justify-between gap-8 max-w-[1200px] mx-auto">
         <div className="max-w-xl">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.35)] font-semibold block mb-3 md:mb-4">
+          <span className="text-[11px] uppercase tracking-[0.4em] text-[rgba(15,15,20,0.65)] font-semibold block mb-3 md:mb-4">
             Servicios Exclusivos
           </span>
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-light tracking-tight text-[rgba(15,15,20,0.85)] leading-tight">
             Guía y Claridad <br />
-            <span className="text-[rgba(15,15,20,0.4)]">en tu camino.</span>
+            <span className="text-[rgba(15,15,20,0.65)]">en tu camino.</span>
           </h2>
         </div>
 
@@ -398,7 +428,7 @@ export function ServiceCarousel({ initialServices }: ServiceCarouselProps) {
 
         <Link
           href="/servicios"
-          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-[rgba(15,15,20,0.5)] hover:text-[rgba(15,15,20,0.85)] transition-all duration-300"
+          className="group flex items-center gap-3 text-xs uppercase tracking-[0.3em] font-medium text-[rgba(15,15,20,0.65)] hover:text-[rgba(15,15,20,0.85)] transition-all duration-300"
         >
           Ver todos los servicios
           <div className="w-8 h-[1px] bg-[rgba(15,15,20,0.15)] group-hover:w-12 group-hover:bg-[rgba(15,15,20,0.8)] transition-all duration-300" />

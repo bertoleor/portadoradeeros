@@ -1,13 +1,18 @@
 ---
 name: tailwind-design-system
-description: Build scalable design systems with Tailwind CSS v4, design tokens, component libraries, and responsive patterns. Use when creating component libraries, implementing design systems, or standardizing UI patterns.
+description:
+  Build scalable design systems with Tailwind CSS v4, design tokens, component libraries, and
+  responsive patterns. Use when creating component libraries, implementing design systems, or
+  standardizing UI patterns.
 ---
 
 # Tailwind Design System (v4)
 
-Build production-ready design systems with Tailwind CSS v4, including CSS-first configuration, design tokens, component variants, responsive patterns, and accessibility.
+Build production-ready design systems with Tailwind CSS v4, including CSS-first configuration,
+design tokens, component variants, responsive patterns, and accessibility.
 
-> **Note**: This skill targets Tailwind CSS v4 (2024+). For v3 projects, refer to the [upgrade guide](https://tailwindcss.com/docs/upgrade-guide).
+> **Note**: This skill targets Tailwind CSS v4 (2024+). For v3 projects, refer to the
+> [upgrade guide](https://tailwindcss.com/docs/upgrade-guide).
 
 ## When to Use This Skill
 
@@ -32,7 +37,7 @@ Build production-ready design systems with Tailwind CSS v4, including CSS-first 
 
 ```css
 /* app.css - Tailwind v4 CSS-first configuration */
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Define your theme with @theme */
 @theme {
@@ -182,5 +187,5 @@ Base styles → Variants → Sizes → States → Overrides
 
 ## Detailed patterns and worked examples
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
-
+Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation
+tier above is insufficient.

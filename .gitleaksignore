@@ -1,0 +1,11 @@
+# .gitleaksignore — hallazgos revisados y aceptados (GATE-SEC)
+# Formato: <fingerprint> commit:file:rule:line
+# Se agrega SOLO tras revisión por rol 13-security (dueño) confirmando false positive.
+#
+# commit 89716c0 (.env.example:17) — RESEND_API_KEY dummy de template:
+#   - Valor PLACEHOLDER de ejemplos, no una clave real (una key de Resend es
+#     "re_" + ~40 chars aleatorios; el dummy "re_" + 123456789 es el de los docs).
+#   - Archivo .env.example ya NO existe en el árbol actual (solo en el commit de
+#     import histórico 2026-09-13; se eliminó después). El valor nunca fue secreto.
+#   - No es exploitable: placeholder, no requiere rotación.
+89716c023ce62aca472ef1a582f2743355a3432e:.env.example:generic-api-key:17

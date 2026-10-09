@@ -1,6 +1,6 @@
 'use server';
 
-import { AppError, ok, fail, type Result } from '@/lib/api/error';
+import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
 import { createClient } from '@/lib/supabase/server';
 
@@ -44,9 +44,9 @@ export async function uploadImage(formData: FormData): Promise<Result<{ url: str
   }
 
   // Generate the public URL
-  const { data: { publicUrl } } = supabase.storage
-    .from('public-images')
-    .getPublicUrl(filePath);
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('public-images').getPublicUrl(filePath);
 
   return ok({ url: publicUrl });
 }

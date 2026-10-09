@@ -30,7 +30,14 @@ export default function GlobalError({
         }}
       >
         <div style={{ maxWidth: 420, textAlign: 'center', padding: 24 }}>
-          <p style={{ fontSize: 12, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)' }}>
+          <p
+            style={{
+              fontSize: 12,
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              color: 'rgba(0,0,0,0.4)',
+            }}
+          >
             Algo salió mal
           </p>
           <h1 style={{ fontSize: 32, fontWeight: 300 }}>Ocurrió un error inesperado</h1>

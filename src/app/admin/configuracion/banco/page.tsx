@@ -1,7 +1,7 @@
 'use client';
 
 import { Save } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button, Input, Label } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
@@ -68,12 +68,12 @@ export default function BankConfigPage() {
     // Validación
     const validationErrors = validateBankData();
     if (validationErrors.length > 0) {
-      validationErrors.forEach(err => error(err));
+      validationErrors.forEach((err) => error(err));
       return;
     }
 
     setIsSaving(true);
-    
+
     try {
       // Server action
       const result = await updateAdminSettings({
@@ -113,7 +113,7 @@ export default function BankConfigPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-1.5">
           <Label htmlFor="bankOwner">Titular de la cuenta</Label>
-          <Input 
+          <Input
             id="bankOwner"
             value={formData.bankOwner}
             onChange={(e) => handleChange('bankOwner', e.target.value)}
@@ -125,7 +125,7 @@ export default function BankConfigPage() {
 
         <div className="space-y-1.5">
           <Label htmlFor="bankName">Nombre del Banco o Entidad</Label>
-          <Input 
+          <Input
             id="bankName"
             value={formData.bankName}
             onChange={(e) => handleChange('bankName', e.target.value)}
@@ -137,7 +137,7 @@ export default function BankConfigPage() {
 
         <div className="space-y-1.5">
           <Label htmlFor="cbu">CBU o CVU</Label>
-          <Input 
+          <Input
             id="cbu"
             value={formData.cbu}
             onChange={(e) => handleChange('cbu', e.target.value)}
@@ -145,14 +145,12 @@ export default function BankConfigPage() {
             required
             className="bg-gray-50/50"
           />
-          <p className="text-[10px] text-black/35 mt-1 ml-1">
-            22 dígitos numéricos sin espacios
-          </p>
+          <p className="text-[10px] text-black/35 mt-1 ml-1">22 dígitos numéricos sin espacios</p>
         </div>
 
         <div className="space-y-1.5">
           <Label htmlFor="alias">Alias</Label>
-          <Input 
+          <Input
             id="alias"
             value={formData.alias}
             onChange={(e) => handleChange('alias', e.target.value)}
@@ -166,7 +164,11 @@ export default function BankConfigPage() {
         </div>
 
         <div className="pt-4 flex justify-end">
-          <Button type="submit" disabled={isSaving} className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 text-sm">
+          <Button
+            type="submit"
+            disabled={isSaving}
+            className="w-full sm:w-auto gap-2 rounded-xl h-10 px-6 text-sm"
+          >
             <Save size={18} />
             {isSaving ? 'Guardando...' : 'Guardar Cambios'}
           </Button>

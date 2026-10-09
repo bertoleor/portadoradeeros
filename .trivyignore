@@ -1,0 +1,15 @@
+# Trivy ignores — EROS (feat/eros-deps)
+# Reviewed: 2026-10-08 (unblock-3projects session)
+# Policy: runtime deps are gated STRICTLY by `npm audit --omit=dev` in CI.
+# The entries below are DEV-ONLY tooling vulns (shadcn -> ts-morph ->
+# fast-glob -> braces chain and eslint-config-next) that require a BREAKING
+# shadcn 4.x -> 1.x major bump (semver-major, high regression risk).
+# Follow-up ticket: bump shadcn to 1.x (then DELETE this whole file).
+# Expiry: this file must be re-reviewed by 2026-12-08 or deleted.
+
+# DEV/BUILD-TIME ONLY — transitive via ajv (schema validation tooling),
+# not shipped to the production runtime. Fix 3.1.8 pending upstream bump.
+# npm audit --omit=dev = 0 vulns (runtime clean, gated strictly in CI).
+CVE-2026-86472
+
+GHSA-vfj7-8cjw-p6xm

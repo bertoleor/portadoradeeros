@@ -6,6 +6,12 @@ import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
 import {
+  mergeOccupiedLabels,
+  nextAvailableArtSlots,
+  slotsOccupiedByAppointment,
+  toOccupiedAppointments,
+} from '@/lib/booking-slots';
+import {
   sendAppointmentCancellation,
   sendAppointmentConfirmation,
   sendAppointmentConfirmed,
@@ -20,11 +26,39 @@ import {
 import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 import { createServiceClient } from '@/lib/supabase/service';
+import { artDayBounds, zonedDateStr, zonedWallClockMs } from '@/lib/timezone';
 import { headers } from 'next/headers';
 
 import type { Database } from '@/types/database';
 
 type AppointmentRow = Database['public']['Tables']['appointments']['Row'];
+
+/**
+ * Default slot duration (minutes) assumed for an appointment when the linked
+ * service has no duration configured. Mirrors the fallback already used by
+ * `getBookedSlots` and `checkSlotAvailability` for the admin path.
+ */
+const DEFAULT_SERVICE_DURATION_MIN = 60;
+
+/**
+ * Resolve the duration of the service being booked. Server actions cannot
+ * pass the admin-only `services` read down to the client, and the public
+ * booking form already knows the duration it rendered the calendar with, so
+ * the form passes `serviceDurationMinutes` alongside the payload. When
+ * absent (older callers / tests) we fall back to the standard 60-minute
+ * slot — the same default the availability helpers use — so the overlap
+ * window is never shorter than the slot the calendar promised.
+ */
+function resolveServiceDuration(payload: {
+  serviceDurationMinutes?: number;
+  serviceName: string;
+}): number {
+  const raw = payload.serviceDurationMinutes;
+  if (typeof raw === 'number' && Number.isFinite(raw) && raw > 0) {
+    return Math.ceil(raw);
+  }
+  return DEFAULT_SERVICE_DURATION_MIN;
+}
 
 /**
  * Normalize a phone number to a consistent format for dedupe and lookup:
@@ -96,6 +130,7 @@ interface AppointmentPayload {
   appointmentDate: Date;
   notes?: string;
   serviceName: string; // for email only
+  serviceDurationMinutes?: number; // overlap window (defaults to 60)
   [HONEYPOT_FIELD]?: string;
 }
 
@@ -135,6 +170,11 @@ export async function createAppointment(
   // HONEYPOT — bots that populate the hidden field must not trigger any email
   // or DB write. We still return a successful-looking result so the caller's
   // UI (and any bot) can't tell it was caught.
+  // HISTÓRICO: the key here is HONEYPOT_FIELD (the fixed string 'company_website',
+  // see src/lib/spam-protection.ts), never derived from input. An attacker
+  // controls the VALUE at that key, not the key name, so there is no path to
+  // reach a prototype shadow such as __proto__/constructor — no injection.
+  // eslint-disable-next-line security/detect-object-injection
   if (isHoneypotTriggered(payload[HONEYPOT_FIELD])) {
     return ok({
       id: 'honeypot',
@@ -154,6 +194,24 @@ export async function createAppointment(
   if (rate.limited) {
     return fail(
       new AppError('VALIDATION', 'Demasiadas solicitudes. Intenta nuevamente en unos minutos.')
+    );
+  }
+
+  // OVERLAP GUARD (ORN-173) — the public path must honor the same
+  // anti-overbooking contract as the admin path: a proposed slot that
+  // collides with any existing non-cancelled appointment is rejected
+  // BEFORE any side effect (DB write, emails, push). `checkSlotAvailability`
+  // reads non-PII columns through the service-role client, filters cancelled
+  // rows server-side and FAILS CLOSED on query errors, so a broken
+  // availability read can never admit a double booking.
+  const durationMin = resolveServiceDuration(payload);
+  const availability = await checkSlotAvailability(payload.appointmentDate, durationMin);
+  if (!availability.available) {
+    return fail(
+      new AppError(
+        'VALIDATION',
+        'Ese horario acaba de ocuparse. Por favor elegí otro horario disponible.'
+      )
     );
   }
 
@@ -274,36 +332,30 @@ export async function getBookedSlots(dateStr: string, durationMinutes = 60) {
   // Privileged (service-role) read: RLS now denies anon SELECT on
   // `appointments` (Slice 1), so the public booking form must source
   // availability from a server-only path that selects ONLY non-PII columns.
+  //
+  // EROS-D1 (ADR-0002): the query window is the ART CALENDAR DAY of
+  // `dateStr`, not the UTC day — a 22:00 ART booking (01:00Z next UTC
+  // date) belongs to the ART day. Slot labels are ART wall-clock, the
+  // same zone the picker compares them in.
+  const { startMs, endExclusiveMs } = artDayBounds(dateStr);
   const { data, error } = await supabase
     .from('appointments')
     .select('appointment_date, service_id, services:service_id(duration)')
-    .filter('appointment_date', 'gte', `${dateStr}T00:00:00Z`)
-    .filter('appointment_date', 'lte', `${dateStr}T23:59:59Z`)
+    .filter('appointment_date', 'gte', new Date(startMs).toISOString())
+    .filter('appointment_date', 'lt', new Date(endExclusiveMs).toISOString())
     .neq('status', 'cancelled');
 
   if (error) {
     throw new AppError('DB', `Failed to fetch booked slots: ${error.message}`);
   }
 
-  // Generate all time slots that would be occupied based on duration
-  const occupiedSlots: string[] = [];
-
-  for (const app of data ?? []) {
-    const startDate = new Date(app.appointment_date);
-    const duration = (app.services as { duration?: number } | null)?.duration || durationMinutes;
-
-    // Generate slots every 15 minutes for the duration of the appointment
-    const slotsCount = Math.ceil(duration / 15);
-    for (let i = 0; i < slotsCount; i++) {
-      const slotTime = new Date(startDate.getTime() + i * 15 * 60 * 1000);
-      const timeStr = `${slotTime.getUTCHours().toString().padStart(2, '0')}:${slotTime.getUTCMinutes().toString().padStart(2, '0')}`;
-      if (!occupiedSlots.includes(timeStr)) {
-        occupiedSlots.push(timeStr);
-      }
-    }
-  }
-
-  return occupiedSlots.sort((a, b) => a.localeCompare(b));
+  // Generate all time slots that would be occupied based on duration —
+  // ART wall-clock labels via the canonical helpers (booking-slots.ts).
+  return mergeOccupiedLabels(
+    toOccupiedAppointments(data ?? [], durationMinutes).map((apt) =>
+      slotsOccupiedByAppointment(apt.appointmentDate, apt.durationMinutes)
+    )
+  );
 }
 
 export async function confirmAppointment(appointmentId: string): Promise<Result<{ id: string }>> {
@@ -768,14 +820,15 @@ export async function getNextAvailableSlots(
   count = 5
 ): Promise<AvailableSlot[]> {
   const availableSlots: AvailableSlot[] = [];
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const slotDurationMs = durationMinutes * 60000;
+  const nowMs = Date.now();
 
-  // Single 30-day window (no per-day queries → no N+1, P2/P5).
-  const windowEnd = new Date(today);
-  windowEnd.setDate(windowEnd.getDate() + 30);
-  const windowEndDateStr = windowEnd.toISOString().split('T')[0];
+  // EROS-D1 (ADR-0002): window bounds and all labels are ART canonical.
+  // The 30-day walk starts at the ART "today" of now, not the server's
+  // local midnight — on a UTC server the old code produced date strings
+  // 21:00 ART "yesterday" and shifted every label by the TZ offset.
+  const nowDateStr = zonedDateStr(nowMs);
+  const { startMs: windowStartMs, endExclusiveMs: windowEndExclMs } = artDayBounds(nowDateStr);
+  const windowEndDateStr = zonedDateStr(windowEndExclMs + 29 * 24 * 60 * 60 * 1000);
 
   // 1. Appointments for the whole window — ONE range query on the indexed
   //    `appointment_date` column, SELECTing only non-PII columns (Slice 1
@@ -784,8 +837,8 @@ export async function getNextAvailableSlots(
   const { data: apts, error: aptErr } = await svc
     .from('appointments')
     .select('appointment_date, service_id, services:service_id(duration)')
-    .gte('appointment_date', today.toISOString())
-    .lte('appointment_date', `${windowEndDateStr}T23:59:59Z`)
+    .gte('appointment_date', new Date(windowStartMs).toISOString())
+    .lt('appointment_date', new Date(windowEndExclMs + 29 * 24 * 60 * 60 * 1000).toISOString())
     .neq('status', 'cancelled');
 
   if (aptErr) {
@@ -793,72 +846,48 @@ export async function getNextAvailableSlots(
   }
 
   // 2. Blocked times for the whole window — ONE range query (public read).
+  //    `date` is an ART calendar date (ADR-0002), so the window bounds are
+  //    ART dates too — not the server-local date slice of the instant.
   const anon = await createClient();
   const { data: blockedRows, error: blockedErr } = await anon
     .from('blocked_times')
     .select('*')
-    .gte('date', today.toISOString().split('T')[0])
+    .gte('date', nowDateStr)
     .lte('date', windowEndDateStr);
 
   if (blockedErr) {
     throw new AppError('DB', `Failed to fetch blocked times: ${blockedErr.message}`);
   }
 
-  // 3. Flatten both sources into a single in-memory occupancy list.
+  // 3. Flatten both sources into a single in-memory occupancy list of
+  //    ABSOLUTE windows (epoch ms) — appointments as stored instants,
+  //    blocked times as ART wall-clock day+time resolved via the canonical.
   const occupied: OccupiedWindow[] = [];
-  for (const apt of apts ?? []) {
-    const start = new Date(apt.appointment_date).getTime();
-    const dur = (apt.services as { duration?: number } | null)?.duration ?? durationMinutes;
-    occupied.push({ start, end: start + dur * 60000 });
+  for (const apt of toOccupiedAppointments(apts ?? [], durationMinutes)) {
+    const start = new Date(apt.appointmentDate).getTime();
+    occupied.push({ start, end: start + apt.durationMinutes * 60000 });
   }
   for (const bt of blockedRows ?? []) {
-    const dayMs = new Date(`${bt.date}T00:00:00`).getTime();
     if (bt.is_all_day === true) {
-      occupied.push({ start: dayMs, end: dayMs + 24 * 60 * 60 * 1000 });
+      const b = artDayBounds(bt.date);
+      occupied.push({ start: b.startMs, end: b.endExclusiveMs });
     } else if (bt.time_start && bt.time_end) {
-      const [sh, sm] = bt.time_start.split(':').map(Number);
-      const [eh, em] = bt.time_end.split(':').map(Number);
       occupied.push({
-        start: dayMs + sh * 3600000 + sm * 60000,
-        end: dayMs + eh * 3600000 + em * 60000,
+        start: zonedWallClockMs(bt.date, bt.time_start),
+        end: zonedWallClockMs(bt.date, bt.time_end),
       });
     }
   }
 
-  // 4. Walk days/business-hours in memory (no DB), matching existing output.
-  for (let d = 0; d < 30 && availableSlots.length < count; d++) {
-    const checkDate = new Date(today);
-    checkDate.setDate(checkDate.getDate() + d);
-    const dateStr = checkDate.toISOString().split('T')[0];
-    const dayName = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][
-      checkDate.getDay()
-    ];
-    const bh = businessHours[dayName];
-
-    if (!bh || bh.closed) {
-      continue;
-    }
-
-    const [sH, sM] = bh.start.split(':').map(Number);
-    const [eH, eM] = bh.end.split(':').map(Number);
-    const dayStartMs = checkDate.getTime() + sH * 3600000 + sM * 60000;
-    const dayEndMs = checkDate.getTime() + eH * 3600000 + eM * 60000;
-
-    for (
-      let cur = dayStartMs;
-      cur + slotDurationMs <= dayEndMs && availableSlots.length < count;
-      cur += 1800000
-    ) {
-      if (!occupied.some((w) => cur < w.end && cur + slotDurationMs > w.start)) {
-        const sd = new Date(cur);
-        availableSlots.push({
-          date: dateStr,
-          time: `${sd.getUTCHours().toString().padStart(2, '0')}:${sd.getUTCMinutes().toString().padStart(2, '0')}`,
-          datetime: sd.toISOString(),
-        });
-      }
-    }
-  }
+  // 4. Walk ART business days in memory (no DB), canonical labels.
+  const slots = nextAvailableArtSlots({
+    nowMs,
+    businessHours,
+    durationMinutes,
+    occupied,
+    count,
+  });
+  availableSlots.push(...slots);
   return availableSlots;
 }
 
@@ -940,9 +969,20 @@ export async function findOrCreateClient(data: ClientData): Promise<Client> {
     const updates: Partial<ClientData> = {};
     const fields: (keyof ClientData)[] = ['name', 'surname', 'email', 'phone'];
 
+    // HISTÓRICO: `field` iterates the hardcoded 4-element `fields` array above
+    // (typed `keyof ClientData`), never an attacker-controlled string. So the
+    // reads `normalizedData[field]` / `existing[field]` and the write
+    // `updates[field]` are bounded to those 4 known model keys — cannot reach
+    // __proto__/constructor. `existing`/`updates` are module-owned objects.
+    // NOTE: uses disable-next-line (not a disable block) because ESLint 9 flat
+    // config only honors the per-line directive here — the block form was
+    // ignored and left 3 live security/detect-object-injection warnings.
     fields.forEach((field) => {
+      // eslint-disable-next-line security/detect-object-injection
       const val = normalizedData[field];
+      // eslint-disable-next-line security/detect-object-injection
       if (val && val !== existing[field]) {
+        // eslint-disable-next-line security/detect-object-injection
         updates[field] = val;
       }
     });
