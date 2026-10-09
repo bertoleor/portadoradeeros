@@ -1,10 +1,10 @@
 'use server';
 
 import webPush from 'web-push';
-import { z } from 'zod';
 
 import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
+import { appointmentSchema } from '@/lib/api/appointments-schemas';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
 import {
   mergeOccupiedLabels,
@@ -142,27 +142,12 @@ interface AppointmentPayload {
  * (`Nuevo turno solicitado: ${service} — ${clientName}`, see
  * src/lib/email/{smtp,resend}.ts) arrived unbounded and untrimmed.
  *
- * Caps mirror the contact route schema (name ≤ 300 = full name + surname,
- * service/subject fields ≤ 200, notes ≤ 5000, phone ≤ 50). CRLF header
- * injection is already neutralized by nodemailer/Resend internally (verified
- * empirically by 34-auditor), so this is payload bounding + normalization,
- * not a fix for an exploitable vuln.
- *
- * `appointmentDate` is a strict `z.date()`: server actions deserialize Date
- * instances natively, so a string here means a hand-crafted request, never
- * a legitimate client.
+ * The schema lives in `appointments-schemas.ts` (no `'use server'`): a
+ * "use server" file may only export async functions, and the zod object is
+ * a value export — exporting it from this module breaks the whole server
+ * actions bundle at runtime ("A 'use server' file can only export async
+ * functions, found object", observed as E2E booking failure on PR #17).
  */
-export const appointmentSchema = z.object({
-  serviceId: z.string().max(100),
-  serviceName: z.string().trim().min(1).max(200),
-  serviceDurationMinutes: z.number().finite().positive().max(1440).optional(),
-  clientName: z.string().trim().min(1).max(300),
-  clientEmail: z.email('Email inválido').max(320),
-  clientPhone: z.string().trim().max(50).optional(),
-  appointmentDate: z.date(),
-  notes: z.string().trim().max(5000).optional(),
-  [HONEYPOT_FIELD]: z.string().optional(),
-});
 
 const RATE_LIMIT_SCOPE = 'appointments';
 
