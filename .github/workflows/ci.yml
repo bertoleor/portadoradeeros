@@ -154,7 +154,7 @@ jobs:
         with:
           scan-type: fs
           path: .
-          format: cyclonedx-json
+          format: cyclonedx
           output: sbom.cdx.json
           exit-code: 0
         env:
