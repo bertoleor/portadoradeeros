@@ -2,9 +2,9 @@
 
 import webPush from 'web-push';
 
+import { appointmentSchema } from '@/lib/api/appointments-schemas';
 import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
-import { appointmentSchema } from '@/lib/api/appointments-schemas';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
 import {
   mergeOccupiedLabels,

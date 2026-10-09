@@ -303,7 +303,6 @@ describe('createAppointment — email provider dispatch (EROS-D2)', () => {
 
 describe('createAppointment — server-side payload validation (H3)', () => {
   it('exports an appointmentSchema that accepts the canonical booking payload', async () => {
-    
     const r = appointmentSchema.safeParse(basePayload);
     expect(r.success).toBe(true);
     if (r.success) {
@@ -313,7 +312,6 @@ describe('createAppointment — server-side payload validation (H3)', () => {
   });
 
   it('trims and bounds free-text fields (name/service/notes/phone)', async () => {
-    
     const r = appointmentSchema.safeParse({
       serviceId: 'svc-1',
       serviceName: '  Lectura de tarot  ',
@@ -333,7 +331,6 @@ describe('createAppointment — server-side payload validation (H3)', () => {
   });
 
   it('rejects over-long fields (public-form payload cap)', async () => {
-    
     const base = {
       serviceId: 'svc-1',
       serviceName: 'Lectura',
@@ -353,7 +350,6 @@ describe('createAppointment — server-side payload validation (H3)', () => {
   });
 
   it('rejects a whitespace-only clientName (would land in the email subject)', async () => {
-    
     const r = appointmentSchema.safeParse({
       serviceId: 'svc-1',
       serviceName: 'Lectura',
@@ -365,7 +361,6 @@ describe('createAppointment — server-side payload validation (H3)', () => {
   });
 
   it('rejects an invalid/missing appointmentDate (Date instance only, no ISO strings)', async () => {
-    
     const base = {
       serviceId: 'svc-1',
       serviceName: 'Lectura',
@@ -385,7 +380,6 @@ describe('createAppointment — server-side payload validation (H3)', () => {
   });
 
   it('rejects non-finite/absurd serviceDurationMinutes', async () => {
-    
     const base = {
       serviceId: 'svc-1',
       serviceName: 'Lectura',
