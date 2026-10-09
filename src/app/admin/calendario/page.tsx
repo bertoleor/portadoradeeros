@@ -62,7 +62,7 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
   const selectedService = services.find(s => s.id === form.serviceId);
 
   const endTime = (() => {
-    if (!form.time || !selectedService) return '--:--';
+    if (!form.time || !selectedService) {return '--:--';}
     const [h, m] = form.time.split(':').map(Number);
     const end = new Date();
     end.setHours(h, m + (selectedService.duration || 60), 0);
@@ -72,13 +72,13 @@ function NewApptModal({ services, selectedDate, onClose, onCreated }: NewApptMod
   const handleSubmit = async () => {
     // Validate all required fields
     const missing: string[] = [];
-    if (!form.clientName.trim()) missing.push('nombre');
-    if (!form.clientSurname.trim()) missing.push('apellido');
-    if (!form.clientPhone.trim()) missing.push('teléfono');
-    if (!form.clientEmail.trim()) missing.push('email');
-    if (!form.date) missing.push('fecha');
-    if (!form.time) missing.push('hora');
-    if (!form.serviceId) missing.push('servicio');
+    if (!form.clientName.trim()) {missing.push('nombre');}
+    if (!form.clientSurname.trim()) {missing.push('apellido');}
+    if (!form.clientPhone.trim()) {missing.push('teléfono');}
+    if (!form.clientEmail.trim()) {missing.push('email');}
+    if (!form.date) {missing.push('fecha');}
+    if (!form.time) {missing.push('hora');}
+    if (!form.serviceId) {missing.push('servicio');}
     
     if (missing.length > 0) {
       toastError(`Completá los campos obligatorios: ${missing.join(', ')}`);
@@ -246,8 +246,8 @@ function BlockModal({ selectedDate, onClose, onCreated }: BlockModalProps) {
     }
 
     const getBlockColor = () => {
-      if (form.type === 'blocked') return '#ef4444';
-      if (form.type === 'occupied') return '#f59e0b';
+      if (form.type === 'blocked') {return '#ef4444';}
+      if (form.type === 'occupied') {return '#f59e0b';}
       return '#3b82f6';
     };
 
@@ -377,7 +377,7 @@ export default function AdminCalendario() {
 
   const loadData = async (isMounted = true) => {
     const [data, blocked, svc] = await Promise.all([getAppointments(), getBlockedTimes(), getServices()]);
-    if (!isMounted) return;
+    if (!isMounted) {return;}
     setAppointments(data || []);
     setBlockedTimes(blocked || []);
     setServices(svc.filter(sv => sv.isVisible));
@@ -398,9 +398,12 @@ export default function AdminCalendario() {
     const channel = supabase
       .channel('admin-calendar-sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'appointments' }, () => {
-        getAppointments().then(data => {
-          if (mounted) setAppointments(data || []);
-        });
+        void getAppointments()
+          .then(data => {
+            if (mounted) {setAppointments(data || []);}
+            return undefined;
+          })
+          .catch(() => undefined);
       })
       .subscribe();
 
@@ -673,8 +676,8 @@ export default function AdminCalendario() {
                     >
                       <span className={`text-xs font-medium w-6 h-6 flex items-center justify-center rounded-full mb-1 transition-colors ${
                         (() => {
-                          if (isToday) return 'bg-[rgba(15,15,20,0.55)] text-white backdrop-blur-sm';
-                          if (isCurrentMonth) return 'text-black/60';
+                          if (isToday) {return 'bg-[rgba(15,15,20,0.55)] text-white backdrop-blur-sm';}
+                          if (isCurrentMonth) {return 'text-black/60';}
                           return 'text-black/20';
                         })()
                       }`}>
@@ -752,8 +755,8 @@ export default function AdminCalendario() {
                               type="button"
                               className={`min-h-[50px] border rounded-lg p-1 transition-all cursor-pointer w-full text-left ${
                                 (() => {
-                                  if (blocked) return 'bg-red-50 border-red-200';
-                                  if (app) return app.status === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';
+                                  if (blocked) {return 'bg-red-50 border-red-200';}
+                                  if (app) {return app.status === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';}
                                   return 'bg-white border-gray-100 hover:border-gray-300';
                                 })()
                               }`}
@@ -804,14 +807,14 @@ export default function AdminCalendario() {
                         type="button"
                         className={`w-full flex items-center gap-4 p-4 border rounded-xl transition-all ${
                           (() => {
-                            if (blocked) return 'bg-red-50 border-red-200';
-                            if (app) return app.status === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';
+                            if (blocked) {return 'bg-red-50 border-red-200';}
+                            if (app) {return app.status === 'confirmed' ? 'bg-green-50 border-green-200' : 'bg-orange-50 border-orange-200';}
                             return 'bg-white border-gray-100 hover:border-gray-300 cursor-pointer';
                           })()
                         }`}
                         onClick={() => {
-                            if (app) setSelectedAppointment(app);
-                            else if (!blocked) setShowNewAppt(true);
+                            if (app) {setSelectedAppointment(app);}
+                            else if (!blocked) {setShowNewAppt(true);}
                         }}
                       >
                         <div className="w-16 text-sm font-medium text-black/60">
@@ -819,7 +822,7 @@ export default function AdminCalendario() {
                         </div>
                         <div className="flex-1">
                           {(() => {
-                            if (app) return <div className="flex items-center justify-between">
+                            if (app) {return <div className="flex items-center justify-between">
                               <div>
                                 <div className="font-medium text-sm">{app.client_name}</div>
                                 <div className="text-xs text-black/50">{app.services?.title}</div>
@@ -831,8 +834,8 @@ export default function AdminCalendario() {
                               }`}>
                                 {app.status === 'confirmed' ? 'Confirmado' : 'Pendiente'}
                               </span>
-                            </div>;
-                            if (blocked) return <div className="text-sm text-red-500">Día bloqueado</div>;
+                            </div>;}
+                            if (blocked) {return <div className="text-sm text-red-500">Día bloqueado</div>;}
                             return <div className="text-sm text-black/40">Disponible - Click para agendar</div>;
                           })()}
                         </div>

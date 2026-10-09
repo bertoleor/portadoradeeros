@@ -45,13 +45,13 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
   const handleSubmit = async () => {
     // Validate all required fields
     const missing: string[] = [];
-    if (!form.clientName.trim()) missing.push('nombre');
-    if (!form.clientSurname.trim()) missing.push('apellido');
-    if (!form.clientPhone.trim()) missing.push('teléfono');
-    if (!form.clientEmail.trim()) missing.push('email');
-    if (!form.date) missing.push('fecha');
-    if (!form.time) missing.push('hora');
-    if (!form.serviceId) missing.push('servicio');
+    if (!form.clientName.trim()) {missing.push('nombre');}
+    if (!form.clientSurname.trim()) {missing.push('apellido');}
+    if (!form.clientPhone.trim()) {missing.push('teléfono');}
+    if (!form.clientEmail.trim()) {missing.push('email');}
+    if (!form.date) {missing.push('fecha');}
+    if (!form.time) {missing.push('hora');}
+    if (!form.serviceId) {missing.push('servicio');}
     
     if (missing.length > 0) {
       toastError(`Completá los campos obligatorios: ${missing.join(', ')}`);
@@ -182,7 +182,7 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
               <Clock size={12} />
               Este turno terminaría a las {
                 (() => {
-                  if (!form.time) return '--:--';
+                  if (!form.time) {return '--:--';}
                   const [h, m] = form.time.split(':').map(Number);
                   const end = new Date(); end.setHours(h, m + selectedService.duration, 0);
                   return end.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
@@ -320,7 +320,7 @@ export default function AdminClientesPage() {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    if (!q) return clients;
+    if (!q) {return clients;}
     return clients.filter(c =>
       c.name.toLowerCase().includes(q) ||
       (c.email?.toLowerCase().includes(q) || false) ||

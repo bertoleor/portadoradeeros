@@ -32,7 +32,7 @@ export function CustomTimePicker({
 
   // Determine current day of week and its hours
   const getDayHours = () => {
-    if (!selectedDate || !businessHours) return { closed: true, start: 9, end: 18 }; // Default safe window
+    if (!selectedDate || !businessHours) {return { closed: true, start: 9, end: 18 };} // Default safe window
 
     // Get day name (monday, tuesday, etc)
     const date = new Date(selectedDate + 'T12:00:00'); // Use noon to avoid timezone shifts
@@ -40,12 +40,12 @@ export function CustomTimePicker({
     const dayName = days[date.getDay()];
 
     const dayConfig = businessHours?.[dayName];
-    if (!dayConfig || dayConfig.closed) return { closed: true, start: 0, end: 0 };
+    if (!dayConfig || dayConfig.closed) {return { closed: true, start: 0, end: 0 };}
 
     return {
       closed: false,
-      start: Number.parseInt(dayConfig.start?.split(':')[0] || '9'),
-      end: Number.parseInt(dayConfig.end?.split(':')[0] || '18'),
+      start: Number.parseInt(dayConfig.start?.split(':')[0] || '9', 10),
+      end: Number.parseInt(dayConfig.end?.split(':')[0] || '18', 10),
     };
   };
 
@@ -53,7 +53,7 @@ export function CustomTimePicker({
 
   // Filter available hours based on business settings
   const availableHours = HOURS.filter((h) => {
-    const hourNum = Number.parseInt(h);
+    const hourNum = Number.parseInt(h, 10);
     return hourNum >= dayStatus.start && hourNum <= dayStatus.end;
   });
 
@@ -61,8 +61,8 @@ export function CustomTimePicker({
   useEffect(() => {
     if (value) {
       const [h, m] = value.split(':');
-      if (h !== selectedHour) setSelectedHour(h);
-      if (m !== selectedMinute) setSelectedMinute(m);
+      if (h !== selectedHour) {setSelectedHour(h);}
+      if (m !== selectedMinute) {setSelectedMinute(m);}
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
@@ -148,11 +148,11 @@ export function CustomTimePicker({
 
             // Check if time is within blocked range
             const isBlocked = blockedTimes.some((bt) => {
-              if (bt.isAllDay) return true;
+              if (bt.isAllDay) {return true;}
               const [startH, startM] = bt.start.split(':').map(Number);
               const [endH, endM] = bt.end.split(':').map(Number);
-              const timeH = Number.parseInt(selectedHour);
-              const timeM = Number.parseInt(m);
+              const timeH = Number.parseInt(selectedHour, 10);
+              const timeM = Number.parseInt(m, 10);
               const timeMinutes = timeH * 60 + timeM;
               const startMinutes = startH * 60 + startM;
               const endMinutes = endH * 60 + endM;

@@ -63,19 +63,19 @@ export async function updateAdminSettings(
   const supabase = await createClient();
 
   const dbPayload: Record<string, unknown> = {};
-  if (updates.instagramUrl !== undefined) dbPayload.instagram_url = updates.instagramUrl;
-  if (updates.whatsappUrl !== undefined) dbPayload.whatsapp_url = updates.whatsappUrl;
-  if (updates.tiktokUrl !== undefined) dbPayload.tiktok_url = updates.tiktokUrl;
-  if (updates.siteUrl !== undefined) dbPayload.site_url = updates.siteUrl;
-  if (updates.contactEmail !== undefined) dbPayload.contact_email = updates.contactEmail;
-  if (updates.bioContent !== undefined) dbPayload.bio_content = updates.bioContent;
-  if (updates.profileImageUrl !== undefined) dbPayload.profile_image_url = updates.profileImageUrl;
-  if (updates.bankOwner !== undefined) dbPayload.bank_owner = updates.bankOwner;
-  if (updates.bankName !== undefined) dbPayload.bank_name = updates.bankName;
-  if (updates.bankCbu !== undefined) dbPayload.bank_cbu = updates.bankCbu;
-  if (updates.bankAlias !== undefined) dbPayload.bank_alias = updates.bankAlias;
-  if (updates.adminName !== undefined) dbPayload.admin_name = updates.adminName;
-  if (updates.adminAvatarUrl !== undefined) dbPayload.admin_avatar_url = updates.adminAvatarUrl;
+  if (updates.instagramUrl !== undefined) {dbPayload.instagram_url = updates.instagramUrl;}
+  if (updates.whatsappUrl !== undefined) {dbPayload.whatsapp_url = updates.whatsappUrl;}
+  if (updates.tiktokUrl !== undefined) {dbPayload.tiktok_url = updates.tiktokUrl;}
+  if (updates.siteUrl !== undefined) {dbPayload.site_url = updates.siteUrl;}
+  if (updates.contactEmail !== undefined) {dbPayload.contact_email = updates.contactEmail;}
+  if (updates.bioContent !== undefined) {dbPayload.bio_content = updates.bioContent;}
+  if (updates.profileImageUrl !== undefined) {dbPayload.profile_image_url = updates.profileImageUrl;}
+  if (updates.bankOwner !== undefined) {dbPayload.bank_owner = updates.bankOwner;}
+  if (updates.bankName !== undefined) {dbPayload.bank_name = updates.bankName;}
+  if (updates.bankCbu !== undefined) {dbPayload.bank_cbu = updates.bankCbu;}
+  if (updates.bankAlias !== undefined) {dbPayload.bank_alias = updates.bankAlias;}
+  if (updates.adminName !== undefined) {dbPayload.admin_name = updates.adminName;}
+  if (updates.adminAvatarUrl !== undefined) {dbPayload.admin_avatar_url = updates.adminAvatarUrl;}
 
   // Supabase JSONB column handles objects directly
   if (updates.businessHours !== undefined) {

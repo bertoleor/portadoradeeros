@@ -124,7 +124,7 @@ export default function ServiciosPage() {
               const order = ['tarot', 'velomancia', 'limpieza-energetica', 'buzios'];
               const idxA = order.indexOf(a.slug);
               const idxB = order.indexOf(b.slug);
-              if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+              if (idxA !== -1 && idxB !== -1) {return idxA - idxB;}
               return 0;
             })
             .map((service, index) => {

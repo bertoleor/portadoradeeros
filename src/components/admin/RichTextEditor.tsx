@@ -80,7 +80,7 @@ export function RichTextEditor({ content, onChange, placeholder }: Readonly<Rich
     },
   });
 
-  if (!editor) return null;
+  if (!editor) {return null;}
 
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden bg-surface/30">

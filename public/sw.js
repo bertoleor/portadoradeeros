@@ -14,7 +14,7 @@ globalThis.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.log('[SW] Pre-cache partial fail (ok):', err);
+        console.warn('[SW] Pre-cache partial fail (ok):', err);
       });
     })
   );
@@ -35,8 +35,8 @@ globalThis.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  if (request.method !== 'GET') return;
-  if (url.origin !== globalThis.location.origin) return;
+  if (request.method !== 'GET') {return;}
+  if (url.origin !== globalThis.location.origin) {return;}
 
   // CRÍTICO: ignorar completamente rutas del sitio público
   // Solo interceptar /admin/* y assets
@@ -50,7 +50,7 @@ globalThis.addEventListener('fetch', (event) => {
     url.pathname === '/manifest.json';
 
   // Si NO es admin ni asset — dejar pasar sin interceptar
-  if (!isAdminRoute && !isAsset) return;
+  if (!isAdminRoute && !isAsset) {return;}
 
   if (isAsset) {
     // Cache-first para assets estáticos
@@ -59,8 +59,9 @@ globalThis.addEventListener('fetch', (event) => {
         if (cached) {
           fetch(request).then((res) => {
             if (res.ok) {
-              caches.open(CACHE_NAME).then((c) => c.put(request, res.clone()));
+              return caches.open(CACHE_NAME).then((c) => c.put(request, res.clone()));
             }
+            return undefined;
           }).catch(() => {});
           return cached;
         }
@@ -86,7 +87,7 @@ globalThis.addEventListener('fetch', (event) => {
     }).catch(() => {
       // Sin conexión: servir desde cache
       return caches.match(request).then((cached) => {
-        if (cached) return cached;
+        if (cached) {return cached;}
         // Fallback al admin principal
         return caches.match(ADMIN_OFFLINE_URL);
       });

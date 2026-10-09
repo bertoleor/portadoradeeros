@@ -27,6 +27,8 @@ const formatMessage = (params: LogParams): string => {
 export const logger = {
   info: (message: string, context?: Record<string, unknown>) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console -- logger.ts IS the logging abstraction; info is dev-only
+      // eslint-disable-next-line no-console -- logger.ts IS the logging abstraction; info is dev-only
       console.info(formatMessage({ level: 'info', message, context }));
     }
   },
@@ -41,6 +43,8 @@ export const logger = {
 
   debug: (message: string, context?: Record<string, unknown>) => {
     if (isDevelopment) {
+      // eslint-disable-next-line no-console -- logger.ts IS the logging abstraction; debug is dev-only
+      // eslint-disable-next-line no-console -- logger.ts IS the logging abstraction; debug is dev-only
       console.debug(formatMessage({ level: 'debug', message, context }));
     }
   },

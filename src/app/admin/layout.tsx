@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
           // Show browser notification if SW + permission granted
           if (globalThis.window !== undefined && 'Notification' in globalThis && Notification.permission === 'granted') {
             void navigator.serviceWorker.ready.then(sw => {
-              void sw.showNotification('Nuevo turno agendado ✨', {
+              return sw.showNotification('Nuevo turno agendado ✨', {
                 body: `${clientName} agendó una consulta.`,
                 icon: '/icons/icon-192x192.png',
                 badge: '/icons/icon-192x192.png',
@@ -60,12 +60,12 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
     let cleanup: (() => void) | void;
 
     const checkAuth = async () => {
-      if (isAuthenticated === true && pathname !== '/admin/login') return;
+      if (isAuthenticated === true && pathname !== '/admin/login') {return;}
 
       const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       
-      if (!active) return;
+      if (!active) {return;}
 
       if (session) {
         setIsAuthenticated(true);
@@ -81,7 +81,7 @@ export default function AdminLayout({ children }: { readonly children: React.Rea
     void checkAuth();
     return () => { 
       active = false; 
-      if (cleanup) cleanup();
+      if (cleanup) {cleanup();}
     };
   }, [pathname, router, setupRealtime, isAuthenticated]);
 
@@ -229,7 +229,7 @@ function SidebarContent({
             <Link
               key={link.href}
               href={link.href}
-              onClick={() => { setIsMobileMenuOpen(false); if (hasNewBadge) onRead?.(); }}
+              onClick={() => { setIsMobileMenuOpen(false); if (hasNewBadge) {onRead?.();} }}
               className={`relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-[rgba(15,15,20,0.08)] text-[rgba(15,15,20,0.90)] shadow-sm'

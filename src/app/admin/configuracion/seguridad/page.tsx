@@ -67,8 +67,8 @@ export default function SeguridadConfiguracion() {
 
     // 2. Prepare updates
     const updates: { email?: string; password?: string } = {};
-    if (seguridad.email && seguridad.email !== oldEmail) updates.email = seguridad.email;
-    if (seguridad.newPassword) updates.password = seguridad.newPassword;
+    if (seguridad.email && seguridad.email !== oldEmail) {updates.email = seguridad.email;}
+    if (seguridad.newPassword) {updates.password = seguridad.newPassword;}
 
     if (Object.keys(updates).length === 0) {
       setIsSaving(false);

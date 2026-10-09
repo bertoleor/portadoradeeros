@@ -135,15 +135,15 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
   const supabase = await createClient();
 
   const dbPayload: Record<string, unknown> = {};
-  if (updates.slug !== undefined) dbPayload.slug = updates.slug;
-  if (updates.title !== undefined) dbPayload.title = updates.title;
-  if (updates.shortDescription !== undefined) dbPayload.short_description = updates.shortDescription;
-  if (updates.description !== undefined) dbPayload.description = updates.description;
-  if (updates.price !== undefined) dbPayload.price = updates.price;
-  if (updates.duration !== undefined) dbPayload.duration = updates.duration;
-  if (updates.isVisible !== undefined) dbPayload.is_visible = updates.isVisible;
-  if (updates.icon !== undefined) dbPayload.icon = updates.icon;
-  if (updates.images !== undefined) dbPayload.images = updates.images;
+  if (updates.slug !== undefined) {dbPayload.slug = updates.slug;}
+  if (updates.title !== undefined) {dbPayload.title = updates.title;}
+  if (updates.shortDescription !== undefined) {dbPayload.short_description = updates.shortDescription;}
+  if (updates.description !== undefined) {dbPayload.description = updates.description;}
+  if (updates.price !== undefined) {dbPayload.price = updates.price;}
+  if (updates.duration !== undefined) {dbPayload.duration = updates.duration;}
+  if (updates.isVisible !== undefined) {dbPayload.is_visible = updates.isVisible;}
+  if (updates.icon !== undefined) {dbPayload.icon = updates.icon;}
+  if (updates.images !== undefined) {dbPayload.images = updates.images;}
 
   const { data: updatedRow, error } = await supabase
     .from('services')

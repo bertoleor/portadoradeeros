@@ -11,7 +11,7 @@ import type { BeforeInstallPromptEvent } from '@/types';
 // iOS detection
 // iOS detection
 function isIOS() {
-  if (globalThis.navigator === undefined) return false;
+  if (globalThis.navigator === undefined) {return false;}
   return /iPad|iPhone|iPod/.test(globalThis.navigator.userAgent) && !((globalThis as unknown as { MSStream?: unknown }).MSStream);
 }
 
@@ -91,7 +91,7 @@ export default function InstalarAppPage() {
                 La aplicación ya está instalada en tu dispositivo.
               </p>
               <Button
-                onClick={() => { if (typeof globalThis !== 'undefined' && globalThis.location) globalThis.location.href = '/admin'; }}
+                onClick={() => { if (typeof globalThis !== 'undefined' && globalThis.location) {globalThis.location.href = '/admin';} }}
                 variant="outline"
                 className="rounded-xl"
               >

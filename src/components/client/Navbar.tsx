@@ -41,15 +41,18 @@ export function Navbar() {
   });
 
   useEffect(() => {
-    getAdminSettings().then((settings) => {
-      if (settings) {
-        setSocialLinks({
-          instagram: settings.socialLinks.instagram || 'https://instagram.com/portadoradeeros',
-          whatsapp: settings.socialLinks.whatsapp || 'https://wa.me/5491138854297',
-          tiktok: settings.socialLinks.tiktok || 'https://tiktok.com/@portadoradeeros',
-        });
-      }
-    });
+    void getAdminSettings()
+      .then((settings) => {
+        if (settings) {
+          setSocialLinks({
+            instagram: settings.socialLinks.instagram || 'https://instagram.com/portadoradeeros',
+            whatsapp: settings.socialLinks.whatsapp || 'https://wa.me/5491138854297',
+            tiktok: settings.socialLinks.tiktok || 'https://tiktok.com/@portadoradeeros',
+          });
+        }
+        return undefined;
+      })
+      .catch(() => undefined);
   }, []);
 
   const handleLinkClick = () => {
@@ -57,7 +60,7 @@ export function Navbar() {
   };
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
+    if (href === '/') {return pathname === '/';}
     return pathname.startsWith(href);
   };
 
