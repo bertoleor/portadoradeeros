@@ -71,6 +71,11 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Build
         run: npm run build
+        env:
+          # Public by design (anon key is client-safe); required by the
+          # prerender of `/` — without them the static export fails.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       - name: Run E2E
         run: npm run test:e2e
 
@@ -116,6 +121,9 @@ jobs:
           path: .
           exit-code: 1
           ignore-unfixed: true
+        env:
+          # Dev-only tooling vulns (shadcn chain) documented with expiry.
+          TRIVY_IGNOREFILE: ./.trivyignore
 
   sast-semgrep:
     name: Semgrep SAST
@@ -146,6 +154,8 @@ jobs:
           format: cyclonedx-json
           output: sbom.cdx.json
           exit-code: 0
+        env:
+          TRIVY_IGNOREFILE: ./.trivyignore
       - name: Cosign install
         uses: sigstore/cosign-installer@v3
       - name: Sign SBOM
