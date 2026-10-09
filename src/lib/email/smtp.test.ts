@@ -120,4 +120,45 @@ describe('email/smtp fallback (nodemailer mocked, never sends real mail)', () =>
     const result = await sendAppointmentReminder(sample);
     expect(result.success).toBe(false);
   });
+
+  /* H3 hardening — structured logger instead of raw console.error (F4-refresh 2026-10-07) */
+
+  it('logs "credentials missing" through the structured logger (warn, observable)', async () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      clearSmtpEnv();
+      const result = await sendAppointmentConfirmation(sample);
+      expect(result.success).toBe(false);
+
+      expect(errorSpy).not.toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      const out = String(warnSpy.mock.calls[0]?.[0]);
+      expect(out).toContain('[WARN]');
+      expect(out).toContain('SMTP credentials missing');
+    } finally {
+      vi.restoreAllMocks();
+      setSmtpEnv();
+    }
+  });
+
+  it('logs send failures through the structured logger (error + provider context)', async () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      setSmtpEnv();
+      sendMailMock.mockRejectedValueOnce(new Error('connection refused'));
+      const result = await sendAppointmentReminder(sample);
+      expect(result.success).toBe(false);
+
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+      const out = String(errorSpy.mock.calls[0]?.[0]);
+      expect(out).toContain('[ERROR]');
+      expect(out).toContain('Error sending SMTP email');
+      expect(out).toContain('provider');
+      expect(out).toContain('smtp');
+      expect(out).toContain('connection refused');
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
 });

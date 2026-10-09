@@ -1,5 +1,7 @@
 import { Resend } from 'resend';
 
+import { logger } from '@/lib/logger';
+
 // TEST MODE ONLY — nothing official:
 // - Default sender is onboarding@resend.dev (override via EMAIL_FROM only
 //   after the owner approves a verified domain).
@@ -137,7 +139,7 @@ interface SendArgs {
 async function sendEmail(args: SendArgs): Promise<EmailResult> {
   const resend = getClient();
   if (!resend) {
-    console.error('Resend credentials missing');
+    logger.warn('Resend credentials missing', { provider: 'resend' });
     return { success: false, error: 'Resend not configured' };
   }
   try {
@@ -146,12 +148,15 @@ async function sendEmail(args: SendArgs): Promise<EmailResult> {
       { idempotencyKey: args.idempotencyKey }
     );
     if (error) {
-      console.error('Error sending Resend email:', error);
+      logger.error('Error sending Resend email', { provider: 'resend', error });
       return { success: false, error };
     }
     return { success: true, id: data?.id };
   } catch (error) {
-    console.error('Error sending Resend email:', error);
+    logger.error('Error sending Resend email', {
+      provider: 'resend',
+      error: error instanceof Error ? error.message : String(error),
+    });
     return { success: false, error };
   }
 }

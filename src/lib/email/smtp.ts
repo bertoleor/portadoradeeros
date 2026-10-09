@@ -1,5 +1,7 @@
 import { createTransport, type SentMessageInfo, type Transporter } from 'nodemailer';
 
+import { logger } from '@/lib/logger';
+
 import type { AppointmentEmailData, EmailResult } from './resend';
 
 export type { AppointmentEmailData, EmailResult } from './resend';
@@ -107,7 +109,7 @@ interface SendArgs {
 async function sendEmail(args: SendArgs): Promise<EmailResult> {
   const tx = getTransporter();
   if (!tx) {
-    console.error('SMTP credentials missing');
+    logger.warn('SMTP credentials missing', { provider: 'smtp' });
     return { success: false, error: 'SMTP not configured' };
   }
   try {
@@ -119,7 +121,10 @@ async function sendEmail(args: SendArgs): Promise<EmailResult> {
     });
     return { success: true, id: info?.messageId };
   } catch (error) {
-    console.error('Error sending SMTP email:', error);
+    logger.error('Error sending SMTP email', {
+      provider: 'smtp',
+      error: error instanceof Error ? error.message : String(error),
+    });
     return { success: false, error };
   }
 }
