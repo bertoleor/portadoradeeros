@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { User, CreditCard, Clock, Lock, Smartphone } from 'lucide-react';
+import { Clock, CreditCard, Lock, Smartphone, User } from 'lucide-react';
 
 import { SettingsCard } from '@/components/admin/SettingsCard';
 

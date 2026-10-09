@@ -1,12 +1,12 @@
 ---
 name: portadora-richtext
 description: >
-  Tiptap rich-text editor conventions for portadora-eros (hydration, sanitize, image).
-  Trigger: when editing rich-text editing/rendering or Tiptap config in this repo.
+  Tiptap rich-text editor conventions for portadora-eros (hydration, sanitize, image). Trigger: when
+  editing rich-text editing/rendering or Tiptap config in this repo.
 license: Apache-2.0
 metadata:
   author: portadora-eros
-  version: "1.0"
+  version: '1.0'
 ---
 
 # Rich Text (Tiptap) — portadora-eros
@@ -16,34 +16,33 @@ Stack: `@tiptap/*@3.20.1` (StarterKit, Placeholder, Link, TextAlign, Image, Unde
 
 ## MUST
 
-- MUST render empty until mounted (`mounted` state set via `useEffect`) to avoid
-  **hydration errors** — Tiptap's `useEditor` produces client-only DOM.
+- MUST render empty until mounted (`mounted` state set via `useEffect`) to avoid **hydration
+  errors** — Tiptap's `useEditor` produces client-only DOM.
 - MUST emit rich content via `onUpdate: ({ editor }) => onChange?.(editor.getHTML())`,
   storing/consuming **HTML strings**, not the JSON/ProseMirror doc.
-- MUST keep the editor `editable` flag plumbed through the `editable` prop so the
-  same component renders read-only content (no toolbar).
-- MUST sanitize untrusted rich text before rendering it as HTML (the repo ships
-  `sanitize-html`) — never `dangerouslySetInnerHTML` with raw stored HTML.
+- MUST keep the editor `editable` flag plumbed through the `editable` prop so the same component
+  renders read-only content (no toolbar).
+- MUST sanitize untrusted rich text before rendering it as HTML (the repo ships `sanitize-html`) —
+  never `dangerouslySetInnerHTML` with raw stored HTML.
 
 ## SHOULD
 
-- SHOULD restrict headings to `levels: [2, 3]` (StarterKit `heading` config) so
-  `h1` is reserved for the page layout (SEO/outline).
-- SHOULD disable link "open on click" (`LinkExtension.configure({ openOnClick:
-  false })`) inside the editor and style links manually via `HTMLAttributes`.
-- SHOULD drive toolbar buttons through a shared `ToolbarButton` (active/disabled
-  states) rather than inline buttons per feature.
-- SHOULD reuse the single `ui/RichTextEditor` component instead of a separate
-  `admin/RichTextEditor` copy.
+- SHOULD restrict headings to `levels: [2, 3]` (StarterKit `heading` config) so `h1` is reserved for
+  the page layout (SEO/outline).
+- SHOULD disable link "open on click" (`LinkExtension.configure({ openOnClick: false })`) inside the
+  editor and style links manually via `HTMLAttributes`.
+- SHOULD drive toolbar buttons through a shared `ToolbarButton` (active/disabled states) rather than
+  inline buttons per feature.
+- SHOULD reuse the single `ui/RichTextEditor` component instead of a separate `admin/RichTextEditor`
+  copy.
 
 ## NEVER
 
-- Never render stored rich text with `dangerouslySetInnerHTML` without
-  `sanitize-html` first.
+- Never render stored rich text with `dangerouslySetInnerHTML` without `sanitize-html` first.
 - Never rely on `editor` being non-null on first render — guard with
   `if (!mounted || !editor) return <placeholder/>`.
-- Never `onClick` links navigate by default (keep `openOnClick: false` in editing
-  context so users can edit the URL, not follow it).
+- Never `onClick` links navigate by default (keep `openOnClick: false` in editing context so users
+  can edit the URL, not follow it).
 
 ## Editor config (canonical)
 
@@ -52,7 +51,10 @@ const editor = useEditor({
   extensions: [
     StarterKit.configure({ heading: { levels: [2, 3] } }),
     Placeholder.configure({ placeholder, emptyEditorClass: 'is-editor-empty ...' }),
-    LinkExtension.configure({ openOnClick: false, HTMLAttributes: { class: 'text-black underline ...' } }),
+    LinkExtension.configure({
+      openOnClick: false,
+      HTMLAttributes: { class: 'text-black underline ...' },
+    }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
     Image.configure({ HTMLAttributes: { class: 'rounded-2xl ...' } }),
   ],

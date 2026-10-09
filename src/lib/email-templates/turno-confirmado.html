@@ -1,126 +1,289 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Turno Confirmado</title>
-</head>
-<body style="margin:0;padding:0;background-color:#f5f4f0;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#1a1a1a;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Turno Confirmado</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #f5f4f0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #1a1a1a;
+    "
+  >
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="background-color: #f5f4f0; padding: 48px 20px"
+    >
+      <tr>
+        <td align="center">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px">
+            <tr>
+              <td align="center" style="padding-bottom: 32px">
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 10px;
+                    letter-spacing: 0.25em;
+                    text-transform: uppercase;
+                    color: #999999;
+                  "
+                >
+                  Portadora de Eros
+                </p>
+              </td>
+            </tr>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f5f4f0;padding:48px 20px;">
-    <tr>
-      <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+            <tr>
+              <td style="background-color: #ffffff; border-radius: 24px; overflow: hidden">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td
+                      style="
+                        height: 4px;
+                        background: linear-gradient(90deg, #e8d5c4, #c8dce8, #d4e8d4);
+                      "
+                    ></td>
+                  </tr>
+                </table>
 
-          <tr>
-            <td align="center" style="padding-bottom:32px;">
-              <p style="margin:0;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:#999999;">Portadora de Eros</p>
-            </td>
-          </tr>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td style="padding: 48px 40px 40px">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom: 32px">
+                            <div
+                              style="
+                                width: 56px;
+                                height: 56px;
+                                background-color: #f0f0ee;
+                                border-radius: 50%;
+                                text-align: center;
+                                line-height: 56px;
+                                display: inline-block;
+                                font-size: 24px;
+                                color: #1a1a1a;
+                              "
+                            >
+                              &#10003;
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
 
-          <tr>
-            <td style="background-color:#ffffff;border-radius:24px;overflow:hidden;">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom: 12px">
+                            <h1
+                              style="
+                                margin: 0;
+                                font-size: 26px;
+                                font-weight: 300;
+                                letter-spacing: -0.02em;
+                                color: #1a1a1a;
+                              "
+                            >
+                              Tu turno está confirmado
+                            </h1>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td align="center" style="padding-bottom: 40px">
+                            <p style="margin: 0; font-size: 15px; line-height: 1.7; color: #777777">
+                              Hola
+                              <strong style="color: #1a1a1a; font-weight: 500"
+                                >{{clientName}}</strong
+                              >, tu sesión fue reservada con éxito.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
 
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="height:4px;background:linear-gradient(90deg,#e8d5c4,#c8dce8,#d4e8d4);"></td>
-                </tr>
-              </table>
+                      <table
+                        width="100%"
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        style="background-color: #f8f7f4; border-radius: 16px; margin-bottom: 36px"
+                      >
+                        <tr>
+                          <td style="padding: 28px 32px">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="padding-bottom: 16px; border-bottom: 1px solid #eeece8">
+                                  <p
+                                    style="
+                                      margin: 0 0 4px;
+                                      font-size: 10px;
+                                      text-transform: uppercase;
+                                      letter-spacing: 0.15em;
+                                      color: #aaaaaa;
+                                      font-weight: 600;
+                                    "
+                                  >
+                                    Servicio
+                                  </p>
+                                  <p
+                                    style="
+                                      margin: 0;
+                                      font-size: 16px;
+                                      font-weight: 300;
+                                      color: #1a1a1a;
+                                    "
+                                  >
+                                    {{service}}
+                                  </p>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="padding: 16px 0; border-bottom: 1px solid #eeece8">
+                                  <p
+                                    style="
+                                      margin: 0 0 4px;
+                                      font-size: 10px;
+                                      text-transform: uppercase;
+                                      letter-spacing: 0.15em;
+                                      color: #aaaaaa;
+                                      font-weight: 600;
+                                    "
+                                  >
+                                    Fecha
+                                  </p>
+                                  <p
+                                    style="
+                                      margin: 0;
+                                      font-size: 16px;
+                                      font-weight: 300;
+                                      color: #1a1a1a;
+                                    "
+                                  >
+                                    {{date}}
+                                  </p>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td style="padding-top: 16px">
+                                  <p
+                                    style="
+                                      margin: 0 0 4px;
+                                      font-size: 10px;
+                                      text-transform: uppercase;
+                                      letter-spacing: 0.15em;
+                                      color: #aaaaaa;
+                                      font-weight: 600;
+                                    "
+                                  >
+                                    Hora
+                                  </p>
+                                  <p
+                                    style="
+                                      margin: 0;
+                                      font-size: 16px;
+                                      font-weight: 300;
+                                      color: #1a1a1a;
+                                    "
+                                  >
+                                    {{time}} hs
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
 
-              <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding:48px 40px 40px;">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center" style="padding-bottom: 32px">
+                            <p style="margin: 0; font-size: 13px; line-height: 1.8; color: #999999">
+                              ¿Necesitás reprogramar? Avisanos por WhatsApp<br />con al menos
+                              <strong style="color: #777777">24 horas de anticipación</strong>.
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
 
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center" style="padding-bottom:32px;">
-                          <div style="width:56px;height:56px;background-color:#f0f0ee;border-radius:50%;text-align:center;line-height:56px;display:inline-block;font-size:24px;color:#1a1a1a;">
-                            &#10003;
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                          <td align="center">
+                            <a
+                              href="https://wa.me/5491138854297"
+                              style="
+                                display: inline-block;
+                                padding: 14px 36px;
+                                background-color: #1a1a1a;
+                                color: #ffffff;
+                                text-decoration: none;
+                                font-size: 12px;
+                                font-weight: 500;
+                                letter-spacing: 0.1em;
+                                text-transform: uppercase;
+                                border-radius: 999px;
+                              "
+                              >Contactar por WhatsApp</a
+                            >
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center" style="padding-bottom:12px;">
-                          <h1 style="margin:0;font-size:26px;font-weight:300;letter-spacing:-0.02em;color:#1a1a1a;">Tu turno está confirmado</h1>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td align="center" style="padding-bottom:40px;">
-                          <p style="margin:0;font-size:15px;line-height:1.7;color:#777777;">Hola <strong style="color:#1a1a1a;font-weight:500;">{{clientName}}</strong>, tu sesión fue reservada con éxito.</p>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8f7f4;border-radius:16px;margin-bottom:36px;">
-                      <tr>
-                        <td style="padding:28px 32px;">
-
-                          <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="padding-bottom:16px;border-bottom:1px solid #eeece8;">
-                                <p style="margin:0 0 4px;font-size:10px;text-transform:uppercase;letter-spacing:0.15em;color:#aaaaaa;font-weight:600;">Servicio</p>
-                                <p style="margin:0;font-size:16px;font-weight:300;color:#1a1a1a;">{{service}}</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="padding:16px 0;border-bottom:1px solid #eeece8;">
-                                <p style="margin:0 0 4px;font-size:10px;text-transform:uppercase;letter-spacing:0.15em;color:#aaaaaa;font-weight:600;">Fecha</p>
-                                <p style="margin:0;font-size:16px;font-weight:300;color:#1a1a1a;">{{date}}</p>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="padding-top:16px;">
-                                <p style="margin:0 0 4px;font-size:10px;text-transform:uppercase;letter-spacing:0.15em;color:#aaaaaa;font-weight:600;">Hora</p>
-                                <p style="margin:0;font-size:16px;font-weight:300;color:#1a1a1a;">{{time}} hs</p>
-                              </td>
-                            </tr>
-                          </table>
-
-                        </td>
-                      </tr>
-                    </table>
-
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center" style="padding-bottom:32px;">
-                          <p style="margin:0;font-size:13px;line-height:1.8;color:#999999;">¿Necesitás reprogramar? Avisanos por WhatsApp<br>con al menos <strong style="color:#777777;">24 horas de anticipación</strong>.</p>
-                        </td>
-                      </tr>
-                    </table>
-
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td align="center">
-                          <a href="https://wa.me/5491138854297" style="display:inline-block;padding:14px 36px;background-color:#1a1a1a;color:#ffffff;text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;border-radius:999px;">Contactar por WhatsApp</a>
-                        </td>
-                      </tr>
-                    </table>
-
-                  </td>
-                </tr>
-              </table>
-
-            </td>
-          </tr>
-
-          <tr>
-            <td align="center" style="padding:32px 0 0;">
-              <p style="margin:0 0 16px;font-size:11px;">
-                <a href="https://instagram.com/portadoradeeros" style="color:#999999;text-decoration:none;margin:0 10px;letter-spacing:0.08em;text-transform:uppercase;font-size:10px;">Instagram</a>
-                <a href="https://tiktok.com/@portadoradeeros" style="color:#999999;text-decoration:none;margin:0 10px;letter-spacing:0.08em;text-transform:uppercase;font-size:10px;">TikTok</a>
-                <a href="https://wa.me/5491138854297" style="color:#999999;text-decoration:none;margin:0 10px;letter-spacing:0.08em;text-transform:uppercase;font-size:10px;">WhatsApp</a>
-              </p>
-              <p style="margin:0;font-size:11px;color:#bbbbbb;">© 2026 Portadora de Eros</p>
-            </td>
-          </tr>
-
-        </table>
-      </td>
-    </tr>
-  </table>
-
-</body>
+            <tr>
+              <td align="center" style="padding: 32px 0 0">
+                <p style="margin: 0 0 16px; font-size: 11px">
+                  <a
+                    href="https://instagram.com/portadoradeeros"
+                    style="
+                      color: #999999;
+                      text-decoration: none;
+                      margin: 0 10px;
+                      letter-spacing: 0.08em;
+                      text-transform: uppercase;
+                      font-size: 10px;
+                    "
+                    >Instagram</a
+                  >
+                  <a
+                    href="https://tiktok.com/@portadoradeeros"
+                    style="
+                      color: #999999;
+                      text-decoration: none;
+                      margin: 0 10px;
+                      letter-spacing: 0.08em;
+                      text-transform: uppercase;
+                      font-size: 10px;
+                    "
+                    >TikTok</a
+                  >
+                  <a
+                    href="https://wa.me/5491138854297"
+                    style="
+                      color: #999999;
+                      text-decoration: none;
+                      margin: 0 10px;
+                      letter-spacing: 0.08em;
+                      text-transform: uppercase;
+                      font-size: 10px;
+                    "
+                    >WhatsApp</a
+                  >
+                </p>
+                <p style="margin: 0; font-size: 11px; color: #bbbbbb">© 2026 Portadora de Eros</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

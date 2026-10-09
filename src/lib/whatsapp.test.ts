@@ -13,7 +13,7 @@ describe('whatsapp: buildWhatsAppLink', () => {
 
   it('appends an encoded message when provided', () => {
     expect(buildWhatsAppLink('5491112345678', 'Hola, quiero un turno')).toBe(
-      'https://wa.me/5491112345678?text=Hola%2C%20quiero%20un%20turno',
+      'https://wa.me/5491112345678?text=Hola%2C%20quiero%20un%20turno'
     );
   });
 

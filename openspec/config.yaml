@@ -12,10 +12,10 @@ strict_tdd: false
 testing:
   strict_tdd: false
   test_runner: vitest
-  test_command: "npm run test"
-  coverage: "npm run test -- --coverage"
-  linter: "npx eslint"
-  type_checker: "npx tsc --noEmit"
+  test_command: 'npm run test'
+  coverage: 'npm run test -- --coverage'
+  linter: 'npx eslint'
+  type_checker: 'npx tsc --noEmit'
 
 rules:
   proposal:
@@ -31,10 +31,10 @@ rules:
   apply:
     - Follow existing code patterns
     - tdd: false
-    - test_command: ""
+    - test_command: ''
   verify:
-    test_command: "npm run test"
-    build_command: "npm run build"
+    test_command: 'npm run test'
+    build_command: 'npm run build'
     coverage_threshold: 0
   archive:
     - Warn before merging destructive deltas

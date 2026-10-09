@@ -1,33 +1,37 @@
 # PLAN DE CORRECCIONES ESTÉTICAS - VERSIÓN COMPLETA
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[AUDITORIA_ESTETICA]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] ·
+> [[INDICE-PLANS]] · [[AUDITORIA_ESTETICA]]
 
 ## DOCUMENTOS DE REFERENCIA:
 
-1. **[`AUDITORIA_ESTETICA.md`](portadora-eros/AUDITORIA_ESTETICA.md)** - Análisis de problemas actuales
-2. **[`MEJORAS_ADICIONALES.md`](portadora-eros/MEJORAS_ADICIONALES.md)** - Mejoras premium propuestas
+1. **[`AUDITORIA_ESTETICA.md`](portadora-eros/AUDITORIA_ESTETICA.md)** - Análisis de problemas
+   actuales
+2. **[`MEJORAS_ADICIONALES.md`](portadora-eros/MEJORAS_ADICIONALES.md)** - Mejoras premium
+   propuestas
 3. **[`PLAN_CORRECCIONES.md`](portadora-eros/PLAN_CORRECCIONES.md)** - Este documento
 
 ---
 
 ## REGLAS ESTRUCTURALES A APLICAR
 
-| Regla | Especificación |
-|-------|---------------|
-| Contenedor principal | max-width: 1200px, margin: 0 auto |
-| Padding vertical secciones | mínimo 100px |
-| Padding horizontal | 5% |
-| Navbar altura | height: 80px FIJO (no cambia con scroll) |
-| Navbar blur | backdrop-filter: blur(10px), fondo sutil |
-| Navbar scroll | Efecto de hide/show con blur, NO cambiar tamaño |
-| Hero título | margin-bottom: 40px |
-| Botones | border-radius: 50px, padding: 12px 24px, tipografía fina (300) |
-| Cards padding | padding interno: 30px |
-| Cards border-radius | 24px |
-| Tipografía títulos | peso 500 |
-| Tipografía cuerpo | peso 300, line-height: 1.6 |
-| Footer | sobrio, 3 columnas, ~120px espacio superior |
-| Formulario contacto | GRANDE, centrado, con aire |
-| Sobre mí | Foto REDONDA a izquierda, texto a derecha, todo centrado |
+| Regla                      | Especificación                                                 |
+| -------------------------- | -------------------------------------------------------------- |
+| Contenedor principal       | max-width: 1200px, margin: 0 auto                              |
+| Padding vertical secciones | mínimo 100px                                                   |
+| Padding horizontal         | 5%                                                             |
+| Navbar altura              | height: 80px FIJO (no cambia con scroll)                       |
+| Navbar blur                | backdrop-filter: blur(10px), fondo sutil                       |
+| Navbar scroll              | Efecto de hide/show con blur, NO cambiar tamaño                |
+| Hero título                | margin-bottom: 40px                                            |
+| Botones                    | border-radius: 50px, padding: 12px 24px, tipografía fina (300) |
+| Cards padding              | padding interno: 30px                                          |
+| Cards border-radius        | 24px                                                           |
+| Tipografía títulos         | peso 500                                                       |
+| Tipografía cuerpo          | peso 300, line-height: 1.6                                     |
+| Footer                     | sobrio, 3 columnas, ~120px espacio superior                    |
+| Formulario contacto        | GRANDE, centrado, con aire                                     |
+| Sobre mí                   | Foto REDONDA a izquierda, texto a derecha, todo centrado       |
 
 ---
 
@@ -130,12 +134,16 @@
 }
 
 /* Tipografía */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-weight: 500;
   letter-spacing: -0.02em;
 }
 
-body, p {
+body,
+p {
   font-weight: 300;
   line-height: 1.6;
 }
@@ -176,6 +184,7 @@ body, p {
 ```
 
 ### 1.2 Actualizar `tailwind.config.ts`:
+
 - Agregar colores consistentes para bordes
 - Agregar animaciones
 
@@ -184,6 +193,7 @@ body, p {
 ## FASE 2: Layout Principal
 
 ### 2.1 Actualizar `layout.tsx`:
+
 - Agregar clase container-premium al main
 - Aumentar espacio antes del footer
 - Agregar metadata OpenGraph
@@ -202,11 +212,11 @@ body, p {
 
 // 2. Contenedor interno
 <div className="
-  h-full 
-  px-[5%] 
-  flex items-center justify-between 
-  backdrop-blur-[10px] 
-  bg-[#0a0505]/80 
+  h-full
+  px-[5%]
+  flex items-center justify-between
+  backdrop-blur-[10px]
+  bg-[#0a0505]/80
   border-b border-white/10
   transition-all duration-300
 ">
@@ -404,10 +414,10 @@ p-10
 
 ```tsx
 // Stroke width consistente
-const iconProps = { 
-  size, 
-  className, 
-  strokeWidth: 1.5  // SIEMPRE 1.5
+const iconProps = {
+  size,
+  className,
+  strokeWidth: 1.5, // SIEMPRE 1.5
 };
 ```
 
@@ -432,6 +442,7 @@ const iconProps = {
 ```
 
 ### 13.2 Mejorar hover states:
+
 - Buttons: scale + shadow
 - Cards: translateY + border color
 - Links: underline animado
@@ -470,32 +481,32 @@ const iconProps = {
 
 ## PRIORIDADES
 
-| # | Prioridad | Componente | Cambio |
-|---|-----------|-----------|--------|
-| 1 | 🔴 CRÍTICO | Navbar | Height 80px fijo |
-| 2 | 🔴 CRÍTICO | Layout/Globals | Clases premium |
-| 3 | 🔴 CRÍTICO | Footer | pt-[120px] |
-| 4 | 🔴 CRÍTICO | Botones | .btn-premium |
-| 5 | 🟡 IMPORTANTE | Hero | Margin + botones |
-| 6 | 🟡 IMPORTANTE | Cards | border-radius 24px |
-| 7 | 🟡 IMPORTANTE | Sobre Mí | Foto redonda |
-| 8 | 🟡 IMPORTANTE | Contacto | Formulario centrado |
-| 9 | 🟢 MEJORA | Animaciones | Scroll + hover |
-| 10 | 🟢 MEJORA | Popup | Estilos premium |
-| 11 | 🟢 MEJORA | 404 | Página personalizada |
+| #   | Prioridad     | Componente     | Cambio               |
+| --- | ------------- | -------------- | -------------------- |
+| 1   | 🔴 CRÍTICO    | Navbar         | Height 80px fijo     |
+| 2   | 🔴 CRÍTICO    | Layout/Globals | Clases premium       |
+| 3   | 🔴 CRÍTICO    | Footer         | pt-[120px]           |
+| 4   | 🔴 CRÍTICO    | Botones        | .btn-premium         |
+| 5   | 🟡 IMPORTANTE | Hero           | Margin + botones     |
+| 6   | 🟡 IMPORTANTE | Cards          | border-radius 24px   |
+| 7   | 🟡 IMPORTANTE | Sobre Mí       | Foto redonda         |
+| 8   | 🟡 IMPORTANTE | Contacto       | Formulario centrado  |
+| 9   | 🟢 MEJORA     | Animaciones    | Scroll + hover       |
+| 10  | 🟢 MEJORA     | Popup          | Estilos premium      |
+| 11  | 🟢 MEJORA     | 404            | Página personalizada |
 
 ---
 
 ## RESUMEN DE CLASES A CREAR
 
-| Clase | Propósito |
-|-------|-----------|
-| .container-premium | max-w-1200px + px-5% |
-| .section-premium | py-100px |
-| .btn-premium | border-radius 50px + padding 12px 24px |
-| .btn-premium-primary | bg-primary |
-| .btn-premium-outline | border white/20 |
-| .card-premium | border-radius 24px + padding 30px |
-| .input-premium | input consistente |
-| .divider | separador mejorado |
-| .scroll-animate | animaciones al scroll |
+| Clase                | Propósito                              |
+| -------------------- | -------------------------------------- |
+| .container-premium   | max-w-1200px + px-5%                   |
+| .section-premium     | py-100px                               |
+| .btn-premium         | border-radius 50px + padding 12px 24px |
+| .btn-premium-primary | bg-primary                             |
+| .btn-premium-outline | border white/20                        |
+| .card-premium        | border-radius 24px + padding 30px      |
+| .input-premium       | input consistente                      |
+| .divider             | separador mejorado                     |
+| .scroll-animate      | animaciones al scroll                  |

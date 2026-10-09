@@ -4,8 +4,8 @@
 
 ### Requirement: Build validated WhatsApp deep link
 
-The system SHALL provide a pure function `buildWhatsAppLink(phone, message?)`
-that returns a `https://wa.me/<digits>[?text=<encoded>]` URL.
+The system SHALL provide a pure function `buildWhatsAppLink(phone, message?)` that returns a
+`https://wa.me/<digits>[?text=<encoded>]` URL.
 
 #### Scenario: Valid phone without message
 

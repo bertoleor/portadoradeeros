@@ -1,4 +1,4 @@
-import { cva } from "class-variance-authority"
+import { cva } from 'class-variance-authority';
 
 /**
  * Button style variants — extracted to a shared module
@@ -10,28 +10,32 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white/38 backdrop-blur-[20px] border-white/60 text-[rgba(15,15,20,0.82)] shadow-none hover:bg-white/55 hover:border-white/80 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
-        destructive: "bg-red-500/20 border-red-300/40 text-red-600 shadow-none hover:bg-red-500/30 active:scale-[0.98] rounded-full",
-        outline: "border border-[rgba(15,15,20,0.16)] bg-transparent text-[rgba(15,15,20,0.55)] hover:border-[rgba(15,15,20,0.30)] hover:text-[rgba(15,15,20,0.82)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
-        secondary: "bg-white/50 text-black shadow-sm hover:bg-white/70 active:scale-[0.98] rounded-full backdrop-blur-sm border border-white/50",
-        ghost: "hover:bg-accent hover:text-accent-foreground active:scale-[0.98]",
-        link: "text-primary underline-offset-4 hover:underline",
-        soft: "bg-white/38 backdrop-blur-[20px] border-white/60 text-[rgba(15,15,20,0.82)] shadow-none hover:bg-white/55 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
+        default:
+          'bg-white/38 backdrop-blur-[20px] border-white/60 text-[rgba(15,15,20,0.82)] shadow-none hover:bg-white/55 hover:border-white/80 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]',
+        destructive:
+          'bg-red-500/20 border-red-300/40 text-red-600 shadow-none hover:bg-red-500/30 active:scale-[0.98] rounded-full',
+        outline:
+          'border border-[rgba(15,15,20,0.16)] bg-transparent text-[rgba(15,15,20,0.55)] hover:border-[rgba(15,15,20,0.30)] hover:text-[rgba(15,15,20,0.82)] hover:-translate-y-px active:translate-y-0 active:scale-[0.98]',
+        secondary:
+          'bg-white/50 text-black shadow-sm hover:bg-white/70 active:scale-[0.98] rounded-full backdrop-blur-sm border border-white/50',
+        ghost: 'hover:bg-accent hover:text-accent-foreground active:scale-[0.98]',
+        link: 'text-primary underline-offset-4 hover:underline',
+        soft: 'bg-white/38 backdrop-blur-[20px] border-white/60 text-[rgba(15,15,20,0.82)] shadow-none hover:bg-white/55 hover:-translate-y-px active:translate-y-0 active:scale-[0.98]',
       },
       size: {
-        default: "min-h-[2.5rem] md:min-h-[3rem] px-6 md:px-8 py-2 md:py-3 gap-2",
-        xs: "min-h-[1.75rem] px-3 text-[10px] gap-1",
-        sm: "min-h-[2rem] md:min-h-[2.5rem] px-4 md:px-6 text-xs md:text-sm gap-1.5",
-        lg: "min-h-[3rem] md:min-h-[3.5rem] px-8 md:px-10 py-3 md:py-4 text-base md:text-lg uppercase tracking-widest gap-3",
-        icon: "size-10 md:size-12",
-        "icon-xs": "size-7 md:size-8",
-        "icon-sm": "size-9 md:size-10",
-        "icon-lg": "size-12 md:size-14",
+        default: 'min-h-[2.5rem] md:min-h-[3rem] px-6 md:px-8 py-2 md:py-3 gap-2',
+        xs: 'min-h-[1.75rem] px-3 text-[10px] gap-1',
+        sm: 'min-h-[2rem] md:min-h-[2.5rem] px-4 md:px-6 text-xs md:text-sm gap-1.5',
+        lg: 'min-h-[3rem] md:min-h-[3.5rem] px-8 md:px-10 py-3 md:py-4 text-base md:text-lg uppercase tracking-widest gap-3',
+        icon: 'size-10 md:size-12',
+        'icon-xs': 'size-7 md:size-8',
+        'icon-sm': 'size-9 md:size-10',
+        'icon-lg': 'size-12 md:size-14',
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: 'default',
+      size: 'default',
     },
   }
-)
+);

@@ -126,7 +126,9 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {return;}
+    if (!validateForm()) {
+      return;
+    }
 
     setIsLoading(true);
     try {

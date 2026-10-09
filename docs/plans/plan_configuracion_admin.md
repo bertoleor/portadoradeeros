@@ -1,9 +1,12 @@
 # Plan: Nueva Configuración de Admin - Estilo Notion/App Nativa
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[0001-admin-allowlist-is-admin]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] ·
+> [[INDICE-PLANS]] · [[0001-admin-allowlist-is-admin]]
 
 ## Resumen
 
-Rediseñar la página de configuración del admin para tener botones de navegación estilo app nativa, similar a la interfaz de Notion, manteniendo la estética actual del proyecto.
+Rediseñar la página de configuración del admin para tener botones de navegación estilo app nativa,
+similar a la interfaz de Notion, manteniendo la estética actual del proyecto.
 
 ---
 
@@ -124,13 +127,7 @@ interface SettingsCardProps {
   badge?: string; // ej: "Activo" / "Inactivo"
 }
 
-export function SettingsCard({
-  title,
-  description,
-  icon: Icon,
-  href,
-  badge,
-}: SettingsCardProps);
+export function SettingsCard({ title, description, icon: Icon, href, badge }: SettingsCardProps);
 ```
 
 **Estilo:**
@@ -138,7 +135,8 @@ export function SettingsCard({
 - `group flex flex-col p-5 rounded-2xl border border-black/5 bg-white hover:border-black/10 hover:shadow-md hover:shadow-black/5 transition-all cursor-pointer`
 - Texto título: `text-base font-medium text-gray-900 group-hover:text-black`
 - Texto descripción: `text-sm text-gray-500 mt-1`
-- Ícono: `w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-gray-100 transition-colors`
+- Ícono:
+  `w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center mb-3 group-hover:bg-gray-100 transition-colors`
 - Flecha derecha: `opacity-0 group-hover:opacity-100 transition-opacity`
 
 ---

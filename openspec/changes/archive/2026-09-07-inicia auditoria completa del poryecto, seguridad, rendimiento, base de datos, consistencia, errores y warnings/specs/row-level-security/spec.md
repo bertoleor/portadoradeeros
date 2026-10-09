@@ -2,13 +2,19 @@
 
 ## Purpose
 
-Habilitar Row Level Security con políticas mínimas sobre `clients`, `appointments` y `blocked_times`, de modo que un anónimo no pueda leer ni escribir PII, ni adulterar el campo `status` de una reserva.
+Habilitar Row Level Security con políticas mínimas sobre `clients`, `appointments` y
+`blocked_times`, de modo que un anónimo no pueda leer ni escribir PII, ni adulterar el campo
+`status` de una reserva.
 
 ## Requirements
 
 ### Requirement: RLS habilitada en tablas PII
 
-RLS MUST estar habilitada en `clients`, `appointments` y `blocked_times`. Las políticas MUST negar SELECT/INSERT/UPDATE/DELETE a roles anónimos sobre `clients`, y MUST negar toda escritura (INSERT/UPDATE/DELETE) anónima sobre `blocked_times`. `blocked_times` expone únicamente horarios de indisponibilidad de agenda (no PII), por lo que su lectura pública es intencional para el cálculo de disponibilidad en la página pública.
+RLS MUST estar habilitada en `clients`, `appointments` y `blocked_times`. Las políticas MUST negar
+SELECT/INSERT/UPDATE/DELETE a roles anónimos sobre `clients`, y MUST negar toda escritura
+(INSERT/UPDATE/DELETE) anónima sobre `blocked_times`. `blocked_times` expone únicamente horarios de
+indisponibilidad de agenda (no PII), por lo que su lectura pública es intencional para el cálculo de
+disponibilidad en la página pública.
 
 (Previously: RLS inoperante — hallazgo S1)
 
@@ -22,7 +28,8 @@ RLS MUST estar habilitada en `clients`, `appointments` y `blocked_times`. Las po
 
 - GIVEN una solicitud anónima contra `blocked_times`
 - WHEN intenta SELECT
-- THEN recibe las filas de bloqueo de agenda (lectura pública de disponibilidad, no PII — ver design D-SEC/Rollout paso 2)
+- THEN recibe las filas de bloqueo de agenda (lectura pública de disponibilidad, no PII — ver design
+  D-SEC/Rollout paso 2)
 
 #### Scenario: Anónimo escribe bloqueos de agenda
 
@@ -32,7 +39,9 @@ RLS MUST estar habilitada en `clients`, `appointments` y `blocked_times`. Las po
 
 ### Requirement: Status de reserva pública restringido
 
-El INSERT público de reservas MUST aceptar únicamente `status = 'pending'` desde una sesión anónima. Cualquier otro valor (`confirmed`, `cancelled`, etc.) MUST ser rechazado o forzado a `pending`, sin permitir adulterar el estado.
+El INSERT público de reservas MUST aceptar únicamente `status = 'pending'` desde una sesión anónima.
+Cualquier otro valor (`confirmed`, `cancelled`, etc.) MUST ser rechazado o forzado a `pending`, sin
+permitir adulterar el estado.
 
 (Previously: anon podía setear `status` arbitrario — hallazgo S6)
 

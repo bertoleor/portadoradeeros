@@ -6,7 +6,9 @@ import { logger } from '@/lib/logger';
 
 const handleUpdatefound = (registration: ServiceWorkerRegistration) => {
   const newWorker = registration.installing;
-  if (!newWorker) {return;}
+  if (!newWorker) {
+    return;
+  }
 
   const onStateChange = () => {
     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
@@ -18,7 +20,9 @@ const handleUpdatefound = (registration: ServiceWorkerRegistration) => {
 };
 
 const registerSW = async () => {
-  if (!('serviceWorker' in navigator)) {return;}
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
 
   try {
     // Limpiar SWs con scope incorrecto (versiones anteriores)
@@ -42,7 +46,9 @@ const registerSW = async () => {
 
 export function PWAHandler() {
   useEffect(() => {
-    if (globalThis.window === undefined) {return;}
+    if (globalThis.window === undefined) {
+      return;
+    }
 
     if (document.readyState === 'complete') {
       void registerSW();

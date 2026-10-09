@@ -4,20 +4,20 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { 
-  Bold, 
-  Italic, 
-  Underline as UnderlineIcon, 
-  List, 
-  ListOrdered, 
-  AlignLeft, 
-  AlignCenter, 
+import {
+  AlignCenter,
+  AlignLeft,
   AlignRight,
+  Bold,
   Heading2,
   Heading3,
-  Quote
+  Italic,
+  List,
+  ListOrdered,
+  Quote,
+  Underline as UnderlineIcon,
 } from 'lucide-react';
 
 interface RichTextEditorProps {
@@ -26,14 +26,14 @@ interface RichTextEditorProps {
   placeholder?: string;
 }
 
-const MenuButton = ({ 
-  onClick, 
-  isActive, 
+const MenuButton = ({
+  onClick,
+  isActive,
   children,
-  title
-}: { 
-  onClick: () => void; 
-  isActive?: boolean; 
+  title,
+}: {
+  onClick: () => void;
+  isActive?: boolean;
   children: React.ReactNode;
   title: string;
 }) => (
@@ -44,9 +44,7 @@ const MenuButton = ({
       onClick();
     }}
     className={`p-2 rounded-lg transition-colors ${
-      isActive 
-        ? 'bg-primary/20 text-primary' 
-        : 'hover:bg-white/5 text-cream/40'
+      isActive ? 'bg-primary/20 text-primary' : 'hover:bg-white/5 text-cream/40'
     }`}
     title={title}
   >
@@ -80,7 +78,9 @@ export function RichTextEditor({ content, onChange, placeholder }: Readonly<Rich
     },
   });
 
-  if (!editor) {return null;}
+  if (!editor) {
+    return null;
+  }
 
   return (
     <div className="border border-white/10 rounded-xl overflow-hidden bg-surface/30">
@@ -107,7 +107,7 @@ export function RichTextEditor({ content, onChange, placeholder }: Readonly<Rich
         >
           <UnderlineIcon size={18} />
         </MenuButton>
-        
+
         <div className="w-px h-6 bg-white/5 mx-1 my-auto" />
 
         <MenuButton

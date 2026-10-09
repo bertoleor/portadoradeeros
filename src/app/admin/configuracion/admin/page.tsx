@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Settings, Save } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Save, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button, Input, Label } from '@/components/ui';
 import { ImageUploader } from '@/components/ui/ImageUploader';
@@ -33,13 +33,13 @@ export default function AdminConfigPage() {
   }, []);
 
   const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    
+
     try {
       const result = await updateAdminSettings({
         adminName: formData.nombre,
@@ -86,7 +86,12 @@ export default function AdminConfigPage() {
           <div className="bg-white/60 backdrop-blur-sm border border-white/50 rounded-2xl shadow-sm p-6 md:p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-1.5">
-                <Label htmlFor="nombre" className="text-[10px] font-bold text-black/40 uppercase tracking-widest">Nombre del Administrador</Label>
+                <Label
+                  htmlFor="nombre"
+                  className="text-[10px] font-bold text-black/40 uppercase tracking-widest"
+                >
+                  Nombre del Administrador
+                </Label>
                 <Input
                   id="nombre"
                   type="text"
@@ -98,12 +103,14 @@ export default function AdminConfigPage() {
               </div>
 
               <div className="space-y-1.5 pt-2">
-                <Label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">Foto de Perfil Interna</Label>
+                <Label className="text-[10px] font-bold text-black/40 uppercase tracking-widest">
+                  Foto de Perfil Interna
+                </Label>
                 <div className="mt-2">
                   <ImageUploader
                     label="Subir foto de perfil"
                     defaultImage={formData.fotoPerfil}
-                    onUpload={(url) => setFormData(prev => ({ ...prev, fotoPerfil: url }))}
+                    onUpload={(url) => setFormData((prev) => ({ ...prev, fotoPerfil: url }))}
                   />
                 </div>
               </div>

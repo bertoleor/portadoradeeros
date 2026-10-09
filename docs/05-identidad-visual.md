@@ -1,5 +1,7 @@
 # EROS — Identidad visual
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[04-branding]] · [[eros-reporte-producto-marketing-estilo-2026-09-12]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[04-branding]] ·
+> [[eros-reporte-producto-marketing-estilo-2026-09-12]]
 
 > Fuente: `src/app/globals.css`, `src/app/layout.tsx`, `src/components/client/Hero.tsx`,
 > `src/fonts/*`. Verificado 2026-09-15.

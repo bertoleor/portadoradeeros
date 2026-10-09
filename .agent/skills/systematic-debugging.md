@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "4-phase root cause debugging: understand bugs before fixing."
+description: '4-phase root cause debugging: understand bugs before fixing.'
 version: 1.1.0
 author: Hermes Agent (adapted from obra/superpowers)
 license: MIT
@@ -31,13 +31,18 @@ If you haven't completed Phase 1, you cannot propose fixes.
 
 ## The Feedback Loop Rule
 
-The feedback loop is the debugging work. Before reading code to build a theory, create or identify a **tight** command that can go red on the user's exact symptom and green when the bug is fixed. A tight loop is fast, deterministic, agent-runnable, and specific enough to catch this bug — not merely "doesn't crash".
+The feedback loop is the debugging work. Before reading code to build a theory, create or identify a
+**tight** command that can go red on the user's exact symptom and green when the bug is fixed. A
+tight loop is fast, deterministic, agent-runnable, and specific enough to catch this bug — not
+merely "doesn't crash".
 
-When a clean repro is hard, spend disproportionate effort building the loop. Guessing without a red-capable loop is the failure mode this skill exists to prevent.
+When a clean repro is hard, spend disproportionate effort building the loop. Guessing without a
+red-capable loop is the failure mode this skill exists to prevent.
 
 ## When to Use
 
 Use for ANY technical issue:
+
 - Test failures
 - Bugs in production
 - Unexpected behavior
@@ -46,6 +51,7 @@ Use for ANY technical issue:
 - Integration issues
 
 **Use this ESPECIALLY when:**
+
 - Under time pressure (emergencies make guessing tempting)
 - "Just one quick fix" seems obvious
 - You've already tried multiple fixes
@@ -53,6 +59,7 @@ Use for ANY technical issue:
 - You don't fully understand the issue
 
 **Don't skip when:**
+
 - Issue seems simple (simple bugs have root causes too)
 - You're in a hurry (rushing guarantees rework)
 - Someone wants it fixed NOW (systematic is faster than thrashing)
@@ -74,7 +81,8 @@ You MUST complete each phase before proceeding to the next.
 - Read stack traces completely
 - Note line numbers, file paths, error codes
 
-**Action:** Use `read_file` on the relevant source files. Use `search_files` to find the error string in the codebase.
+**Action:** Use `read_file` on the relevant source files. Use `search_files` to find the error
+string in the codebase.
 
 ### 2. Build a Tight Feedback Loop
 
@@ -91,11 +99,14 @@ You MUST complete each phase before proceeding to the next.
 3. **CLI invocation** with fixture input, diffing stdout/stderr against expected output.
 4. **Headless browser script** (Playwright/Puppeteer) asserting on DOM, console, or network.
 5. **Replay a captured trace**: HAR, request payload, event log, queue message, or webhook body.
-6. **Throwaway harness** that boots the smallest useful slice of the system and calls the failing path.
+6. **Throwaway harness** that boots the smallest useful slice of the system and calls the failing
+   path.
 7. **Property / fuzz loop** when the bug is intermittent wrong output over a broad input space.
-8. **Bisection harness** suitable for `git bisect run` when the bug appeared between two known states.
+8. **Bisection harness** suitable for `git bisect run` when the bug appeared between two known
+   states.
 9. **Differential loop** comparing old vs new version, two configs, two providers, or two datasets.
-10. **Human-in-the-loop script** only as a last resort: script the human steps and capture their result so the loop stays structured.
+10. **Human-in-the-loop script** only as a last resort: script the human steps and capture their
+    result so the loop stays structured.
 
 **Tighten the loop once it exists:**
 
@@ -103,7 +114,9 @@ You MUST complete each phase before proceeding to the next.
 - Make the signal sharper: assert the exact symptom, not generic success.
 - Make it more deterministic: pin time, seed randomness, isolate filesystem, freeze network.
 
-For non-deterministic bugs, the immediate goal is a higher reproduction rate, not perfection. Run the trigger 100x, parallelize, add stress, narrow timing windows, or inject sleeps. A 50% flake is debuggable; a 1% flake usually is not.
+For non-deterministic bugs, the immediate goal is a higher reproduction rate, not perfection. Run
+the trigger 100x, parallelize, add stress, narrow timing windows, or inject sleeps. A 50% flake is
+debuggable; a 1% flake usually is not.
 
 **Action:** Use the `terminal` tool to run the tight loop:
 
@@ -144,14 +157,14 @@ git log -p --follow src/problematic_file.py | head -100
 **BEFORE proposing fixes, add diagnostic instrumentation:**
 
 For EACH component boundary:
+
 - Log what data enters the component
 - Log what data exits the component
 - Verify environment/config propagation
 - Check state at each layer
 
-Run once to gather evidence showing WHERE it breaks.
-THEN analyze evidence to identify the failing component.
-THEN investigate that specific component.
+Run once to gather evidence showing WHERE it breaks. THEN analyze evidence to identify the failing
+component. THEN investigate that specific component.
 
 ### 5. Trace Data Flow
 
@@ -193,9 +206,12 @@ search_files("variable_name\\s*=", path="src/", file_glob="*.py")
 
 ### 0. Minimize the Reproduction
 
-Once the loop is red, shrink the repro to the smallest scenario that still goes red. Cut inputs, callers, config, data, and steps **one at a time**, re-running the loop after each cut. Keep only what is load-bearing for the failure.
+Once the loop is red, shrink the repro to the smallest scenario that still goes red. Cut inputs,
+callers, config, data, and steps **one at a time**, re-running the loop after each cut. Keep only
+what is load-bearing for the failure.
 
-Done when removing any remaining element makes the loop go green. A minimal repro narrows the hypothesis space and often becomes the cleanest regression test.
+Done when removing any remaining element makes the loop go green. A minimal repro narrows the
+hypothesis space and often becomes the cleanest regression test.
 
 ### 1. Find Working Examples
 
@@ -236,10 +252,12 @@ search_files("similar_pattern", path="src/", file_glob="*.py")
 
 - Generate 3–5 plausible hypotheses before testing any single one.
 - Rank them by likelihood and cheapness to falsify.
-- State the prediction each hypothesis makes: "If X is the cause, then changing or observing Y should make Z happen."
+- State the prediction each hypothesis makes: "If X is the cause, then changing or observing Y
+  should make Z happen."
 - Discard or sharpen any hypothesis that does not make a testable prediction.
 
-If the user is present, show the ranked list before testing. They may have domain knowledge that instantly re-ranks it. If the user is AFK, proceed with your ranking.
+If the user is present, show the ranked list before testing. They may have domain knowledge that
+instantly re-ranks it. If the user is AFK, proceed with your ranking.
 
 ### 2. Test Minimally
 
@@ -247,7 +265,8 @@ If the user is present, show the ranked list before testing. They may have domai
 - Change one variable at a time.
 - Don't fix multiple things at once.
 - Prefer debugger/REPL inspection when available; one breakpoint beats ten logs.
-- If you add logs, tag every temporary line with a unique prefix such as `[DEBUG-a4f2]` so cleanup is a single search.
+- If you add logs, tag every temporary line with a unique prefix such as `[DEBUG-a4f2]` so cleanup
+  is a single search.
 
 ### 3. Verify Before Continuing
 
@@ -303,11 +322,13 @@ pytest tests/ -q
 ### 5. If 3+ Fixes Failed: Question Architecture
 
 **Pattern indicating an architectural problem:**
+
 - Each fix reveals new shared state/coupling in a different place
 - Fixes require "massive refactoring" to implement
 - Each fix creates new symptoms elsewhere
 
 **STOP and question fundamentals:**
+
 - Is this pattern fundamentally sound?
 - Are we "sticking with it through sheer inertia"?
 - Should we refactor the architecture vs. continue fixing symptoms?
@@ -321,6 +342,7 @@ This is NOT a failed hypothesis — this is a wrong architecture.
 ## Red Flags — STOP and Follow Process
 
 If you catch yourself thinking:
+
 - "Quick fix for now, investigate later"
 - "Just try changing X and see if it works"
 - "Add multiple changes, run tests"
@@ -339,25 +361,25 @@ If you catch yourself thinking:
 
 ## Common Rationalizations
 
-| Excuse | Reality |
-|--------|---------|
-| "Issue is simple, don't need process" | Simple issues have root causes too. Process is fast for simple bugs. |
-| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check thrashing. |
-| "Just try this first, then investigate" | First fix sets the pattern. Do it right from the start. |
-| "I'll write test after confirming fix works" | Untested fixes don't stick. Test first proves it. |
-| "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
-| "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
-| "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
-| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question the pattern, don't fix again. |
+| Excuse                                       | Reality                                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------------- |
+| "Issue is simple, don't need process"        | Simple issues have root causes too. Process is fast for simple bugs.        |
+| "Emergency, no time for process"             | Systematic debugging is FASTER than guess-and-check thrashing.              |
+| "Just try this first, then investigate"      | First fix sets the pattern. Do it right from the start.                     |
+| "I'll write test after confirming fix works" | Untested fixes don't stick. Test first proves it.                           |
+| "Multiple fixes at once saves time"          | Can't isolate what worked. Causes new bugs.                                 |
+| "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely.                  |
+| "I see the problem, let me fix it"           | Seeing symptoms ≠ understanding root cause.                                 |
+| "One more fix attempt" (after 2+ failures)   | 3+ failures = architectural problem. Question the pattern, don't fix again. |
 
 ## Quick Reference
 
-| Phase | Key Activities | Success Criteria |
-|-------|---------------|------------------|
-| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence, trace data flow | Understand WHAT and WHY |
-| **2. Pattern** | Find working examples, compare, identify differences | Know what's different |
-| **3. Hypothesis** | Form theory, test minimally, one variable at a time | Confirmed or new hypothesis |
-| **4. Implementation** | Create regression test, fix root cause, verify | Bug resolved, all tests pass |
+| Phase                 | Key Activities                                                          | Success Criteria             |
+| --------------------- | ----------------------------------------------------------------------- | ---------------------------- |
+| **1. Root Cause**     | Read errors, reproduce, check changes, gather evidence, trace data flow | Understand WHAT and WHY      |
+| **2. Pattern**        | Find working examples, compare, identify differences                    | Know what's different        |
+| **3. Hypothesis**     | Form theory, test minimally, one variable at a time                     | Confirmed or new hypothesis  |
+| **4. Implementation** | Create regression test, fix root cause, verify                          | Bug resolved, all tests pass |
 
 ## Hermes Agent Integration
 
@@ -395,6 +417,7 @@ delegate_task(
 ### With test-driven-development
 
 When fixing bugs:
+
 1. Write a test that reproduces the bug (RED)
 2. Debug systematically to find root cause
 3. Fix the root cause (GREEN)
@@ -403,6 +426,7 @@ When fixing bugs:
 ## Real-World Impact
 
 From debugging sessions:
+
 - Systematic approach: 15-30 minutes to fix
 - Random fixes approach: 2-3 hours of thrashing
 - First-time fix rate: 95% vs 40%

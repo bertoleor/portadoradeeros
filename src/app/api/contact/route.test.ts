@@ -98,15 +98,9 @@ describe('contactSchema', () => {
 
   it('rejects over-long fields (payload cap on a public form)', () => {
     const base = { name: 'Ana', email: 'a@b.com', message: 'Hola' };
-    expect(
-      contactSchema.safeParse({ ...base, name: 'x'.repeat(201) }).success
-    ).toBe(false);
-    expect(
-      contactSchema.safeParse({ ...base, message: 'x'.repeat(5001) }).success
-    ).toBe(false);
-    expect(
-      contactSchema.safeParse({ ...base, phone: '5'.repeat(51) }).success
-    ).toBe(false);
+    expect(contactSchema.safeParse({ ...base, name: 'x'.repeat(201) }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...base, message: 'x'.repeat(5001) }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...base, phone: '5'.repeat(51) }).success).toBe(false);
   });
 
   it('trims surrounding whitespace server-side', () => {

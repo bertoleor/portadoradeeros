@@ -2,12 +2,10 @@
 
 ## Intent
 
-`src/lib/socials.ts` builds WhatsApp URLs with an inline regex
-(`username.replaceAll(/\D/g, '')`) and no validation: empty input yields
-`https://wa.me/`, short/long digit strings pass silently. Add one minimal
-pure function `buildWhatsAppLink(phone, message?)` with explicit
-validation, covered by Strict TDD, so every WhatsApp CTA site-wide shares
-one tested contract.
+`src/lib/socials.ts` builds WhatsApp URLs with an inline regex (`username.replaceAll(/\D/g, '')`)
+and no validation: empty input yields `https://wa.me/`, short/long digit strings pass silently. Add
+one minimal pure function `buildWhatsAppLink(phone, message?)` with explicit validation, covered by
+Strict TDD, so every WhatsApp CTA site-wide shares one tested contract.
 
 ## Scope
 
@@ -30,15 +28,15 @@ one tested contract.
 
 ## Risks
 
-| Risk | Likelihood | Mitigation |
-| ---- | ---------- | ---------- |
-| Over-strict digit rule rejects real numbers | Low | Accept 8–15 digits (E.164 range sans `+`), strip separators first |
-| Scope creep (normalization per country) | Low | No country logic; digits-only contract |
+| Risk                                        | Likelihood | Mitigation                                                        |
+| ------------------------------------------- | ---------- | ----------------------------------------------------------------- |
+| Over-strict digit rule rejects real numbers | Low        | Accept 8–15 digits (E.164 range sans `+`), strip separators first |
+| Scope creep (normalization per country)     | Low        | No country logic; digits-only contract                            |
 
 ## Rollback Plan
 
-Single bounded commit; `git revert` restores prior state (new files only,
-no modifications to existing code).
+Single bounded commit; `git revert` restores prior state (new files only, no modifications to
+existing code).
 
 ## Success Criteria
 

@@ -1,5 +1,7 @@
 # EROS — Framework / Stack
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[02-como-se-arma]] · [[projects/eros/STATUS|STATUS]] · [[docs/proyectos/eros|eros]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[02-como-se-arma]] ·
+> [[projects/eros/STATUS|STATUS]] · [[docs/proyectos/eros|eros]]
 
 > Fuente: `package.json`, `next.config.ts`, `src/app/layout.tsx`, `src/app/globals.css`,
 > `components.json`, `tsconfig.json`. Verificado 2026-09-15.
@@ -21,12 +23,12 @@
 
 ## Backend / datos
 
-| Capa                | Elección                                                                          |
-| ------------------- | --------------------------------------------------------------------------------- |
-| DB + Auth + Storage | Supabase (`@supabase/ssr` 0.9, `@supabase/supabase-js` 2.99)                      |
+| Capa                | Elección                                                                                                                                     |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| DB + Auth + Storage | Supabase (`@supabase/ssr` 0.9, `@supabase/supabase-js` 2.99)                                                                                 |
 | Email               | Resend (`resend` 6.28, default) + fallback SMTP (`nodemailer` 10) vía `EMAIL_PROVIDER` — plantillas en `src/lib/email/resend.ts` / `smtp.ts` |
-| Push admin          | `web-push` 3.6.7 + tabla `push_subscriptions`                                     |
-| Validación          | Zod 4 en formularios y API routes                                                 |
+| Push admin          | `web-push` 3.6.7 + tabla `push_subscriptions`                                                                                                |
+| Validación          | Zod 4 en formularios y API routes                                                                                                            |
 
 ## Plataforma
 

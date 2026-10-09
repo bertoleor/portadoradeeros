@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardTitle, CardDescription } from './Card';
+import { Card, CardDescription, CardHeader, CardTitle } from './Card';
 
 interface InfoCardProps {
   readonly title: string;
@@ -6,16 +6,14 @@ interface InfoCardProps {
   readonly className?: string;
 }
 
-export function InfoCard({ 
-  title, 
-  description, 
-  className = '' 
-}: InfoCardProps) {
+export function InfoCard({ title, description, className = '' }: InfoCardProps) {
   return (
     <Card className={`h-full flex flex-col justify-center glass ${className}`.trim()}>
       <CardHeader>
         <CardTitle className="text-3xl font-normal tracking-tight text-black">{title}</CardTitle>
-        <CardDescription className="text-gray-600 font-light leading-relaxed text-lg mt-4">{description}</CardDescription>
+        <CardDescription className="text-gray-600 font-light leading-relaxed text-lg mt-4">
+          {description}
+        </CardDescription>
       </CardHeader>
     </Card>
   );

@@ -6,9 +6,13 @@ interface SkeletonProps {
   readonly glass?: boolean;
 }
 
-export function Skeleton({ className = '', variant = 'rectangular', glass = false }: SkeletonProps) {
+export function Skeleton({
+  className = '',
+  variant = 'rectangular',
+  glass = false,
+}: SkeletonProps) {
   const baseClasses = glass ? 'skeleton-glass' : 'skeleton';
-  
+
   const variantClasses = {
     text: 'h-4 w-full rounded',
     circular: 'rounded-full',
@@ -16,10 +20,7 @@ export function Skeleton({ className = '', variant = 'rectangular', glass = fals
   };
 
   return (
-    <div
-      className={`${baseClasses} ${variantClasses[variant]} ${className}`}
-      aria-hidden="true"
-    />
+    <div className={`${baseClasses} ${variantClasses[variant]} ${className}`} aria-hidden="true" />
   );
 }
 

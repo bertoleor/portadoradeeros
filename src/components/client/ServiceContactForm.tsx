@@ -564,19 +564,33 @@ export function ServiceContactForm({
 
   const handleChange = (f: keyof FormData, v: string) => {
     setFormData((prev) => ({ ...prev, [f]: v }));
-    if (errors[f]) {setErrors((prev) => ({ ...prev, [f]: '' }));}
+    if (errors[f]) {
+      setErrors((prev) => ({ ...prev, [f]: '' }));
+    }
   };
 
   const validateStep = (s: Step) => {
     const e: Record<string, string> = {};
     if (s === 1) {
-      if (!formData.name.trim()) {e.name = 'Requerido';}
-      if (!formData.surname.trim()) {e.surname = 'Requerido';}
-      if (!formData.phone.trim()) {e.phone = 'Requerido';}
-      if (!formData.email.trim()) {e.email = 'Requerido';}
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {e.email = 'Email inválido';}
-    } else if (s === 2 && !formData.appointmentDate) {e.appointmentDate = 'Seleccioná un día';}
-    else if (s === 3 && !formData.appointmentTime) {e.appointmentTime = 'Seleccioná una hora';}
+      if (!formData.name.trim()) {
+        e.name = 'Requerido';
+      }
+      if (!formData.surname.trim()) {
+        e.surname = 'Requerido';
+      }
+      if (!formData.phone.trim()) {
+        e.phone = 'Requerido';
+      }
+      if (!formData.email.trim()) {
+        e.email = 'Requerido';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        e.email = 'Email inválido';
+      }
+    } else if (s === 2 && !formData.appointmentDate) {
+      e.appointmentDate = 'Seleccioná un día';
+    } else if (s === 3 && !formData.appointmentTime) {
+      e.appointmentTime = 'Seleccioná una hora';
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -602,8 +616,11 @@ export function ServiceContactForm({
         notes: formData.message,
         company_website: formData.company_website,
       });
-      if (result.ok) {setIsSubmitted(true);}
-      else {setErrors({ submit: result.error.message || 'Error al agendar.' });}
+      if (result.ok) {
+        setIsSubmitted(true);
+      } else {
+        setErrors({ submit: result.error.message || 'Error al agendar.' });
+      }
     } catch (err) {
       setErrors({ submit: (err as Error)?.message || 'Error de conexión.' });
     } finally {

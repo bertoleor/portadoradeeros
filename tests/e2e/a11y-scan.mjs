@@ -186,7 +186,7 @@ async function main() {
       for (const v of r.violations) {
         if (v.impact === 'critical' || v.impact === 'serious') {
           console.log(
-            `  [${v.impact}] ${v.id} — ${v.help} @ ${r.viewport} ${r.route} (nodes ${v.nodes})`,
+            `  [${v.impact}] ${v.id} — ${v.help} @ ${r.viewport} ${r.route} (nodes ${v.nodes})`
           );
           console.log(`      target: ${v.target}`);
           console.log(`      html: ${v.html}`);

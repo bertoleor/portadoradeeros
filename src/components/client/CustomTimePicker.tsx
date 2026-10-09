@@ -32,7 +32,9 @@ export function CustomTimePicker({
 
   // Determine current day of week and its hours
   const getDayHours = () => {
-    if (!selectedDate || !businessHours) {return { closed: true, start: 9, end: 18 };} // Default safe window
+    if (!selectedDate || !businessHours) {
+      return { closed: true, start: 9, end: 18 };
+    } // Default safe window
 
     // Get day name (monday, tuesday, etc)
     const date = new Date(selectedDate + 'T12:00:00'); // Use noon to avoid timezone shifts
@@ -40,7 +42,9 @@ export function CustomTimePicker({
     const dayName = days[date.getDay()];
 
     const dayConfig = businessHours?.[dayName];
-    if (!dayConfig || dayConfig.closed) {return { closed: true, start: 0, end: 0 };}
+    if (!dayConfig || dayConfig.closed) {
+      return { closed: true, start: 0, end: 0 };
+    }
 
     return {
       closed: false,
@@ -61,8 +65,12 @@ export function CustomTimePicker({
   useEffect(() => {
     if (value) {
       const [h, m] = value.split(':');
-      if (h !== selectedHour) {setSelectedHour(h);}
-      if (m !== selectedMinute) {setSelectedMinute(m);}
+      if (h !== selectedHour) {
+        setSelectedHour(h);
+      }
+      if (m !== selectedMinute) {
+        setSelectedMinute(m);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
@@ -148,7 +156,9 @@ export function CustomTimePicker({
 
             // Check if time is within blocked range
             const isBlocked = blockedTimes.some((bt) => {
-              if (bt.isAllDay) {return true;}
+              if (bt.isAllDay) {
+                return true;
+              }
               const [startH, startM] = bt.start.split(':').map(Number);
               const [endH, endM] = bt.end.split(':').map(Number);
               const timeH = Number.parseInt(selectedHour, 10);

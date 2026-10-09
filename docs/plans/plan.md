@@ -1,5 +1,7 @@
 # Portadora de Eros - Implementation Plan
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[PLAN_IMPLEMENTACION_FINAL]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] ·
+> [[INDICE-PLANS]] · [[PLAN_IMPLEMENTACION_FINAL]]
 
 ## Project Overview
 
@@ -13,6 +15,7 @@
 ## Design System
 
 ### Colors
+
 - **Primary:** Burgundy (`#800020`) - Background, borders, accents
 - **Secondary:** Dark Gold (`#B8860B`) - Used for highlights, buttons
 - **Background:** Burgundy (`#800020`) - Main background color
@@ -21,12 +24,14 @@
 - **Success:** Green (`#16A34A`)
 
 ### Typography
+
 - Single sans-serif font (user will provide later)
 - Hero: 4rem+ on desktop, 2.5rem on mobile
 - Headings: 2rem-3rem
 - Body: 1rem-1.125rem
 
 ### Components
+
 - Rounded cards (border-radius: 16px)
 - Rounded buttons (border-radius: 12px)
 - SVG icons only (no emojis)
@@ -38,6 +43,7 @@
 ## Page Structure
 
 ### Client Pages (`/`)
+
 ```
 /                    → Home (Hero + Services Carousel)
 /servicios           → Services overview
@@ -50,6 +56,7 @@
 ```
 
 ### Admin Pages (`/admin`)
+
 ```
 /admin               → Dashboard (redirect to /admin/servicios)
 /admin/servicios     → Edit services
@@ -64,18 +71,21 @@
 ## Functionality Specification
 
 ### 1. Hero Section
+
 - Large "Portadora de Eros" title
 - Subtitle tagline
 - Call-to-action button
 - Background with subtle animation (user will provide later)
 
 ### 2. Services Carousel
+
 - **Desktop:** Horizontal scroll, one elongated card visible at a time
 - **Mobile:** Vertical scroll, full-width cards
 - Services: Tarot, Buzios, Limpieza Energética, Velomancia
 - Each card has: SVG icon, title, brief description, "Ver más" button
 
 ### 3. Service Detail Pages
+
 - Large header with service name
 - Description
 - Image
@@ -84,49 +94,58 @@
 ### 4. Scheduling Popup Form
 
 **Step 1:**
+
 - Left (70%): Name, Surname, Phone, Email inputs
 - Right (30%): Calendar (date picker) + Hour selector
 
 **Step 2:**
+
 - Transfer instructions
 - Bank details display
 - "Confirmar" button
 - Success message
 
 ### 5. About Me Page
+
 - Photo on left (round frame, blur effect)
 - Bio text on right
 - Social links
 
 ### 6. Contact Page
+
 - Contact form
 - Social media links
 - Location (if applicable)
 
 ### 7. Admin Authentication
+
 - Hardcoded credentials: `jacque` / `portadora`
 - Session stored in localStorage/cookies
 - Protected routes - block access without login
 - Native app feel with client-side navigation
 
 ### 8. Admin - Simple Dashboard
+
 - Welcome message
 - Quick stats (appointments today, week clients)
 - Quick access to main sections
 - No automatic redirect
 
 ### 9. Admin - Clients
+
 - Table view of clients
 - Filter by week/month
 - Client details
 
 ### 10. Admin - Calendar
+
 - Google Calendar-like interface
 - View appointments
 - Add external clients
 - Drag-and-drop rescheduling
 
 ### 11. Admin - Settings
+
 - Social media links (single config file)
 - Business hours
 - Bank details for transfers
@@ -135,6 +154,7 @@
 ---
 
 ## SEO & Sitemap
+
 - Next.js Metadata API for SEO
 - Dynamic sitemap.xml generation
 - robots.txt configuration
@@ -144,6 +164,7 @@
 ---
 
 ## Social Media Configuration
+
 - Single `socials.ts` file with all social links and usernames
 - Used across client pages and admin settings
 
@@ -152,6 +173,7 @@
 ## Technical Architecture
 
 ### Directory Structure
+
 ```
 /src
   /app                    # Next.js App Router
@@ -189,6 +211,7 @@
 ```
 
 ### Libraries to Install
+
 - `next@16` (latest canary if needed)
 - `react@19`
 - `react-dom@19`
@@ -210,21 +233,25 @@
 ## API Integrations (Prepared)
 
 ### Supabase
+
 - Environment variables ready
 - Client initialization
 - Auth middleware
 
 ### Resend
+
 - Email service configuration
 - Transactional emails
 
 ### Google Calendar
+
 - API credentials
 - OAuth flow preparation
 
 ---
 
 ## Error Handling
+
 - Error boundaries per section
 - Centralized error display
 - Toast notifications
@@ -233,6 +260,7 @@
 ---
 
 ## Performance Optimizations
+
 - Custom skeleton loaders per page
 - Blur image placeholders (blurDataURL)
 - Lazy loading for images
@@ -253,6 +281,7 @@
 ---
 
 ## Notes
+
 - No emojis - SVG icons only
 - No AI aesthetics - solid colors, clean design
 - Burgundy border + dark gold details

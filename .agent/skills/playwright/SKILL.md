@@ -1,12 +1,12 @@
 ---
 name: playwright
 description: >
-  Playwright E2E testing patterns.
-  Trigger: When writing E2E tests - Page Objects, selectors, MCP workflow.
+  Playwright E2E testing patterns. Trigger: When writing E2E tests - Page Objects, selectors, MCP
+  workflow.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.1"
+  version: '1.1'
 ---
 
 ## MCP Workflow (MANDATORY If Available)
@@ -56,23 +56,23 @@ tests/
 
 ```typescript
 // 1. BEST - getByRole for interactive elements
-this.submitButton = page.getByRole("button", { name: "Submit" });
-this.navLink = page.getByRole("link", { name: "Dashboard" });
+this.submitButton = page.getByRole('button', { name: 'Submit' });
+this.navLink = page.getByRole('link', { name: 'Dashboard' });
 
 // 2. BEST - getByLabel for form controls
-this.emailInput = page.getByLabel("Email");
-this.passwordInput = page.getByLabel("Password");
+this.emailInput = page.getByLabel('Email');
+this.passwordInput = page.getByLabel('Password');
 
 // 3. SPARINGLY - getByText for static content only
-this.errorMessage = page.getByText("Invalid credentials");
-this.pageTitle = page.getByText("Welcome");
+this.errorMessage = page.getByText('Invalid credentials');
+this.pageTitle = page.getByText('Welcome');
 
 // 4. LAST RESORT - getByTestId when above fail
-this.customWidget = page.getByTestId("date-picker");
+this.customWidget = page.getByTestId('date-picker');
 
 // ❌ AVOID fragile selectors
-this.button = page.locator(".btn-primary"); // NO
-this.input = page.locator("#email"); // NO
+this.button = page.locator('.btn-primary'); // NO
+this.input = page.locator('#email'); // NO
 ```
 
 ## Scope Detection (ASK IF AMBIGUOUS)
@@ -91,7 +91,7 @@ this.input = page.locator("#email"); // NO
 ## Page Object Pattern
 
 ```typescript
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 
 // BasePage - ALL pages extend this
 export class BasePage {
@@ -99,7 +99,7 @@ export class BasePage {
 
   async goto(path: string): Promise<void> {
     await this.page.goto(path);
-    await this.page.waitForLoadState("networkidle");
+    await this.page.waitForLoadState('networkidle');
   }
 
   // Common methods go here (see Refactoring Guidelines)
@@ -126,13 +126,13 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.getByLabel("Email");
-    this.passwordInput = page.getByLabel("Password");
-    this.submitButton = page.getByRole("button", { name: "Sign in" });
+    this.emailInput = page.getByLabel('Email');
+    this.passwordInput = page.getByLabel('Password');
+    this.submitButton = page.getByRole('button', { name: 'Sign in' });
   }
 
   async goto(): Promise<void> {
-    await super.goto("/login");
+    await super.goto('/login');
   }
 
   async login(data: LoginData): Promise<void> {
@@ -142,7 +142,7 @@ export class LoginPage extends BasePage {
   }
 
   async verifyCriticalOutcome(): Promise<void> {
-    await expect(this.page).toHaveURL("/dashboard");
+    await expect(this.page).toHaveURL('/dashboard');
   }
 }
 ```
@@ -153,10 +153,10 @@ export class LoginPage extends BasePage {
 
 ```typescript
 // ✅ GOOD: Reuse existing page objects
-import { SignInPage } from "../sign-in/sign-in-page";
-import { HomePage } from "../home/home-page";
+import { SignInPage } from '../sign-in/sign-in-page';
+import { HomePage } from '../home/home-page';
 
-test("User can sign up and login", async ({ page }) => {
+test('User can sign up and login', async ({ page }) => {
   const signUpPage = new SignUpPage(page);
   const signInPage = new SignInPage(page); // REUSE
   const homePage = new HomePage(page); // REUSE
@@ -236,9 +236,9 @@ export function generateUniqueEmail(): string {
 
 export function generateTestUser() {
   return {
-    name: "Test User",
+    name: 'Test User',
     email: generateUniqueEmail(),
-    password: "TestPassword123!",
+    password: 'TestPassword123!',
   };
 }
 ```
@@ -246,21 +246,21 @@ export function generateTestUser() {
 ## Test Pattern with Tags
 
 ```typescript
-import { test, expect } from "@playwright/test";
-import { LoginPage } from "./login-page";
+import { test, expect } from '@playwright/test';
+import { LoginPage } from './login-page';
 
-test.describe("Login", () => {
+test.describe('Login', () => {
   test(
-    "User can login successfully",
-    { tag: ["@critical", "@e2e", "@login", "@LOGIN-E2E-001"] },
+    'User can login successfully',
+    { tag: ['@critical', '@e2e', '@login', '@LOGIN-E2E-001'] },
     async ({ page }) => {
       const loginPage = new LoginPage(page);
 
       await loginPage.goto();
-      await loginPage.login({ email: "user@test.com", password: "pass123" });
+      await loginPage.login({ email: 'user@test.com', password: 'pass123' });
 
-      await expect(page).toHaveURL("/dashboard");
-    },
+      await expect(page).toHaveURL('/dashboard');
+    }
   );
 });
 ```
@@ -277,8 +277,7 @@ test.describe("Login", () => {
 ```markdown
 ### E2E Tests: {Feature Name}
 
-**Suite ID:** `{SUITE-ID}`
-**Feature:** {Feature description}
+**Suite ID:** `{SUITE-ID}` **Feature:** {Feature description}
 
 ---
 

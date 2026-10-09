@@ -1,9 +1,12 @@
 # Plan de Mejoras: Calendario Cliente
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] · [[INDICE-PLANS]] · [[plan_mejoras_calendario]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[EROS-plan-2026-09-14]] ·
+> [[INDICE-PLANS]] · [[plan_mejoras_calendario]]
 
 ## Problemas a Resolver
 
-1. **Bug crítico**: El cliente puede reservar horarios que se superponen con turnos existentes (no considera duración del servicio)
+1. **Bug crítico**: El cliente puede reservar horarios que se superponen con turnos existentes (no
+   considera duración del servicio)
 2. **Falta visualización**: Cliente no ve los horarios bloqueados por el admin
 3. **UX mejorable**: No muestra próximos horarios disponibles
 
@@ -23,7 +26,8 @@
 
 **Archivo**: `src/lib/api/appointments.ts`
 
-**Cambio**: Modificar la función para que retorne no solo el horario ocupado, sino toda la ventana de tiempo basada en la duración del servicio.
+**Cambio**: Modificar la función para que retorne no solo el horario ocupado, sino toda la ventana
+de tiempo basada en la duración del servicio.
 
 ```typescript
 // ACTUAL (problemático):
@@ -38,7 +42,8 @@ return data.map((app) => `${horas}:${minutos}`); // Solo HH:mm
 
 **Archivo**: `src/lib/api/blocked-times.ts` (ya existe)
 
-**Cambio**: El cliente debe llamar a `getBlockedTimesByMonth()` o similar para obtener los días/horarios bloqueados por el admin y mostrarlos.
+**Cambio**: El cliente debe llamar a `getBlockedTimesByMonth()` o similar para obtener los
+días/horarios bloqueados por el admin y mostrarlos.
 
 ### 3. Crear función de "próximos disponibles" 🎯
 
@@ -67,7 +72,8 @@ return data.map((app) => `${horas}:${minutos}`); // Solo HH:mm
 - Opción A: Mejorar el actual `CustomTimePicker`
 - Opción B: Crear un componente de "selector de fecha" con mini-calendario
 
-**Recomendación**: Opción A más simple - mantener el selector actual pero mejorar la lógica de bloqueo.
+**Recomendación**: Opción A más simple - mantener el selector actual pero mejorar la lógica de
+bloqueo.
 
 ---
 

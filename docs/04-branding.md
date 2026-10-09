@@ -1,5 +1,7 @@
 # EROS — Branding
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[05-identidad-visual]] · [[06-marketing]] · [[eros-reporte-producto-marketing-estilo-2026-09-12]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[05-identidad-visual]] ·
+> [[06-marketing]] · [[eros-reporte-producto-marketing-estilo-2026-09-12]]
 
 > Fuente: `src/app/layout.tsx` (metadata), `src/components/client/{Hero,Footer,Navbar}.tsx`,
 > `src/app/sobre-mi/page.tsx`, `public/manifest.json`, `supabase_seed.sql`. Verificado 2026-09-15.

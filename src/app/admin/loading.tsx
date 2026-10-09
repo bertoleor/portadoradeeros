@@ -13,7 +13,10 @@ export default function AdminLoading() {
       {/* Stat cards skeleton */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-28 rounded-2xl bg-white/35 border border-white/50 p-5 flex items-center gap-4">
+          <div
+            key={i}
+            className="h-28 rounded-2xl bg-white/35 border border-white/50 p-5 flex items-center gap-4"
+          >
             <div className="h-11 w-11 rounded-xl bg-gray-200 animate-pulse shrink-0" />
             <div className="flex-1 space-y-2">
               <div className="h-5 w-20 bg-gray-200 rounded animate-pulse" />

@@ -44,17 +44,13 @@ export async function sendContactFormNotification(
     : resend.sendContactFormNotification(name, email, message);
 }
 
-export async function sendAppointmentConfirmed(
-  data: AppointmentEmailData
-): Promise<EmailResult> {
+export async function sendAppointmentConfirmed(data: AppointmentEmailData): Promise<EmailResult> {
   return getEmailProvider() === 'smtp'
     ? smtp.sendAppointmentConfirmed(data)
     : resend.sendAppointmentConfirmed(data);
 }
 
-export async function sendAppointmentReminder(
-  data: AppointmentEmailData
-): Promise<EmailResult> {
+export async function sendAppointmentReminder(data: AppointmentEmailData): Promise<EmailResult> {
   return getEmailProvider() === 'smtp'
     ? smtp.sendAppointmentReminder(data)
     : resend.sendAppointmentReminder(data);

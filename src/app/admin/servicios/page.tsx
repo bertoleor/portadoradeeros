@@ -1,14 +1,14 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Edit3, Trash2 } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Edit3, Plus, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 import { useToast } from '@/components/ui/ToastProvider';
-import { getServices, deleteService } from '@/lib/api/services';
+import { deleteService, getServices } from '@/lib/api/services';
 
 import type { Service } from '@/types';
 
@@ -20,7 +20,7 @@ export default function AdminServicios() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-  
+
   const { success } = useToast();
 
   useEffect(() => {
@@ -34,16 +34,14 @@ export default function AdminServicios() {
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setSelectedIds(servicios.map(s => s.id));
+      setSelectedIds(servicios.map((s) => s.id));
     } else {
       setSelectedIds([]);
     }
   };
 
   const handleSelectOne = (id: string) => {
-    setSelectedIds(prev =>
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    );
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   };
 
   const confirmDelete = (id: string) => {
@@ -62,14 +60,14 @@ export default function AdminServicios() {
         for (const id of selectedIds) {
           await deleteService(id);
         }
-        setServicios(prev => prev.filter(s => !selectedIds.includes(s.id)));
+        setServicios((prev) => prev.filter((s) => !selectedIds.includes(s.id)));
         success(`${selectedIds.length} servicios eliminados correctamente.`);
         setSelectedIds([]);
       } else if (itemToDelete) {
         await deleteService(itemToDelete);
-        setServicios(prev => prev.filter(s => s.id !== itemToDelete));
+        setServicios((prev) => prev.filter((s) => s.id !== itemToDelete));
         success('Servicio eliminado correctamente.');
-        setSelectedIds(prev => prev.filter(id => id !== itemToDelete));
+        setSelectedIds((prev) => prev.filter((id) => id !== itemToDelete));
       }
     } catch (err) {
       console.error('Error deleting service:', err);
@@ -80,7 +78,9 @@ export default function AdminServicios() {
   };
 
   const isBulkDelete = itemToDelete === BULK_ACTION;
-  const confirmModalTitle = isBulkDelete ? '¿Eliminar servicios seleccionados?' : '¿Eliminar servicio?';
+  const confirmModalTitle = isBulkDelete
+    ? '¿Eliminar servicios seleccionados?'
+    : '¿Eliminar servicio?';
   const confirmModalDescription = isBulkDelete
     ? `Estás por eliminar ${selectedIds.length} servicios. Esta acción no se puede deshacer y los servicios desaparecerán del sitio público inmediatamente.`
     : 'Esta acción no se puede deshacer y el servicio desaparecerá del sitio público inmediatamente.';
@@ -130,18 +130,20 @@ export default function AdminServicios() {
               </div>
               <div>
                 <p className="font-medium text-black text-sm">{service.title}</p>
-                <p className="text-xs text-black/40 truncate max-w-[200px]">{service.shortDescription}</p>
+                <p className="text-xs text-black/40 truncate max-w-[200px]">
+                  {service.shortDescription}
+                </p>
               </div>
             </div>
           </td>
-          <td className="px-6 py-4 text-sm text-black/60 hidden sm:table-cell">
-            ${service.price}
-          </td>
+          <td className="px-6 py-4 text-sm text-black/60 hidden sm:table-cell">${service.price}</td>
           <td className="px-6 py-4 text-sm text-black/60 hidden md:table-cell">
             {service.duration} min
           </td>
           <td className="px-6 py-4">
-            <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${statusClasses}`}>
+            <span
+              className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${statusClasses}`}
+            >
               {service.isVisible ? 'Público' : 'Oculto'}
             </span>
           </td>
@@ -169,13 +171,22 @@ export default function AdminServicios() {
   };
 
   const renderMobileCards = () => {
-    if (isLoading) {return <div className="py-12 text-center text-black/20">Cargando oráculo...</div>;}
-    if (servicios.length === 0) {return <div className="py-12 text-center text-black/20 italic">Buzón de servicios vacío.</div>;}
-    
+    if (isLoading) {
+      return <div className="py-12 text-center text-black/20">Cargando oráculo...</div>;
+    }
+    if (servicios.length === 0) {
+      return (
+        <div className="py-12 text-center text-black/20 italic">Buzón de servicios vacío.</div>
+      );
+    }
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:hidden gap-4">
         {servicios.map((s) => (
-          <div key={s.id} className="bg-white/60 backdrop-blur-sm p-5 rounded-2xl border border-white/50 shadow-sm space-y-4">
+          <div
+            key={s.id}
+            className="bg-white/60 backdrop-blur-sm p-5 rounded-2xl border border-white/50 shadow-sm space-y-4"
+          >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-gray-600 shrink-0">
@@ -183,17 +194,33 @@ export default function AdminServicios() {
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-black">{s.title}</h3>
-                  <p className="text-[10px] text-black/40 uppercase font-bold tracking-wider">${s.price} • {s.duration} min</p>
+                  <p className="text-[10px] text-black/40 uppercase font-bold tracking-wider">
+                    ${s.price} • {s.duration} min
+                  </p>
                 </div>
               </div>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${s.isVisible ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-black/30'}`}>
+              <span
+                className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${s.isVisible ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-black/30'}`}
+              >
                 {s.isVisible ? 'Público' : 'Oculto'}
               </span>
             </div>
-            <p className="text-xs text-black/50 line-clamp-2 leading-relaxed italic">&quot;{s.shortDescription}&quot;</p>
+            <p className="text-xs text-black/50 line-clamp-2 leading-relaxed italic">
+              &quot;{s.shortDescription}&quot;
+            </p>
             <div className="pt-2 flex items-center gap-2">
-              <Link href={`/admin/servicios/${s.slug}`} className="flex-1 py-2 text-center text-xs font-bold border border-black/5 rounded-xl hover:bg-black/5 transition-colors">Editar</Link>
-              <button onClick={() => confirmDelete(s.id)} className="flex-1 py-2 text-center text-xs font-bold bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors">Eliminar</button>
+              <Link
+                href={`/admin/servicios/${s.slug}`}
+                className="flex-1 py-2 text-center text-xs font-bold border border-black/5 rounded-xl hover:bg-black/5 transition-colors"
+              >
+                Editar
+              </Link>
+              <button
+                onClick={() => confirmDelete(s.id)}
+                className="flex-1 py-2 text-center text-xs font-bold bg-red-50 text-red-500 rounded-xl hover:bg-red-100 transition-colors"
+              >
+                Eliminar
+              </button>
             </div>
           </div>
         ))}
@@ -221,9 +248,7 @@ export default function AdminServicios() {
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl font-light tracking-tight text-black mb-1">
-              Servicios
-            </h1>
+            <h1 className="text-3xl font-light tracking-tight text-black mb-1">Servicios</h1>
             <p className="text-black/50 font-light text-sm">
               Administrá los servicios que ofrecés en tu sitio.
             </p>
@@ -243,7 +268,10 @@ export default function AdminServicios() {
                 </motion.button>
               )}
             </AnimatePresence>
-            <Link href="/admin/servicios/nuevo" className="btn-primary inline-flex items-center justify-center gap-2 px-5 py-2.5">
+            <Link
+              href="/admin/servicios/nuevo"
+              className="btn-primary inline-flex items-center justify-center gap-2 px-5 py-2.5"
+            >
               <Plus size={16} />
               Nuevo Servicio
             </Link>
@@ -265,23 +293,29 @@ export default function AdminServicios() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest">Servicio</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest hidden sm:table-cell">Precio</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest hidden md:table-cell">Duración</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest">Estado</th>
-                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest text-right">Acciones</th>
+                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest">
+                    Servicio
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest hidden sm:table-cell">
+                    Precio
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest hidden md:table-cell">
+                    Duración
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest">
+                    Estado
+                  </th>
+                  <th className="px-6 py-4 text-xs font-semibold text-black/40 uppercase tracking-widest text-right">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-black/5">
-                {renderTableBody()}
-              </tbody>
+              <tbody className="divide-y divide-black/5">{renderTableBody()}</tbody>
             </table>
           </div>
 
           {/* Mobile Cards (shown up to lg breakpoint) */}
-          <div className="lg:hidden p-4">
-            {renderMobileCards()}
-          </div>
+          <div className="lg:hidden p-4">{renderMobileCards()}</div>
         </div>
       </motion.div>
     </div>

@@ -51,9 +51,10 @@ export function mapSettingsRow(row: AdminSettingsRow): BusinessSettings {
     },
     bioContent: row.bio_content ?? '',
     profileImageUrl: row.profile_image_url ?? '',
-    businessHours: typeof row.business_hours === 'string'
-      ? JSON.parse(row.business_hours)
-      : row.business_hours || {},
+    businessHours:
+      typeof row.business_hours === 'string'
+        ? JSON.parse(row.business_hours)
+        : row.business_hours || {},
     appointmentDuration: 60,
     adminName: row.admin_name ?? 'Jacque',
     adminAvatarUrl: row.admin_avatar_url ?? '',

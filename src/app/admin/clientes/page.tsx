@@ -1,12 +1,12 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Search, ChevronRight, X, Phone, Mail, Calendar, Plus, Clock } from 'lucide-react';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Calendar, ChevronRight, Clock, Mail, Phone, Plus, Search, Users, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Button, Select, DatePicker, TimePicker } from '@/components/ui';
+import { Button, DatePicker, Select, TimePicker } from '@/components/ui';
 import { useToast } from '@/components/ui/ToastProvider';
-import { getClients, createAppointmentAdmin, type ClientRecord } from '@/lib/api/appointments';
+import { createAppointmentAdmin, getClients, type ClientRecord } from '@/lib/api/appointments';
 import { getServices } from '@/lib/api/services';
 
 import type { Service } from '@/types';
@@ -26,7 +26,13 @@ interface NewApptModalProps {
   readonly onCreated: () => void;
 }
 
-function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, onCreated }: NewApptModalProps) {
+function NewApptModal({
+  services,
+  defaultEmail = '',
+  defaultName = '',
+  onClose,
+  onCreated,
+}: NewApptModalProps) {
   const { success, error: toastError } = useToast();
   const [form, setForm] = useState({
     clientName: defaultName,
@@ -40,24 +46,38 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
   });
   const [saving, setSaving] = useState(false);
 
-  const selectedService = services.find(s => s.id === form.serviceId);
+  const selectedService = services.find((s) => s.id === form.serviceId);
 
   const handleSubmit = async () => {
     // Validate all required fields
     const missing: string[] = [];
-    if (!form.clientName.trim()) {missing.push('nombre');}
-    if (!form.clientSurname.trim()) {missing.push('apellido');}
-    if (!form.clientPhone.trim()) {missing.push('teléfono');}
-    if (!form.clientEmail.trim()) {missing.push('email');}
-    if (!form.date) {missing.push('fecha');}
-    if (!form.time) {missing.push('hora');}
-    if (!form.serviceId) {missing.push('servicio');}
-    
+    if (!form.clientName.trim()) {
+      missing.push('nombre');
+    }
+    if (!form.clientSurname.trim()) {
+      missing.push('apellido');
+    }
+    if (!form.clientPhone.trim()) {
+      missing.push('teléfono');
+    }
+    if (!form.clientEmail.trim()) {
+      missing.push('email');
+    }
+    if (!form.date) {
+      missing.push('fecha');
+    }
+    if (!form.time) {
+      missing.push('hora');
+    }
+    if (!form.serviceId) {
+      missing.push('servicio');
+    }
+
     if (missing.length > 0) {
       toastError(`Completá los campos obligatorios: ${missing.join(', ')}`);
       return;
     }
-    
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.clientEmail)) {
@@ -74,7 +94,10 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
 
     const [h, m] = form.time.split(':').map(Number);
     const apptDate = new Date(`${form.date}T${form.time}:00`);
-    if (Number.isNaN(apptDate.getTime())) { toastError('Fecha u hora inválida.'); return; }
+    if (Number.isNaN(apptDate.getTime())) {
+      toastError('Fecha u hora inválida.');
+      return;
+    }
     apptDate.setHours(h, m, 0, 0);
 
     setSaving(true);
@@ -105,14 +128,26 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
 
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        onClick={onClose} className="fixed inset-0 bg-black/30 z-[60]" />
-      <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/30 z-[60]"
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] border border-white/60 overflow-hidden">
+        className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-xl z-[70] border border-white/60 overflow-hidden"
+      >
         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
           <h3 className="font-medium text-gray-900">Nuevo Turno</h3>
-          <button onClick={onClose} aria-label="Cerrar" className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors">
+          <button
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+          >
             <X size={16} className="text-gray-500" />
           </button>
         </div>
@@ -121,30 +156,67 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
           {/* Client info */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="appt-name" className="text-xs font-medium text-gray-600 block mb-1.5">Nombre *</label>
-              <input id="appt-name" type="text" value={form.clientName}
-                onChange={e => setForm(f => ({ ...f, clientName: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors" placeholder="Juan" />
+              <label htmlFor="appt-name" className="text-xs font-medium text-gray-600 block mb-1.5">
+                Nombre *
+              </label>
+              <input
+                id="appt-name"
+                type="text"
+                value={form.clientName}
+                onChange={(e) => setForm((f) => ({ ...f, clientName: e.target.value }))}
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors"
+                placeholder="Juan"
+              />
             </div>
             <div>
-              <label htmlFor="appt-surname" className="text-xs font-medium text-gray-600 block mb-1.5">Apellido *</label>
-              <input id="appt-surname" type="text" value={form.clientSurname}
-                onChange={e => setForm(f => ({ ...f, clientSurname: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors" placeholder="Pérez" />
+              <label
+                htmlFor="appt-surname"
+                className="text-xs font-medium text-gray-600 block mb-1.5"
+              >
+                Apellido *
+              </label>
+              <input
+                id="appt-surname"
+                type="text"
+                value={form.clientSurname}
+                onChange={(e) => setForm((f) => ({ ...f, clientSurname: e.target.value }))}
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors"
+                placeholder="Pérez"
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label htmlFor="appt-phone" className="text-xs font-medium text-gray-600 block mb-1.5">Teléfono *</label>
-              <input id="appt-phone" type="tel" value={form.clientPhone}
-                onChange={e => setForm(f => ({ ...f, clientPhone: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors" placeholder="+54 11..." />
+              <label
+                htmlFor="appt-phone"
+                className="text-xs font-medium text-gray-600 block mb-1.5"
+              >
+                Teléfono *
+              </label>
+              <input
+                id="appt-phone"
+                type="tel"
+                value={form.clientPhone}
+                onChange={(e) => setForm((f) => ({ ...f, clientPhone: e.target.value }))}
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors"
+                placeholder="+54 11..."
+              />
             </div>
             <div>
-              <label htmlFor="appt-email" className="text-xs font-medium text-gray-600 block mb-1.5">Email *</label>
-              <input id="appt-email" type="email" value={form.clientEmail}
-                onChange={e => setForm(f => ({ ...f, clientEmail: e.target.value }))}
-                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors" placeholder="juan@email.com" />
+              <label
+                htmlFor="appt-email"
+                className="text-xs font-medium text-gray-600 block mb-1.5"
+              >
+                Email *
+              </label>
+              <input
+                id="appt-email"
+                type="email"
+                value={form.clientEmail}
+                onChange={(e) => setForm((f) => ({ ...f, clientEmail: e.target.value }))}
+                className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 transition-colors"
+                placeholder="juan@email.com"
+              />
             </div>
           </div>
 
@@ -154,8 +226,11 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
               id="appt-service"
               label="Servicio *"
               value={form.serviceId}
-              onChange={(value) => setForm(f => ({ ...f, serviceId: value }))}
-              options={services.map(s => ({ value: s.id, label: `${s.title} (${s.duration} min)` }))}
+              onChange={(value) => setForm((f) => ({ ...f, serviceId: value }))}
+              options={services.map((s) => ({
+                value: s.id,
+                label: `${s.title} (${s.duration} min)`,
+              }))}
               placeholder="Seleccionar servicio..."
             />
           </div>
@@ -166,13 +241,13 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
               id="appt-date"
               label="Fecha *"
               value={form.date}
-              onChange={(value) => setForm(f => ({ ...f, date: value }))}
+              onChange={(value) => setForm((f) => ({ ...f, date: value }))}
               min={new Date().toISOString().split('T')[0]}
             />
             <TimePicker
               label="Hora *"
               value={form.time}
-              onChange={(value) => setForm(f => ({ ...f, time: value }))}
+              onChange={(value) => setForm((f) => ({ ...f, time: value }))}
             />
           </div>
 
@@ -180,31 +255,50 @@ function NewApptModal({ services, defaultEmail = '', defaultName = '', onClose, 
           {selectedService && (
             <p className="text-xs text-gray-500 flex items-center gap-1">
               <Clock size={12} />
-              Este turno terminaría a las {
-                (() => {
-                  if (!form.time) {return '--:--';}
-                  const [h, m] = form.time.split(':').map(Number);
-                  const end = new Date(); end.setHours(h, m + selectedService.duration, 0);
-                  return end.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-                })()
-              }
+              Este turno terminaría a las{' '}
+              {(() => {
+                if (!form.time) {
+                  return '--:--';
+                }
+                const [h, m] = form.time.split(':').map(Number);
+                const end = new Date();
+                end.setHours(h, m + selectedService.duration, 0);
+                return end.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+              })()}
             </p>
           )}
 
           {/* Notes */}
           <div>
-            <label htmlFor="appt-notes" className="text-[10px] font-bold uppercase tracking-wider text-black/40 block mb-1.5">Notas</label>
-            <textarea id="appt-notes" value={form.notes} rows={3}
-              onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
-              className="w-full px-3 py-2.5 text-sm border border-black/10 rounded-xl focus:outline-none focus:border-black transition-colors resize-none" placeholder="Observaciones..." />
+            <label
+              htmlFor="appt-notes"
+              className="text-[10px] font-bold uppercase tracking-wider text-black/40 block mb-1.5"
+            >
+              Notas
+            </label>
+            <textarea
+              id="appt-notes"
+              value={form.notes}
+              rows={3}
+              onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
+              className="w-full px-3 py-2.5 text-sm border border-black/10 rounded-xl focus:outline-none focus:border-black transition-colors resize-none"
+              placeholder="Observaciones..."
+            />
           </div>
         </div>
 
         <div className="p-6 border-t border-black/5 flex gap-3">
-          <button onClick={onClose} className="flex-1 py-3 rounded-xl border border-black/10 text-sm text-black/60 hover:bg-gray-50 transition-colors">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 rounded-xl border border-black/10 text-sm text-black/60 hover:bg-gray-50 transition-colors"
+          >
             Cancelar
           </button>
-          <Button onClick={handleSubmit} disabled={saving} className="btn-primary flex-1 h-12 text-sm min-h-0">
+          <Button
+            onClick={handleSubmit}
+            disabled={saving}
+            className="btn-primary flex-1 h-12 text-sm min-h-0"
+          >
             {saving ? 'Guardando...' : 'Crear Turno'}
           </Button>
         </div>
@@ -225,17 +319,29 @@ interface ClientModalProps {
 function ClientModal({ client, onClose, onNewAppt }: ClientModalProps) {
   return (
     <>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        onClick={onClose} className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]" />
-      <motion.div initial={{ opacity: 0, scale: 0.96, y: 16 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60]"
+      />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 16 }}
-        className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-white/85 backdrop-blur-2xl rounded-3xl shadow-2xl z-[70] border border-white/60 overflow-hidden flex flex-col">
+        className="fixed inset-0 m-auto w-full max-w-lg h-fit max-h-[85vh] bg-white/85 backdrop-blur-2xl rounded-3xl shadow-2xl z-[70] border border-white/60 overflow-hidden flex flex-col"
+      >
         <div className="p-6 border-b border-black/5 flex items-center justify-between shrink-0">
           <div>
             <h3 className="font-medium text-black">{client.name}</h3>
             <p className="text-xs text-black/40">{client.email}</p>
           </div>
-          <button onClick={onClose} aria-label="Cerrar" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+          <button
+            onClick={onClose}
+            aria-label="Cerrar"
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
             <X size={18} className="text-black/40" />
           </button>
         </div>
@@ -245,31 +351,55 @@ function ClientModal({ client, onClose, onNewAppt }: ClientModalProps) {
           {[
             { label: 'Turnos', value: client.totalAppointments },
             { label: 'Teléfono', value: client.phone ?? '—' },
-            { label: 'Último turno', value: new Date(client.lastAppointment).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' }) },
-          ].map(s => (
+            {
+              label: 'Último turno',
+              value: new Date(client.lastAppointment).toLocaleDateString('es-AR', {
+                day: 'numeric',
+                month: 'short',
+              }),
+            },
+          ].map((s) => (
             <div key={s.label} className="p-4 text-center">
               <p className="text-lg font-light text-black">{s.value}</p>
-              <p className="text-[10px] uppercase tracking-widest text-black/30 mt-0.5">{s.label}</p>
+              <p className="text-[10px] uppercase tracking-widest text-black/30 mt-0.5">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Appointment history */}
         <div className="flex-1 overflow-y-auto p-6 space-y-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-black/30 mb-4">Historial de Turnos</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-black/30 mb-4">
+            Historial de Turnos
+          </p>
           {client.appointments.map((appt) => {
             const badge = statusLabel[appt.status] ?? statusLabel.pending;
             return (
-              <div key={appt.id} className="flex items-center justify-between p-4 rounded-xl border border-black/5 bg-gray-50/50">
+              <div
+                key={appt.id}
+                className="flex items-center justify-between p-4 rounded-xl border border-black/5 bg-gray-50/50"
+              >
                 <div>
-                  <p className="text-sm font-medium text-black">{appt.serviceTitle ?? 'Servicio'}</p>
+                  <p className="text-sm font-medium text-black">
+                    {appt.serviceTitle ?? 'Servicio'}
+                  </p>
                   <p className="text-xs text-black/40 mt-0.5">
-                    {new Date(appt.appointment_date).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    {new Date(appt.appointment_date).toLocaleDateString('es-AR', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
                     {' — '}
-                    {new Date(appt.appointment_date).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(appt.appointment_date).toLocaleTimeString('es-AR', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </p>
                 </div>
-                <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badge.className}`}>
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border ${badge.className}`}
+                >
                   {badge.text}
                 </span>
               </div>
@@ -278,7 +408,10 @@ function ClientModal({ client, onClose, onNewAppt }: ClientModalProps) {
         </div>
 
         <div className="p-6 border-t border-black/5 shrink-0">
-          <Button onClick={onNewAppt} className="btn-primary w-full h-11 text-sm min-h-0 flex items-center justify-center gap-2">
+          <Button
+            onClick={onNewAppt}
+            className="btn-primary w-full h-11 text-sm min-h-0 flex items-center justify-center gap-2"
+          >
             <Plus size={16} /> Agendar nuevo turno
           </Button>
         </div>
@@ -303,7 +436,7 @@ export default function AdminClientesPage() {
     setIsLoading(true);
     const [c, s] = await Promise.all([getClients(), getServices()]);
     setClients(c);
-    setServices(s.filter(sv => sv.isVisible));
+    setServices(s.filter((sv) => sv.isVisible));
     setIsLoading(false);
   }, []);
 
@@ -315,16 +448,22 @@ export default function AdminClientesPage() {
       }
     }
     load();
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [loadData]);
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    if (!q) {return clients;}
-    return clients.filter(c =>
-      c.name.toLowerCase().includes(q) ||
-      (c.email?.toLowerCase().includes(q) || false) ||
-      (c.phone ?? '').includes(q)
+    if (!q) {
+      return clients;
+    }
+    return clients.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.email?.toLowerCase().includes(q) ||
+        false ||
+        (c.phone ?? '').includes(q)
     );
   }, [clients, search]);
 
@@ -336,18 +475,25 @@ export default function AdminClientesPage() {
 
   return (
     <div className="p-6 md:p-10 max-w-[1200px] mx-auto w-full">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-10">
           <div>
             <h1 className="text-3xl font-light tracking-tight text-black mb-1">Clientes</h1>
             <p className="text-black/50 font-light text-sm">
-              {clients.length} {clients.length === 1 ? 'cliente registrado' : 'clientes registrados'}
+              {clients.length}{' '}
+              {clients.length === 1 ? 'cliente registrado' : 'clientes registrados'}
             </p>
           </div>
           <Button
-            onClick={() => { setNewApptDefaults({ name: '', email: '' }); setShowNewAppt(true); }}
+            onClick={() => {
+              setNewApptDefaults({ name: '', email: '' });
+              setShowNewAppt(true);
+            }}
             className="btn-primary rounded-xl h-10 px-5 text-xs min-h-0 flex items-center gap-2 shrink-0"
           >
             <Plus size={15} /> Nuevo Turno
@@ -360,7 +506,7 @@ export default function AdminClientesPage() {
           <input
             type="search"
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nombre, email o teléfono…"
             className="w-full pl-10 pr-4 py-3 border border-black/10 rounded-2xl text-sm focus:outline-none focus:border-black transition-colors bg-white"
           />
@@ -371,8 +517,11 @@ export default function AdminClientesPage() {
           if (isLoading) {
             return (
               <div className="space-y-3">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={`skeleton-${i}`} className="h-16 bg-gray-50 rounded-2xl animate-pulse" />
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={`skeleton-${i}`}
+                    className="h-16 bg-gray-50 rounded-2xl animate-pulse"
+                  />
                 ))}
               </div>
             );
@@ -391,7 +540,7 @@ export default function AdminClientesPage() {
 
           return (
             <div className="space-y-2">
-              {filtered.map(client => (
+              {filtered.map((client) => (
                 <motion.div
                   key={client.email}
                   layout
@@ -407,21 +556,37 @@ export default function AdminClientesPage() {
                     <div className="min-w-0">
                       <p className="font-medium text-sm text-black truncate">{client.name}</p>
                       <p className="text-xs text-black/40 truncate flex items-center gap-2 mt-0.5">
-                        <Mail size={11} />{client.email}
-                        {client.phone && <><Phone size={11} />{client.phone}</>}
+                        <Mail size={11} />
+                        {client.email}
+                        {client.phone && (
+                          <>
+                            <Phone size={11} />
+                            {client.phone}
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-6 shrink-0">
                     <div className="hidden sm:block text-right">
-                      <p className="text-xs font-medium text-black">{client.totalAppointments} {client.totalAppointments === 1 ? 'turno' : 'turnos'}</p>
+                      <p className="text-xs font-medium text-black">
+                        {client.totalAppointments}{' '}
+                        {client.totalAppointments === 1 ? 'turno' : 'turnos'}
+                      </p>
                       <p className="text-[10px] text-black/30 mt-0.5">
                         <Calendar size={10} className="inline mr-1" />
-                        {new Date(client.lastAppointment).toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {new Date(client.lastAppointment).toLocaleDateString('es-AR', {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric',
+                        })}
                       </p>
                     </div>
-                    <ChevronRight size={16} className="text-black/20 group-hover:text-black/50 group-hover:translate-x-0.5 transition-all" />
+                    <ChevronRight
+                      size={16}
+                      className="text-black/20 group-hover:text-black/50 group-hover:translate-x-0.5 transition-all"
+                    />
                   </div>
                 </motion.div>
               ))}

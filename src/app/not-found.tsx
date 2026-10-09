@@ -28,10 +28,24 @@ export default function NotFound() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/" className={buttonVariants({ variant: "default", size: "lg", className: "px-8 rounded-full font-light tracking-widest uppercase" })}>
+            <Link
+              href="/"
+              className={buttonVariants({
+                variant: 'default',
+                size: 'lg',
+                className: 'px-8 rounded-full font-light tracking-widest uppercase',
+              })}
+            >
               Volver al Inicio
             </Link>
-            <Link href="/contacto" className={buttonVariants({ variant: "secondary", size: "lg", className: "px-8 rounded-full font-light tracking-widest uppercase" })}>
+            <Link
+              href="/contacto"
+              className={buttonVariants({
+                variant: 'secondary',
+                size: 'lg',
+                className: 'px-8 rounded-full font-light tracking-widest uppercase',
+              })}
+            >
               Contacto
             </Link>
           </div>

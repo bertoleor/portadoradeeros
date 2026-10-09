@@ -1,8 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { UploadCloud, X } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { uploadImage } from '@/lib/api/storage';
 import { cn } from '@/lib/utils';
@@ -14,21 +14,26 @@ interface ImageUploaderProps {
   readonly label?: string;
 }
 
-export function ImageUploader({ onUpload, defaultImage, className = '', label = 'Subir Imagen' }: ImageUploaderProps) {
+export function ImageUploader({
+  onUpload,
+  defaultImage,
+  className = '',
+  label = 'Subir Imagen',
+}: ImageUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState<string | null>(defaultImage || null);
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  let borderClass = "border-black/20 bg-gray-50/50 hover:bg-gray-50";
+  let borderClass = 'border-black/20 bg-gray-50/50 hover:bg-gray-50';
   if (dragActive) {
-    borderClass = "border-black bg-black/5";
+    borderClass = 'border-black bg-black/5';
   } else if (preview) {
-    borderClass = "border-transparent bg-black/5";
+    borderClass = 'border-transparent bg-black/5';
   }
 
   const containerClassName = cn(
-    "relative w-full h-48 rounded-2xl border-2 border-dashed overflow-hidden flex flex-col items-center justify-center transition-colors",
+    'relative w-full h-48 rounded-2xl border-2 border-dashed overflow-hidden flex flex-col items-center justify-center transition-colors',
     borderClass,
     className
   );
@@ -48,13 +53,13 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
     // Create local preview immediately
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
-    
+
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const result = await uploadImage(formData);
-      
+
       if (result.ok) {
         onUpload(result.data.url);
       } else {
@@ -97,20 +102,20 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
   return (
     <div className={`w-full ${className}`}>
       {label && <label className="block text-sm font-medium text-black/70 mb-2">{label}</label>}
-      
-      <label 
+
+      <label
         htmlFor="image-upload"
-        className={cn(containerClassName, "cursor-pointer block")}
+        className={cn(containerClassName, 'cursor-pointer block')}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
       >
         <span className="sr-only">Seleccionar imagen para {label || 'subir'}</span>
-        <input 
+        <input
           id="image-upload"
           ref={inputRef}
-          type="file" 
+          type="file"
           accept="image/jpeg, image/png, image/webp"
           onChange={handleChange}
           className="hidden"
@@ -118,7 +123,7 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
 
         <AnimatePresence mode="popLayout">
           {preview ? (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
@@ -127,7 +132,7 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={preview} alt="Vista previa" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <button 
+                <button
                   type="button"
                   onClick={handleRemove}
                   className="bg-white/90 text-red-600 p-2 rounded-xl hover:bg-white hover:scale-105 transition-all shadow-lg z-10"
@@ -138,17 +143,17 @@ export function ImageUploader({ onUpload, defaultImage, className = '', label = 
               </div>
               {isUploading && (
                 <div className="absolute inset-x-0 bottom-0 h-1 bg-black/20">
-                  <motion.div 
-                    initial={{ width: 0 }} 
-                    animate={{ width: "100%" }} 
-                    transition={{ duration: 1.5, ease: "linear" }}
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ duration: 1.5, ease: 'linear' }}
                     className="h-full bg-black"
                   />
                 </div>
               )}
             </motion.div>
           ) : (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}

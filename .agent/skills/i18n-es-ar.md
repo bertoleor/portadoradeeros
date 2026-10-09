@@ -1,19 +1,20 @@
 ---
 name: i18n-es-ar
 description: >
-  Rioplatense Spanish (es-AR) UI copy and formatting for PAEONIA.
-  Trigger: When writing Spanish UI copy, voseo text, or es-AR date/number formatting.
+  Rioplatense Spanish (es-AR) UI copy and formatting for PAEONIA. Trigger: When writing Spanish UI
+  copy, voseo text, or es-AR date/number formatting.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
 ---
 
 ## Scope
 
 This skill covers UI copy only: labels, buttons, empty states, errors, dates, numbers, currency.
 
-Astrological interpretation voice (tone, literary style, tiers) belongs to `paeonia-astro-voice`. Do NOT mix the two: this skill decides HOW the interface speaks, never WHAT the stars say.
+Astrological interpretation voice (tone, literary style, tiers) belongs to `paeonia-astro-voice`. Do
+NOT mix the two: this skill decides HOW the interface speaks, never WHAT the stars say.
 
 ## Voseo Decision Tree
 
@@ -27,36 +28,37 @@ Unsure tuteo vs voseo?    → voseo ALWAYS wins in UI
 
 ```typescript
 // ✅ ALWAYS: voseo imperatives in UI copy
-"Calculá tu carta natal";
-"Descubrí tus tránsitos";
-"Elegí tu plan";
-"Subí tu comprobante";
+'Calculá tu carta natal';
+'Descubrí tus tránsitos';
+'Elegí tu plan';
+'Subí tu comprobante';
 
 // ❌ NEVER: tuteo forms
-"Calcula tu carta natal"; // NO
-"Descubre tus tránsitos"; // NO
-"Sube tu comprobante"; // NO
+'Calcula tu carta natal'; // NO
+'Descubre tus tránsitos'; // NO
+'Sube tu comprobante'; // NO
 ```
 
-Common pairs: calculá/calcula, descubrí/descubre, elegí/elige, subí/sube, mirá/mira, tocá/toca, empezá/empieza, guardá/guarda.
+Common pairs: calculá/calcula, descubrí/descubre, elegí/elige, subí/sube, mirá/mira, tocá/toca,
+empezá/empieza, guardá/guarda.
 
 ## Locale Formatting (REQUIRED)
 
 ```typescript
 // ✅ ALWAYS: explicit es-AR locale, never bare toString()
-const dateFmt = new Intl.DateTimeFormat("es-AR", {
-  day: "numeric",
-  month: "long",
-  year: "numeric",
+const dateFmt = new Intl.DateTimeFormat('es-AR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
 });
 dateFmt.format(new Date()); // "8 de septiembre de 2026"
 
-const numberFmt = new Intl.NumberFormat("es-AR");
+const numberFmt = new Intl.NumberFormat('es-AR');
 numberFmt.format(1234567.89); // "1.234.567,89"
 
-const arsFmt = new Intl.NumberFormat("es-AR", {
-  style: "currency",
-  currency: "ARS",
+const arsFmt = new Intl.NumberFormat('es-AR', {
+  style: 'currency',
+  currency: 'ARS',
 });
 arsFmt.format(1999.99); // "$1.999,99"
 
@@ -90,7 +92,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 <span>El pago no se pudo procesar. Intentá de nuevo.</span>;
 ```
 
-Error copy stays in voseo too: "Revisá los datos e intentá de nuevo", "Tu sesión expiró. Iniciá sesión otra vez."
+Error copy stays in voseo too: "Revisá los datos e intentá de nuevo", "Tu sesión expiró. Iniciá
+sesión otra vez."
 
 ## Copy Conventions
 
@@ -102,8 +105,8 @@ Error copy stays in voseo too: "Revisá los datos e intentá de nuevo", "Tu sesi
 ```typescript
 // ✅ Copy dictionaries keep UI strings out of JSX
 const COPY = {
-  CTA_CALCULATE: "Calculá tu carta natal",
-  ERROR_RETRY: "Algo salió mal. Intentá de nuevo.",
+  CTA_CALCULATE: 'Calculá tu carta natal',
+  ERROR_RETRY: 'Algo salió mal. Intentá de nuevo.',
 } as const;
 
 type CopyKey = (typeof COPY)[keyof typeof COPY];

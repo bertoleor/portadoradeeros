@@ -1,9 +1,18 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Check, Archive, X, Send, ArrowLeft, MessageSquare, ChevronRight } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Archive,
+  ArrowLeft,
+  Check,
+  ChevronRight,
+  Mail,
+  MessageSquare,
+  Send,
+  X,
+} from 'lucide-react';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useToast } from '@/components/ui/ToastProvider';
 import { getContactMessages, updateContactStatus } from '@/lib/api/appointments';
@@ -34,8 +43,10 @@ export default function AdminMensajes() {
     loadMessages();
   }, []);
 
-  const filteredMessages = messages.filter(msg => {
-    if (filter === 'all') {return true;}
+  const filteredMessages = messages.filter((msg) => {
+    if (filter === 'all') {
+      return true;
+    }
     return msg.status === filter;
   });
 
@@ -43,7 +54,7 @@ export default function AdminMensajes() {
     try {
       const res = await updateContactStatus(id, newStatus);
       if (res.ok) {
-        setMessages(prev => prev.map(m => m.id === id ? { ...m, status: newStatus } : m));
+        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status: newStatus } : m)));
         if (selectedMessage?.id === id) {
           setSelectedMessage({ ...selectedMessage, status: newStatus });
         }
@@ -54,14 +65,16 @@ export default function AdminMensajes() {
     }
   };
 
-  const unreadCount = messages.filter(m => m.status === 'unread').length;
-  const archivedCount = messages.filter(m => m.status === 'archived').length;
+  const unreadCount = messages.filter((m) => m.status === 'unread').length;
+  const archivedCount = messages.filter((m) => m.status === 'archived').length;
 
   const renderMessageList = () => {
     if (isLoading) {
       return (
         <div className="space-y-3">
-          {[1, 2, 3].map(i => <div key={i} className="h-24 bg-gray-50 rounded-2xl animate-pulse" />)}
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-24 bg-gray-50 rounded-2xl animate-pulse" />
+          ))}
         </div>
       );
     }
@@ -69,7 +82,9 @@ export default function AdminMensajes() {
       return (
         <div className="py-24 text-center">
           <Mail size={48} className="mx-auto text-black/10 mb-4" />
-          <p className="text-black/30 italic text-sm">No hay mensajes {filter === 'all' ? 'todavía' : 'en esta categoría'}.</p>
+          <p className="text-black/30 italic text-sm">
+            No hay mensajes {filter === 'all' ? 'todavía' : 'en esta categoría'}.
+          </p>
         </div>
       );
     }
@@ -83,25 +98,33 @@ export default function AdminMensajes() {
             animate={{ opacity: 1, y: 0 }}
             onClick={() => setSelectedMessage(msg)}
             className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-all group ${
-              msg.status === 'unread' 
-                ? 'border-white/60 bg-white/50 backdrop-blur-sm' 
+              msg.status === 'unread'
+                ? 'border-white/60 bg-white/50 backdrop-blur-sm'
                 : 'border-white/40 text-gray-600 hover:bg-white/30 backdrop-blur-sm'
             }`}
           >
             <div className="flex items-center gap-3 min-w-0">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                msg.status === 'unread' ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-500'
-              }`}>
+              <div
+                className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                  msg.status === 'unread'
+                    ? 'bg-gray-200 text-gray-700'
+                    : 'bg-gray-100 text-gray-500'
+                }`}
+              >
                 <Mail size={16} />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <p className="font-medium text-sm text-gray-900 truncate">{msg.name}</p>
-                  {msg.status === 'unread' && <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />}
+                  {msg.status === 'unread' && (
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
+                  )}
                 </div>
-                <p className={`text-xs truncate flex items-center gap-1 mt-0.5 ${
-                  msg.status === 'unread' ? 'text-gray-600' : 'text-gray-400'
-                }`}>
+                <p
+                  className={`text-xs truncate flex items-center gap-1 mt-0.5 ${
+                    msg.status === 'unread' ? 'text-gray-600' : 'text-gray-400'
+                  }`}
+                >
                   <MessageSquare size={11} />
                   <span className="truncate">{msg.message}</span>
                 </p>
@@ -110,15 +133,25 @@ export default function AdminMensajes() {
 
             <div className="flex items-center gap-3 shrink-0">
               <div className="hidden sm:block text-right">
-                <p className={`text-[10px] ${
-                  msg.status === 'unread' ? 'text-gray-500' : 'text-gray-400'
-                }`}>
-                  {new Date(msg.created_at).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
+                <p
+                  className={`text-[10px] ${
+                    msg.status === 'unread' ? 'text-gray-500' : 'text-gray-400'
+                  }`}
+                >
+                  {new Date(msg.created_at).toLocaleDateString('es-AR', {
+                    day: 'numeric',
+                    month: 'short',
+                  })}
                 </p>
               </div>
-              <ChevronRight size={16} className={`transition-all ${
-                msg.status === 'unread' ? 'text-gray-400' : 'text-gray-300 group-hover:text-gray-500'
-              }`} />
+              <ChevronRight
+                size={16}
+                className={`transition-all ${
+                  msg.status === 'unread'
+                    ? 'text-gray-400'
+                    : 'text-gray-300 group-hover:text-gray-500'
+                }`}
+              />
             </div>
           </motion.div>
         ))}
@@ -136,18 +169,14 @@ export default function AdminMensajes() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <Link 
+            <Link
               href="/admin"
               className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 mb-3 transition-colors"
             >
               <ArrowLeft size={16} /> Volver
             </Link>
-            <h1 className="text-xl font-semibold text-gray-900">
-              Mensajes
-            </h1>
-            <p className="text-sm text-gray-500">
-              Gestión de mensajes recibidos.
-            </p>
+            <h1 className="text-xl font-semibold text-gray-900">Mensajes</h1>
+            <p className="text-sm text-gray-500">Gestión de mensajes recibidos.</p>
           </div>
         </div>
 
@@ -156,8 +185,8 @@ export default function AdminMensajes() {
           <button
             onClick={() => setFilter('all')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              filter === 'all' 
-                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+              filter === 'all'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0'
                 : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
@@ -166,8 +195,8 @@ export default function AdminMensajes() {
           <button
             onClick={() => setFilter('unread')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              filter === 'unread' 
-                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+              filter === 'unread'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0'
                 : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
@@ -176,8 +205,8 @@ export default function AdminMensajes() {
           <button
             onClick={() => setFilter('read')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              filter === 'read' 
-                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+              filter === 'read'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0'
                 : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
@@ -186,8 +215,8 @@ export default function AdminMensajes() {
           <button
             onClick={() => setFilter('archived')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-              filter === 'archived' 
-                ? 'btn-primary py-2 px-4 text-sm min-h-0' 
+              filter === 'archived'
+                ? 'btn-primary py-2 px-4 text-sm min-h-0'
                 : 'bg-white/30 backdrop-blur-sm border border-[rgba(15,15,20,0.12)] text-[rgba(15,15,20,0.60)] hover:bg-white/50'
             }`}
           >
@@ -217,9 +246,13 @@ export default function AdminMensajes() {
             >
               <div className="p-6 border-b border-black/5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    selectedMessage.status === 'unread' ? 'bg-gray-100 text-gray-700' : 'bg-gray-50 text-gray-400'
-                  }`}>
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      selectedMessage.status === 'unread'
+                        ? 'bg-gray-100 text-gray-700'
+                        : 'bg-gray-50 text-gray-400'
+                    }`}
+                  >
                     <MessageSquare size={18} />
                   </div>
                   <div>
@@ -227,7 +260,7 @@ export default function AdminMensajes() {
                     <p className="text-sm text-black/50">{selectedMessage.email}</p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => setSelectedMessage(null)}
                   className="p-2 hover:bg-gray-100 rounded-full"
                   aria-label="Cerrar"
@@ -238,14 +271,17 @@ export default function AdminMensajes() {
 
               <div className="p-6 space-y-4">
                 <div className="flex items-center gap-4 text-sm text-black/50">
-                  <span>Recibido: {new Date(selectedMessage.created_at).toLocaleDateString('es-AR', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}</span>
+                  <span>
+                    Recibido:{' '}
+                    {new Date(selectedMessage.created_at).toLocaleDateString('es-AR', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </span>
                 </div>
 
                 {selectedMessage.phone && (

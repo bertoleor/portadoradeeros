@@ -1,5 +1,7 @@
 # EROS — Marketing
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[04-branding]] · [[eros-reporte-producto-marketing-estilo-2026-09-12]]
+
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[04-branding]] ·
+> [[eros-reporte-producto-marketing-estilo-2026-09-12]]
 
 > Fuente: metadata/OG/sitemap (layout, sitemap, robots), Hero/Footer/sobre-mí, `admin_settings`
 > (redes/bio), cron recordatorios. Verificado 2026-09-15.
@@ -24,7 +26,8 @@ transferencia.
 
 - **Web propia** (canal central, `es-AR`, OG `portadoradeeros.com`).
 - **Instagram / TikTok / WhatsApp** — links editables en admin, sin deploy.
-- **Email transaccional** — confirmación al cliente + aviso al admin (Resend por defecto, fallback SMTP vía `EMAIL_PROVIDER`).
+- **Email transaccional** — confirmación al cliente + aviso al admin (Resend por defecto, fallback
+  SMTP vía `EMAIL_PROVIDER`).
 - **PWA admin** — atajos a calendario/clientes, respuesta rápida = ventaja de conversión.
 
 ## Mensajes por servicio (seed)

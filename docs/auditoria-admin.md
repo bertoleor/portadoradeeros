@@ -1,8 +1,9 @@
 # Auditoría Panel de Administración
-> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] · [[auditoria-responsive-mobile]] · [[PLAN_CORRECCIONES]]
 
-Fecha: 2026-03-16
-Archivos leídos: 28
+> Parte de: [[projects/eros/README|README]] · Relacionados: [[INDICE-AUDITS]] ·
+> [[auditoria-responsive-mobile]] · [[PLAN_CORRECCIONES]]
+
+Fecha: 2026-03-16 Archivos leídos: 28
 
 ---
 
@@ -73,7 +74,8 @@ Archivos leídos: 28
 
 **Problemas detectados:**
 
-- 🟡 **Moderado**: Las métricas de "servicio popular" se calculan solo con turnos existentes, no es filtrado por mes actual
+- 🟡 **Moderado**: Las métricas de "servicio popular" se calculan solo con turnos existentes, no es
+  filtrado por mes actual
 - 🟢 **Menor**: No hay filtro de fecha en las métricas
 
 ---
@@ -213,7 +215,8 @@ Archivos leídos: 28
 
 **Problema:**
 
-- 🟡 **Moderado**: El cliente no recibe notificación cuando el admin confirma/cancela un turno (solo email)
+- 🟡 **Moderado**: El cliente no recibe notificación cuando el admin confirma/cancela un turno (solo
+  email)
 
 ### 3.3 Configuración
 
@@ -252,27 +255,39 @@ Archivos leídos: 28
 
 ### 🔴 Críticos (rompen funcionalidad o seguridad)
 
-1. **[admin/configuracion/banco/page.tsx](portadora-eros/src/app/admin/configuracion/banco/page.tsx)** — Datos bancarios guardados sin encriptación. El CBU y alias se almacenan en texto plano en la tabla admin_settings.
+1. **[admin/configuracion/banco/page.tsx](portadora-eros/src/app/admin/configuracion/banco/page.tsx)**
+   — Datos bancarios guardados sin encriptación. El CBU y alias se almacenan en texto plano en la
+   tabla admin_settings.
 
-2. **[lib/api/appointments.ts](portadora-eros/src/lib/api/appointments.ts)** — La función `createAppointment` no valida que el cliente envíe el comprobante de pago. El turno queda "pending" indefinidamente.
+2. **[lib/api/appointments.ts](portadora-eros/src/lib/api/appointments.ts)** — La función
+   `createAppointment` no valida que el cliente envíe el comprobante de pago. El turno queda
+   "pending" indefinidamente.
 
 ### 🟡 Moderados (degradan la experiencia)
 
-1. **[admin/page.tsx](portadora-eros/src/app/admin/page.tsx)** — Métrica de "servicio popular" no filtra por mes actual, incluye todo el historial.
+1. **[admin/page.tsx](portadora-eros/src/app/admin/page.tsx)** — Métrica de "servicio popular" no
+   filtra por mes actual, incluye todo el historial.
 
-2. **[admin/calendario/page.tsx](portadora-eros/src/app/admin/calendario/page.tsx)** — No hay forma de eliminar un turno desde el calendario, solo cambiar status.
+2. **[admin/calendario/page.tsx](portadora-eros/src/app/admin/calendario/page.tsx)** — No hay forma
+   de eliminar un turno desde el calendario, solo cambiar status.
 
-3. **[components/client/ServiceContactForm.tsx](portadora-eros/src/components/client/ServiceContactForm.tsx)** — No hay notificación al cliente cuando el admin confirma o cancela su turno (solo email, que puede fallar).
+3. **[components/client/ServiceContactForm.tsx](portadora-eros/src/components/client/ServiceContactForm.tsx)**
+   — No hay notificación al cliente cuando el admin confirma o cancela su turno (solo email, que
+   puede fallar).
 
-4. **[lib/api/settings.ts](portadora-eros/src/lib/api/settings.ts)** — No hay validación de formato para CBU (debería tener 22 dígitos) ni alias.
+4. **[lib/api/settings.ts](portadora-eros/src/lib/api/settings.ts)** — No hay validación de formato
+   para CBU (debería tener 22 dígitos) ni alias.
 
 ### 🟢 Menores (pulido y consistencia)
 
-1. **[admin/servicios/[slug]/page.tsx](portadora-eros/src/app/admin/servicios/[slug]/page.tsx)** — El slug no se genera automáticamente desde el título.
+1. **[admin/servicios/[slug]/page.tsx](portadora-eros/src/app/admin/servicios/[slug]/page.tsx)** —
+   El slug no se genera automáticamente desde el título.
 
-2. **[admin/configuracion/perfil/page.tsx](portadora-eros/src/app/admin/configuracion/perfil/page.tsx)** — Los campos de URL no validan formato URL válido.
+2. **[admin/configuracion/perfil/page.tsx](portadora-eros/src/app/admin/configuracion/perfil/page.tsx)**
+   — Los campos de URL no validan formato URL válido.
 
-3. **[lib/api/services.ts](portadora-eros/src/lib/api/services.ts)** — getServices devuelve TODOS los servicios incluyendo los no visibles, el filtro happens en el cliente.
+3. **[lib/api/services.ts](portadora-eros/src/lib/api/services.ts)** — getServices devuelve TODOS
+   los servicios incluyendo los no visibles, el filtro happens en el cliente.
 
 ---
 
@@ -308,7 +323,8 @@ Archivos leídos: 28
 
 ## 8. Resumen ejecutivo
 
-El panel de administración del proyecto "Portadora de Eros" está **bien estructurado y funcional**. cuenta con:
+El panel de administración del proyecto "Portadora de Eros" está **bien estructurado y funcional**.
+cuenta con:
 
 ✅ **Fortalezas:**
 

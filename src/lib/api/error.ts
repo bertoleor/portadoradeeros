@@ -9,7 +9,7 @@ export type ErrorCode = 'UNAUTHORIZED' | 'VALIDATION' | 'DB' | 'NOT_FOUND';
 export class AppError extends Error {
   constructor(
     public readonly code: ErrorCode,
-    msg: string,
+    msg: string
   ) {
     super(msg);
     this.name = 'AppError';

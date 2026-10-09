@@ -19,7 +19,7 @@ export default function ConfiguracionLayout({ children }: { readonly children: R
         transition={{ duration: 0.5 }}
       >
         {/* Breadcrumb */}
-        <Link 
+        <Link
           href={backHref}
           className="inline-flex items-center gap-1 text-xs text-black/40 hover:text-black/70 transition-colors mb-6"
         >

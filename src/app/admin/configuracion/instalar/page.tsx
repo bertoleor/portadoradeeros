@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Download, Smartphone, CheckCircle2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { CheckCircle2, Download, Smartphone } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui';
 
@@ -11,14 +11,21 @@ import type { BeforeInstallPromptEvent } from '@/types';
 // iOS detection
 // iOS detection
 function isIOS() {
-  if (globalThis.navigator === undefined) {return false;}
-  return /iPad|iPhone|iPod/.test(globalThis.navigator.userAgent) && !((globalThis as unknown as { MSStream?: unknown }).MSStream);
+  if (globalThis.navigator === undefined) {
+    return false;
+  }
+  return (
+    /iPad|iPhone|iPod/.test(globalThis.navigator.userAgent) &&
+    !(globalThis as unknown as { MSStream?: unknown }).MSStream
+  );
 }
 
 export default function InstalarAppPage() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState(() => 
-    typeof globalThis !== 'undefined' && !!globalThis.matchMedia?.('(display-mode: standalone)').matches
+  const [isInstalled, setIsInstalled] = useState(
+    () =>
+      typeof globalThis !== 'undefined' &&
+      !!globalThis.matchMedia?.('(display-mode: standalone)').matches
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,7 +98,11 @@ export default function InstalarAppPage() {
                 La aplicación ya está instalada en tu dispositivo.
               </p>
               <Button
-                onClick={() => { if (typeof globalThis !== 'undefined' && globalThis.location) {globalThis.location.href = '/admin';} }}
+                onClick={() => {
+                  if (typeof globalThis !== 'undefined' && globalThis.location) {
+                    globalThis.location.href = '/admin';
+                  }
+                }}
                 variant="outline"
                 className="rounded-xl"
               >
@@ -104,7 +115,7 @@ export default function InstalarAppPage() {
                 <Smartphone size={32} className="text-blue-600" />
               </div>
               <h2 className="text-xl font-medium text-black mb-2">Instalar App</h2>
-              
+
               {(() => {
                 if (isIOS()) {
                   return (
@@ -116,8 +127,8 @@ export default function InstalarAppPage() {
                         <span className="text-lg shrink-0">1</span>
                         <p className="text-sm text-black/70">
                           Tocá el botón <strong>Compartir</strong>{' '}
-                          <span className="inline-block mx-1">⎙</span>{' '}
-                          en la barra inferior de Safari
+                          <span className="inline-block mx-1">⎙</span> en la barra inferior de
+                          Safari
                         </p>
                       </div>
                       <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
@@ -153,7 +164,9 @@ export default function InstalarAppPage() {
                         {isLoading ? (
                           <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                         ) : (
-                          <><Download size={18} className="mr-2" /> Instalar Ahora</>
+                          <>
+                            <Download size={18} className="mr-2" /> Instalar Ahora
+                          </>
                         )}
                       </Button>
                     </>
@@ -174,7 +187,8 @@ export default function InstalarAppPage() {
                     <div className="flex gap-3 p-4 bg-gray-50 rounded-2xl">
                       <span className="text-lg shrink-0">2</span>
                       <p className="text-sm text-black/70">
-                        Seleccioná <strong>&quot;Instalar aplicación&quot;</strong> o <strong>&quot;Agregar a pantalla de inicio&quot;</strong>
+                        Seleccioná <strong>&quot;Instalar aplicación&quot;</strong> o{' '}
+                        <strong>&quot;Agregar a pantalla de inicio&quot;</strong>
                       </p>
                     </div>
                   </div>

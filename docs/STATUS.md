@@ -8,11 +8,10 @@
 > Estado del proyecto y dónde vive cada fuente de verdad. Solo documentación. Actualizado:
 > 2026-09-30 · Rama: `feat/eros-deps` (HEAD 8827e8a) · Verificado contra `src/`, `package.json`,
 
-> **Rama de integración canónica (2026-10-08):** `feat/eros-deps` — el trabajo del lane mergea
-> acá por worktrees locales (sin PR). CI (`ci.yml`) dispara en push a `main`, `develop` y
+> **Rama de integración canónica (2026-10-08):** `feat/eros-deps` — el trabajo del lane mergea acá
+> por worktrees locales (sin PR). CI (`ci.yml`) dispara en push a `main`, `develop` y
 > `feat/eros-deps`; el job e2e corre también en `feat/eros-deps`. El merge bajada a `main` es el
-> gate de release.
-> `migrations/` (schema canónico: `0001_canonical_schema.sql` +
+> gate de release. `migrations/` (schema canónico: `0001_canonical_schema.sql` +
 > `migration_security_rls_allowlist.sql`
 >
 > - `add_rls_phase10.sql`, linaje en `migrations/README.md`), `supabase_seed.sql` y

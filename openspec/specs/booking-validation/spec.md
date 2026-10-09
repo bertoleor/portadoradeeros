@@ -2,13 +2,15 @@
 
 ## Purpose
 
-Validar con zod los endpoints públicos de reservas y contacto, y añadir guard de sesión (defensa en profundidad) en las acciones de servidor más allá de RLS.
+Validar con zod los endpoints públicos de reservas y contacto, y añadir guard de sesión (defensa en
+profundidad) en las acciones de servidor más allá de RLS.
 
 ## Requirements
 
 ### Requirement: Validación zod en endpoints públicos
 
-Los endpoints públicos `contact` y `appointments` MUST validar sus payloads con esquemas zod antes de procesarlos, rechazando entradas inválidas.
+Los endpoints públicos `contact` y `appointments` MUST validar sus payloads con esquemas zod antes
+de procesarlos, rechazando entradas inválidas.
 
 (Previously: sin validación de entrada — hallazgo S7)
 
@@ -26,7 +28,8 @@ Los endpoints públicos `contact` y `appointments` MUST validar sus payloads con
 
 ### Requirement: Guard de sesión en acciones server
 
-Las acciones de servidor que mutan reservas/contacto MUST verificar autenticación/autorización además de RLS (defensa en profundidad), denegando anónimos o no autorizados.
+Las acciones de servidor que mutan reservas/contacto MUST verificar autenticación/autorización
+además de RLS (defensa en profundidad), denegando anónimos o no autorizados.
 
 (Previously: solo RLS, sin guard — hallazgo S2, relacionado S6)
 
@@ -38,7 +41,8 @@ Las acciones de servidor que mutan reservas/contacto MUST verificar autenticaci�
 
 ### Requirement: Status de reserva solo pending desde anon
 
-El flujo público de reserva MUST fijar/validar `status='pending'` en el servidor, sin confiar en el valor enviado por el cliente.
+El flujo público de reserva MUST fijar/validar `status='pending'` en el servidor, sin confiar en el
+valor enviado por el cliente.
 
 (Previously: cliente podía fijar status — hallazgo S6)
 

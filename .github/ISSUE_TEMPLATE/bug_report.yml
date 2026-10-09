@@ -1,7 +1,7 @@
 name: Bug Report
 description: Report a bug or unexpected behavior
-title: "[Bug]: "
-labels: ["bug", "triage"]
+title: '[Bug]: '
+labels: ['bug', 'triage']
 body:
   - type: markdown
     attributes:
@@ -12,7 +12,7 @@ body:
     attributes:
       label: Version/Commit
       description: What version or commit are you on?
-      placeholder: "main / v1.2.3 / commit sha"
+      placeholder: 'main / v1.2.3 / commit sha'
     required: true
   - type: textarea
     id: description

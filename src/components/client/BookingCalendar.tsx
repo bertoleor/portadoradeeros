@@ -48,7 +48,9 @@ export function BookingCalendar({
   today.setHours(0, 0, 0, 0);
 
   const isDayClosed = (dateStr: string) => {
-    if (!businessHours) {return false;}
+    if (!businessHours) {
+      return false;
+    }
     // Parse dateStr manually to avoid timezone shifts (e.g., "2024-03-18" -> local noon)
     const [y, m, d] = dateStr.split('-').map(Number);
     const date = new Date(y, m - 1, d, 12, 0, 0);
@@ -98,7 +100,9 @@ export function BookingCalendar({
           const dayNumber = i - startOffset + 1;
           const isCurrentMonth = dayNumber > 0 && dayNumber <= totalDays;
 
-          if (!isCurrentMonth) {return <div key={`empty-${year}-${month}-${i}`} />;}
+          if (!isCurrentMonth) {
+            return <div key={`empty-${year}-${month}-${i}`} />;
+          }
 
           const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
           const dateObj = new Date(year, month, dayNumber);

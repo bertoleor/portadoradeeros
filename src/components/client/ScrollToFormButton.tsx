@@ -17,7 +17,7 @@ export function ScrollToFormButton({ label = 'Agendar Consulta' }: ScrollToFormB
   };
 
   return (
-    <button 
+    <button
       onClick={handleClick}
       className="btn-primary w-full px-8 py-4 rounded-full text-sm font-medium tracking-widest uppercase transition-all duration-200 flex items-center justify-center gap-3"
     >

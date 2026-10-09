@@ -1,6 +1,10 @@
 ---
 name: refactor
-description: 'Surgical code refactoring to improve maintainability without changing behavior. Covers extracting functions, renaming variables, breaking down god functions, improving type safety, eliminating code smells, and applying design patterns. Less drastic than repo-rebuilder; use for gradual improvements.'
+description:
+  'Surgical code refactoring to improve maintainability without changing behavior. Covers extracting
+  functions, renaming variables, breaking down god functions, improving type safety, eliminating
+  code smells, and applying design patterns. Less drastic than repo-rebuilder; use for gradual
+  improvements.'
 license: MIT
 ---
 
@@ -8,7 +12,8 @@ license: MIT
 
 ## Overview
 
-Improve code structure and readability without changing external behavior. Refactoring is gradual evolution, not revolution. Use this for improving existing code, not rewriting from scratch.
+Improve code structure and readability without changing external behavior. Refactoring is gradual
+evolution, not revolution. Use this for improving existing code, not rewriting from scratch.
 
 ## When to Use
 

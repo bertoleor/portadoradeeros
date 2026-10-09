@@ -1,4 +1,4 @@
-import { Hero, AboutPreview, ContactCTA } from '@/components/client/Hero';
+import { AboutPreview, ContactCTA, Hero } from '@/components/client/Hero';
 import { ServiceCarousel } from '@/components/client/ServiceCarousel';
 import { getVisibleServices } from '@/lib/api/services';
 

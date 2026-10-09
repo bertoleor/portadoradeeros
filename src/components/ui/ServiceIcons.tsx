@@ -9,7 +9,15 @@ interface ServiceIconProps {
 // Custom hand-crafted SVGs for each service — no containers, pure paths
 function TarotIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       {/* Playing card outline */}
       <rect x="5" y="2" width="14" height="20" rx="2" />
       {/* Simple star burst in center */}
@@ -23,7 +31,15 @@ function TarotIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function CandleIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       {/* Candle body */}
       <rect x="9" y="10" width="6" height="12" rx="1" />
       {/* Wick */}
@@ -39,7 +55,15 @@ function CandleIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function WaveIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       {/* Three stacked waves */}
       <path d="M2 8 C4.5 6 7.5 6 10 8 C12.5 10 15.5 10 18 8 C20.5 6 21.5 6 22 8" />
       <path d="M2 12 C4.5 10 7.5 10 10 12 C12.5 14 15.5 14 18 12 C20.5 10 21.5 10 22 12" />
@@ -50,7 +74,15 @@ function WaveIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function StarIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       {/* Sharp 4-pointed star */}
       <path d="M12 2L13.5 10.5L22 12L13.5 13.5L12 22L10.5 13.5L2 12L10.5 10.5L12 2Z" />
     </svg>
@@ -59,7 +91,15 @@ function StarIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function MoonIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
       <circle cx="12" cy="12" r="1.5" stroke="none" fill="currentColor" />
     </svg>
@@ -68,7 +108,15 @@ function MoonIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function SunIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <circle cx="12" cy="12" r="4" />
       <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41m12.72-12.72l-1.41 1.41" />
     </svg>
@@ -77,7 +125,15 @@ function SunIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function LotusIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <path d="M12 22s-8-4.5-8-12c0 0 3 0 8 5s8-5 8-5c0 7.5-8 12-8 12Z" />
       <path d="M12 22s-4-6-4-10c0-3 2-5 4-5s4 2 4 5c0 4-4 10-4 10Z" />
       <path d="M12 11c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2Z" />
@@ -87,7 +143,15 @@ function LotusIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function CrystalIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <path d="M12 2L5 8v8l7 6 7-6V8l-7-6Z" />
       <path d="M12 2v20M5 8l14 8M19 8L5 16" />
     </svg>
@@ -96,7 +160,15 @@ function CrystalIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function EyeIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
       <circle cx="12" cy="12" r="3" />
       <path d="M12 12h.01" />
@@ -106,7 +178,15 @@ function EyeIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
 
 function SmokeIcon(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
       <path d="M9 22c0-3 2-4 2-7s-2-4-2-7 2-4 2-7" />
       <path d="M15 22c0-3-2-4-2-7s2-4-2-7 2-4 2-7" />
     </svg>
@@ -123,7 +203,7 @@ export const SERVICES_ICONS_GALLERY = {
   lotus: { component: LotusIcon, label: 'Loto' },
   crystal: { component: CrystalIcon, label: 'Cristal' },
   eye: { component: EyeIcon, label: 'Protección' },
-  smoke: { component: SmokeIcon, label: 'Sahumerio' }
+  smoke: { component: SmokeIcon, label: 'Sahumerio' },
 };
 
 export function ServiceIcon({ type, className = '', size = 24 }: ServiceIconProps) {
@@ -155,7 +235,17 @@ interface SocialIconProps {
 }
 
 export function SocialIcon({ platform, className = '', size = 24 }: Readonly<SocialIconProps>) {
-  const base = { width: size, height: size, className, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, strokeWidth: '1.5' };
+  const base = {
+    width: size,
+    height: size,
+    className,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    strokeWidth: '1.5',
+  };
 
   switch (platform) {
     case 'instagram':
@@ -181,7 +271,7 @@ export function SocialIcon({ platform, className = '', size = 24 }: Readonly<Soc
     case 'tiktok':
       return (
         <svg {...base} fill="currentColor" stroke="none">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
         </svg>
       );
     default:

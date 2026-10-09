@@ -2,13 +2,13 @@
 
 ## Runner calibration
 
-- Calibrated runner: `pnpm test` / `pnpm typecheck` (pnpm 12.4.1, lockfile
-  `pnpm-lock.yaml` + `pnpm-workspace.yaml` present, `node_modules` installed).
+- Calibrated runner: `pnpm test` / `pnpm typecheck` (pnpm 12.4.1, lockfile `pnpm-lock.yaml` +
+  `pnpm-workspace.yaml` present, `node_modules` installed).
 - Config contradiction (NOT touched, only reported):
   - `openspec/config.yaml` → `strict_tdd: false`, `test_command: "npm run test"`
   - `openspec.config.yaml` (root) → `strict_tdd: true`, runners `pnpm test`
-  - This change ran under Strict TDD with `pnpm` (matches lockfile and the
-    prior change's evidence). Recommendo unificar configs en un follow-up.
+  - This change ran under Strict TDD with `pnpm` (matches lockfile and the prior change's evidence).
+    Recommendo unificar configs en un follow-up.
 
 ## Strict TDD evidence
 
@@ -18,8 +18,8 @@
 
 ## Full verification (real outputs, 2026-09-15)
 
-- `pnpm test` → `Test Files 6 passed (6)`, `Tests 41 passed (41)` —
-  incluye `whatsapp.test.ts (5 tests)` + suites preexistentes sin regresiones.
+- `pnpm test` → `Test Files 6 passed (6)`, `Tests 41 passed (41)` — incluye
+  `whatsapp.test.ts (5 tests)` + suites preexistentes sin regresiones.
 - `pnpm typecheck` (`tsc --noEmit`) → exit 0, sin errores.
 
 ## Gate

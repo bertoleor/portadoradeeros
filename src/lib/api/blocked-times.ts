@@ -54,7 +54,7 @@ export async function createBlockedTime(data: Omit<BlockedTime, 'id'>): Promise<
   await requireAdmin();
 
   const supabase = await createClient();
-  
+
   const { data: newRow, error } = await supabase
     .from('blocked_times')
     .insert([data])
@@ -68,7 +68,10 @@ export async function createBlockedTime(data: Omit<BlockedTime, 'id'>): Promise<
   return newRow as BlockedTime;
 }
 
-export async function updateBlockedTime(id: string, updates: Partial<BlockedTime>): Promise<BlockedTime> {
+export async function updateBlockedTime(
+  id: string,
+  updates: Partial<BlockedTime>
+): Promise<BlockedTime> {
   await requireAdmin();
 
   const supabase = await createClient();

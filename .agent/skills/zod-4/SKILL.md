@@ -1,12 +1,12 @@
 ---
 name: zod-4
 description: >
-  Zod 4 schema validation patterns.
-  Trigger: When using Zod for validation - breaking changes from v3.
+  Zod 4 schema validation patterns. Trigger: When using Zod for validation - breaking changes from
+  v3.
 license: Apache-2.0
 metadata:
   author: gentleman-programming
-  version: "1.0"
+  version: '1.0'
 ---
 
 ## Breaking Changes from Zod 3
@@ -17,20 +17,20 @@ z.string().email();
 z.string().uuid();
 z.string().url();
 z.string().nonempty();
-z.object({ name: z.string() }).required_error("Required");
+z.object({ name: z.string() }).required_error('Required');
 
 // ✅ Zod 4 (NEW)
 z.email();
 z.uuid();
 z.url();
 z.string().min(1);
-z.object({ name: z.string() }, { error: "Required" });
+z.object({ name: z.string() }, { error: 'Required' });
 ```
 
 ## Basic Schemas
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
 // Primitives
 const stringSchema = z.string();
@@ -54,10 +54,10 @@ const priceSchema = z.number().min(0).multipleOf(0.01);
 ```typescript
 const userSchema = z.object({
   id: z.uuid(),
-  email: z.email({ error: "Invalid email address" }),
-  name: z.string().min(1, { error: "Name is required" }),
+  email: z.email({ error: 'Invalid email address' }),
+  name: z.string().min(1, { error: 'Name is required' }),
   age: z.number().int().positive().optional(),
-  role: z.enum(["admin", "user", "guest"]),
+  role: z.enum(['admin', 'user', 'guest']),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
@@ -97,9 +97,9 @@ const coordinatesSchema = z.tuple([z.number(), z.number()]);
 const stringOrNumber = z.union([z.string(), z.number()]);
 
 // Discriminated union (more efficient)
-const resultSchema = z.discriminatedUnion("status", [
-  z.object({ status: z.literal("success"), data: z.unknown() }),
-  z.object({ status: z.literal("error"), error: z.string() }),
+const resultSchema = z.discriminatedUnion('status', [
+  z.object({ status: z.literal('success'), data: z.unknown() }),
+  z.object({ status: z.literal('error'), error: z.string() }),
 ]);
 ```
 
@@ -115,8 +115,8 @@ const dateFromString = z.coerce.date(); // "2024-01-01" → Date
 
 // Preprocessing
 const trimmedString = z.preprocess(
-  (val) => (typeof val === "string" ? val.trim() : val),
-  z.string(),
+  (val) => (typeof val === 'string' ? val.trim() : val),
+  z.string()
 );
 ```
 
@@ -127,10 +127,10 @@ const passwordSchema = z
   .string()
   .min(8)
   .refine((val) => /[A-Z]/.test(val), {
-    message: "Must contain uppercase letter",
+    message: 'Must contain uppercase letter',
   })
   .refine((val) => /[0-9]/.test(val), {
-    message: "Must contain number",
+    message: 'Must contain number',
   });
 
 // With superRefine for multiple errors
@@ -144,7 +144,7 @@ const formSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Passwords don't match",
-        path: ["confirmPassword"],
+        path: ['confirmPassword'],
       });
     }
   });
@@ -163,7 +163,7 @@ z.string().nullable();
 z.string().nullish();
 
 // Default values
-z.string().default("unknown");
+z.string().default('unknown');
 z.number().default(() => Math.random());
 ```
 
@@ -172,18 +172,18 @@ z.number().default(() => Math.random());
 ```typescript
 // Zod 4: Use 'error' param instead of 'message'
 const schema = z.object({
-  name: z.string({ error: "Name must be a string" }),
-  email: z.email({ error: "Invalid email format" }),
-  age: z.number().min(18, { error: "Must be 18 or older" }),
+  name: z.string({ error: 'Name must be a string' }),
+  email: z.email({ error: 'Invalid email format' }),
+  age: z.number().min(18, { error: 'Must be 18 or older' }),
 });
 
 // Custom error map
 const customSchema = z.string({
   error: (issue) => {
-    if (issue.code === "too_small") {
-      return "String is too short";
+    if (issue.code === 'too_small') {
+      return 'String is too short';
     }
-    return "Invalid string";
+    return 'Invalid string';
   },
 });
 ```
