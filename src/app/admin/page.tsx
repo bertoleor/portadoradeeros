@@ -23,6 +23,7 @@ import {
   updateContactStatus,
 } from '@/lib/api/appointments';
 import { logger } from '@/lib/logger';
+import { SUPPORT_WHATSAPP_URL } from '@/lib/socials';
 import { createClient } from '@/lib/supabase/client';
 
 interface AppointmentRecord {
@@ -461,7 +462,7 @@ export default function AdminDashboard() {
                 ¿Necesitas ayuda? Escríbenos y te orientamos.
               </p>
               <a
-                href="https://wa.me/5491173643504"
+                href={SUPPORT_WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary w-full text-center block text-xs py-2.5"

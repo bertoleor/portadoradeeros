@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { SocialIcon } from '@/components/ui/ServiceIcons';
 import { getAdminSettings } from '@/lib/api/settings';
+import { resolveWhatsAppUrl } from '@/lib/socials';
 
 // TikTokIcon is no longer needed here as it's in SocialIcon
 
@@ -23,7 +24,7 @@ const initialSocials = [
   },
   {
     label: 'WhatsApp',
-    href: 'https://wa.me/5491138854297',
+    href: resolveWhatsAppUrl(),
     platform: 'whatsapp' as const,
   },
   {
@@ -49,7 +50,7 @@ export function Footer() {
           },
           {
             label: 'WhatsApp',
-            href: settings.socialLinks.whatsapp || 'https://wa.me/5491138854297',
+            href: resolveWhatsAppUrl(settings.socialLinks.whatsapp),
             platform: 'whatsapp' as const,
           },
           {

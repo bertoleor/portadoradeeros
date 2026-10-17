@@ -8,6 +8,7 @@ import { Button, Input, Label } from '@/components/ui';
 import { SocialIcon } from '@/components/ui/ServiceIcons';
 import { Textarea } from '@/components/ui/TextArea';
 import { getAdminSettings } from '@/lib/api/settings';
+import { resolveWhatsAppUrl } from '@/lib/socials';
 
 // Custom TikTok icon
 function TikTokIcon({ size = 18 }: { readonly size?: number }) {
@@ -35,7 +36,7 @@ const socials: SocialLink[] = [
   },
   {
     label: 'WhatsApp',
-    href: 'https://wa.me/5491138854297',
+    href: resolveWhatsAppUrl(),
     icon: MessageCircle,
     handle: '+54 911 3885-4297',
   },
@@ -80,7 +81,7 @@ export default function ContactPage() {
           },
           {
             label: 'WhatsApp',
-            href: settings.socialLinks.whatsapp || 'https://wa.me/5491138854297',
+            href: resolveWhatsAppUrl(settings.socialLinks.whatsapp),
             icon: MessageCircle,
             handle: 'Chat directo',
           },
