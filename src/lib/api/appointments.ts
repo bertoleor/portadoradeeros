@@ -2,6 +2,7 @@
 
 import webPush from 'web-push';
 
+import { appointmentSchema } from '@/lib/api/appointments-schemas';
 import { AppError, fail, ok, type Result } from '@/lib/api/error';
 import { getAdminSettings } from '@/lib/api/settings';
 import { requireAdmin } from '@/lib/auth/requireAdmin';
@@ -134,6 +135,20 @@ interface AppointmentPayload {
   [HONEYPOT_FIELD]?: string;
 }
 
+/**
+ * H3 hardening (F4-refresh 2026-10-07): server-side zod validation for the
+ * public booking server action. Until now the payload was validated
+ * client-side only, so the free-text fields that land in the email SUBJECT
+ * (`Nuevo turno solicitado: ${service} — ${clientName}`, see
+ * src/lib/email/{smtp,resend}.ts) arrived unbounded and untrimmed.
+ *
+ * The schema lives in `appointments-schemas.ts` (no `'use server'`): a
+ * "use server" file may only export async functions, and the zod object is
+ * a value export — exporting it from this module breaks the whole server
+ * actions bundle at runtime ("A 'use server' file can only export async
+ * functions, found object", observed as E2E booking failure on PR #17).
+ */
+
 const RATE_LIMIT_SCOPE = 'appointments';
 
 /**
@@ -187,6 +202,23 @@ export async function createAppointment(
       status: 'pending',
     } as AppointmentRow);
   }
+
+  // SCHEMA (H3) — the payload came from a public form that until now was
+  // validated client-side only. Trim + bound every free-text field BEFORE any
+  // side effect (rate-limit counter, availability query, DB write, emails,
+  // push) so an oversized/malformed request burns no resources. The parsed
+  // (trimmed) copy replaces the caller's payload for the rest of the flow, so
+  // the values that land in email subjects/bodies are always normalized.
+  const parsed = appointmentSchema.safeParse(payload);
+  if (!parsed.success) {
+    return fail(
+      new AppError(
+        'VALIDATION',
+        'Los datos enviados no son válidos. Revisá los campos e intentá de nuevo.'
+      )
+    );
+  }
+  payload = { ...payload, ...parsed.data } as AppointmentPayload;
 
   // RATE LIMIT — cap this public write+email flow per IP.
   const ip = await resolveActionClientIp();

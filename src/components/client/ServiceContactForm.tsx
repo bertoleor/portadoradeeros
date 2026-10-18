@@ -114,10 +114,16 @@ const StepClientInfo = ({
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
       {[
-        { id: 'name', label: 'Nombre', placeholder: 'Tu nombre' },
-        { id: 'surname', label: 'Apellido', placeholder: 'Tu apellido' },
-        { id: 'email', label: 'Email', placeholder: 'ejemplo@correo.com', type: 'email' },
-        { id: 'phone', label: 'WhatsApp', placeholder: '+54 9...' },
+        { id: 'name', label: 'Nombre', placeholder: 'Tu nombre', maxLength: 300 },
+        { id: 'surname', label: 'Apellido', placeholder: 'Tu apellido', maxLength: 300 },
+        {
+          id: 'email',
+          label: 'Email',
+          placeholder: 'ejemplo@correo.com',
+          type: 'email',
+          maxLength: 320,
+        },
+        { id: 'phone', label: 'WhatsApp', placeholder: '+54 9...', maxLength: 50 },
       ].map((f) => (
         <div key={f.id} className="space-y-2">
           <Label
@@ -130,6 +136,7 @@ const StepClientInfo = ({
             id={f.id}
             type={f.type || 'text'}
             placeholder={f.placeholder}
+            maxLength={f.maxLength}
             value={formData[f.id as keyof FormData]}
             onChange={(e) => handleChange(f.id as keyof FormData, e.target.value)}
             variant="underline"
@@ -149,6 +156,7 @@ const StepClientInfo = ({
       <Textarea
         id="message"
         placeholder="Contame brevemente tu consulta..."
+        maxLength={5000}
         value={formData.message}
         onChange={(e) => handleChange('message', e.target.value)}
         variant="underline"

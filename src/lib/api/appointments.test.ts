@@ -153,6 +153,7 @@ vi.mock('@/lib/supabase/service', () => ({
 
 // Import AFTER all vi.mock calls take effect.
 import { createAppointment } from './appointments';
+import { appointmentSchema } from './appointments-schemas';
 
 const basePayload = {
   serviceId: 'svc-1',
@@ -297,5 +298,127 @@ describe('createAppointment — email provider dispatch (EROS-D2)', () => {
     } finally {
       delete process.env.EMAIL_PROVIDER;
     }
+  });
+});
+
+describe('createAppointment — server-side payload validation (H3)', () => {
+  it('exports an appointmentSchema that accepts the canonical booking payload', async () => {
+    const r = appointmentSchema.safeParse(basePayload);
+    expect(r.success).toBe(true);
+    if (r.success) {
+      expect(r.data.clientName).toBe('Ana');
+      expect(r.data.serviceName).toBe('Lectura');
+    }
+  });
+
+  it('trims and bounds free-text fields (name/service/notes/phone)', async () => {
+    const r = appointmentSchema.safeParse({
+      serviceId: 'svc-1',
+      serviceName: '  Lectura de tarot  ',
+      clientName: '  Ana Pérez  ',
+      clientEmail: 'ana@example.com',
+      clientPhone: '  +54 11 5555 5555  ',
+      appointmentDate: new Date('2026-10-01T14:00:00'),
+      notes: '  Voy con mi mamá  ',
+    });
+    expect(r.success).toBe(true);
+    if (r.success) {
+      expect(r.data.clientName).toBe('Ana Pérez');
+      expect(r.data.serviceName).toBe('Lectura de tarot');
+      expect(r.data.notes).toBe('Voy con mi mamá');
+      expect(r.data.clientPhone).toBe('+54 11 5555 5555');
+    }
+  });
+
+  it('rejects over-long fields (public-form payload cap)', async () => {
+    const base = {
+      serviceId: 'svc-1',
+      serviceName: 'Lectura',
+      clientEmail: 'ana@example.com',
+      appointmentDate: new Date('2026-10-01T14:00:00'),
+    };
+    expect(appointmentSchema.safeParse({ ...base, clientName: 'x'.repeat(301) }).success).toBe(
+      false
+    );
+    expect(appointmentSchema.safeParse({ ...base, serviceName: 'x'.repeat(201) }).success).toBe(
+      false
+    );
+    expect(appointmentSchema.safeParse({ ...base, notes: 'x'.repeat(5001) }).success).toBe(false);
+    expect(appointmentSchema.safeParse({ ...base, clientPhone: '5'.repeat(51) }).success).toBe(
+      false
+    );
+  });
+
+  it('rejects a whitespace-only clientName (would land in the email subject)', async () => {
+    const r = appointmentSchema.safeParse({
+      serviceId: 'svc-1',
+      serviceName: 'Lectura',
+      clientName: '   ',
+      clientEmail: 'ana@example.com',
+      appointmentDate: new Date('2026-10-01T14:00:00'),
+    });
+    expect(r.success).toBe(false);
+  });
+
+  it('rejects an invalid/missing appointmentDate (Date instance only, no ISO strings)', async () => {
+    const base = {
+      serviceId: 'svc-1',
+      serviceName: 'Lectura',
+      clientName: 'Ana',
+      clientEmail: 'ana@example.com',
+    };
+    // missing
+    expect(appointmentSchema.safeParse(base).success).toBe(false);
+    // ISO string is NOT a Date instance — the schema demands a real Date
+    expect(
+      appointmentSchema.safeParse({ ...base, appointmentDate: '2026-10-01T14:00:00.000Z' }).success
+    ).toBe(false);
+    // invalid Date instance
+    expect(
+      appointmentSchema.safeParse({ ...base, appointmentDate: new Date('garbage') }).success
+    ).toBe(false);
+  });
+
+  it('rejects non-finite/absurd serviceDurationMinutes', async () => {
+    const base = {
+      serviceId: 'svc-1',
+      serviceName: 'Lectura',
+      clientName: 'Ana',
+      clientEmail: 'ana@example.com',
+      appointmentDate: new Date('2026-10-01T14:00:00'),
+    };
+    expect(appointmentSchema.safeParse({ ...base, serviceDurationMinutes: 0 }).success).toBe(false);
+    expect(appointmentSchema.safeParse({ ...base, serviceDurationMinutes: -5 }).success).toBe(
+      false
+    );
+    expect(appointmentSchema.safeParse({ ...base, serviceDurationMinutes: 1e9 }).success).toBe(
+      false
+    );
+    expect(appointmentSchema.safeParse({ ...base, serviceDurationMinutes: 60 }).success).toBe(true);
+  });
+
+  it('createAppointment rejects a schema-invalid payload BEFORE any side effect', async () => {
+    setAvailability([]); // FREE slot — only the schema can reject this payload
+    const result = await createAppointment({
+      ...basePayload,
+      clientName: 'x'.repeat(301), // over the cap
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('VALIDATION');
+    }
+    expect(insertAttempts).toHaveLength(0);
+  });
+
+  it('createAppointment still allows a valid payload end-to-end (trim applied)', async () => {
+    setAvailability([]);
+    const result = await createAppointment({
+      ...basePayload,
+      clientName: '  Ana  ',
+      notes: '  nota  ',
+    });
+    expect(result.ok).toBe(true);
+    // The honeypot short-circuit returns ok — need the real path; verify insert happened
+    expect(insertAttempts.length).toBeGreaterThanOrEqual(1);
   });
 });

@@ -255,6 +255,7 @@ export default function ContactPage() {
                     <Input
                       id="name"
                       placeholder="Tu nombre"
+                      maxLength={200}
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       aria-invalid={!!errors.name}
@@ -275,6 +276,7 @@ export default function ContactPage() {
                       id="email"
                       type="email"
                       placeholder="tu@email.com"
+                      maxLength={320}
                       value={formData.email}
                       onChange={(e) => handleChange('email', e.target.value)}
                       aria-invalid={!!errors.email}
@@ -296,6 +298,7 @@ export default function ContactPage() {
                     id="phone"
                     type="tel"
                     placeholder="+54 9 11 1234 5678"
+                    maxLength={50}
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
                     variant="underline"
@@ -314,6 +317,7 @@ export default function ContactPage() {
                     id="message"
                     placeholder="Contame sobre tu consulta..."
                     rows={4}
+                    maxLength={5000}
                     value={formData.message}
                     onChange={(e) => handleChange('message', e.target.value)}
                     aria-invalid={!!errors.message}
