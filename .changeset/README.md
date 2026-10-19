@@ -1,6 +1,7 @@
 # Changesets
 
-This project uses [Changesets](https://github.com/changesets/changesets) for versioning and changelog generation.
+This project uses [Changesets](https://github.com/changesets/changesets) for versioning and
+changelog generation.
 
 ## Adding a Changeset
 
@@ -27,4 +28,5 @@ This will create a markdown file in `.changeset/` describing your change.
 
 ## Monorepo (khal)
 
-For the khal monorepo, changesets handles cross-package versioning with `updateInternalDependencies: "patch"`.
+For the khal monorepo, changesets handles cross-package versioning with
+`updateInternalDependencies: "patch"`.
