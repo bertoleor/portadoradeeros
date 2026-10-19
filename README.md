@@ -25,19 +25,21 @@ Proyecto Supabase: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
 
 ## Docs
 
-| Doc                                                          | Contenido                                          |
-| ------------------------------------------------------------ | -------------------------------------------------- |
-| [`docs/README.md`](docs/README.md)                           | Índice completo                                    |
-| [`docs/01-producto.md`](docs/01-producto.md)                 | Qué es, catálogo, actores, rutas                   |
-| [`docs/02-como-se-arma.md`](docs/02-como-se-arma.md)         | Setup, DB/migraciones, deploy, estructura `src/`   |
-| [`docs/03-stack.md`](docs/03-stack.md)                       | Framework, backend, plataforma, tooling            |
-| [`docs/04-branding.md`](docs/04-branding.md)                 | Marca, voz, SEO, activos                           |
-| [`docs/05-identidad-visual.md`](docs/05-identidad-visual.md) | Paleta, tipografías, botones                       |
-| [`docs/06-marketing.md`](docs/06-marketing.md)               | Propuesta, embudo, canales                         |
-| [`docs/SECURITY.md`](docs/SECURITY.md)                       | Security policy (medidas reales vs aspiracionales) |
-| [`CHANGELOG.md`](CHANGELOG.md)                               | Cambios del repo                                   |
-| [`docs/adr/`](docs/adr/)                                     | Decisiones (ADR-0001 allowlist `is_admin()`)       |
-| [`docs/STATUS.md`](docs/STATUS.md)                           | Estado del proyecto + fuentes de verdad            |
+| Doc                                                                                                            | Contenido                                          |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| [`docs/README.md`](docs/README.md)                                                                             | Índice completo                                    |
+| [`docs/01-producto.md`](docs/01-producto.md)                                                                   | Qué es, catálogo, actores, rutas                   |
+| [`docs/02-como-se-arma.md`](docs/02-como-se-arma.md)                                                           | Setup, DB/migraciones, deploy, estructura `src/`   |
+| [`docs/03-stack.md`](docs/03-stack.md)                                                                         | Framework, backend, plataforma, tooling            |
+| [`docs/04-branding.md`](docs/04-branding.md)                                                                   | Marca, voz, SEO, activos                           |
+| [`docs/05-identidad-visual.md`](docs/05-identidad-visual.md)                                                   | Paleta, tipografías, botones                       |
+| [`docs/06-marketing.md`](docs/06-marketing.md)                                                                 | Propuesta, embudo, canales                         |
+| [`SECURITY.md`](SECURITY.md)                                                                                   | Security policy (medidas reales vs aspiracionales) |
+| [`CHANGELOG.md`](CHANGELOG.md)                                                                                 | Cambios del repo                                   |
+| [`docs/adr/`](docs/adr/)                                                                                       | Decisiones (ADR-0001 allowlist `is_admin()`)       |
+| [`docs/STATUS.md`](docs/STATUS.md)                                                                             | Estado del proyecto + fuentes de verdad            |
+| [AGENTS.md](AGENTS.md) · [CONTRIBUTING.md](CONTRIBUTING.md) · [ARCHITECTURE.md](ARCHITECTURE.md)               | Set infaltables v2 — raíz                          |
+| [`docs/DESIGN.md`](docs/DESIGN.md) · [`docs/DATABASE.md`](docs/DATABASE.md) · [`docs/marca.md`](docs/marca.md) | Set infaltables v2 — `docs/`                       |
 
 ## Comandos
 
