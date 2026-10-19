@@ -46,7 +46,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .atl/
-.changeset/
 .husky/
 .eslintcache
 
