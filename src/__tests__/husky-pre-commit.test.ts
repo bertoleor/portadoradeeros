@@ -1,3 +1,6 @@
+/* eslint-disable security/detect-non-literal-fs-filename -- this test writes
+   only to its own mkdtempSync fixture dir; every path is built from tmpdir()
+   and no external input reaches these fs calls. */
 import { execFileSync, spawnSync } from 'node:child_process';
 import {
   chmodSync,
