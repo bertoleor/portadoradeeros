@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -59,7 +59,7 @@ jobs:
       'refs/heads/feat/eros-deps'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -85,7 +85,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Run npm audit
         # EROS-DEPS-RuntimeVulns gate: STRICT for production runtime deps
         # (--omit=dev). Dev-only tooling vulns (shadcn->ts-morph->braces chain,
@@ -102,7 +102,7 @@ jobs:
       pull-requests: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Run Gitleaks
@@ -116,7 +116,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Run Trivy
         uses: aquasecurity/trivy-action@v0.36.0
         with:
