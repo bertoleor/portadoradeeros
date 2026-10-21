@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 interface CustomTimePickerProps {
   readonly value: string; // HH:mm format
@@ -24,8 +24,11 @@ export function CustomTimePicker({
   bookedSlots = [],
   blockedTimes = [],
 }: CustomTimePickerProps) {
-  const [selectedHour, setSelectedHour] = useState<string>(value ? value.split(':')[0] : '');
-  const [selectedMinute, setSelectedMinute] = useState<string>(value ? value.split(':')[1] : '');
+  // Fully controlled: derive the selection from the `value` prop. Every
+  // selection commits through onChange (hour → `${h}:00`, minute → `12:${m}`),
+  // so there is no intermediate uncommitted state that needs local state.
+  const selectedHour = value ? value.split(':')[0] : '';
+  const selectedMinute = value ? value.split(':')[1] : '';
 
   const hourRef = useRef<HTMLDivElement>(null);
   const minuteRef = useRef<HTMLDivElement>(null);
@@ -61,38 +64,20 @@ export function CustomTimePicker({
     return hourNum >= dayStatus.start && hourNum <= dayStatus.end;
   });
 
-  // Sync internal state if `value` prop changes externally
-  useEffect(() => {
-    if (value) {
-      const [h, m] = value.split(':');
-      if (h !== selectedHour) {
-        setSelectedHour(h);
-      }
-      if (m !== selectedMinute) {
-        setSelectedMinute(m);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
-
   const handleHourSelect = (h: string) => {
-    setSelectedHour(h);
     if (selectedMinute) {
       onChange(`${h}:${selectedMinute}`);
     } else {
       // If minute is not selected yet, default to '00'
-      setSelectedMinute('00');
       onChange(`${h}:00`);
     }
   };
 
   const handleMinuteSelect = (m: string) => {
-    setSelectedMinute(m);
     if (selectedHour) {
       onChange(`${selectedHour}:${m}`);
     } else {
       // If hour is not selected yet, default to '12'
-      setSelectedHour('12');
       onChange(`12:${m}`);
     }
   };
