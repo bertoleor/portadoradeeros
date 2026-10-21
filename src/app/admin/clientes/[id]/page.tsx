@@ -74,35 +74,69 @@ export default function ClientDetailPage() {
     notes: '',
   });
 
-  const loadData = useCallback(async () => {
+  // Fetch only — deliberately no setState here so the mount effect can call
+  // it without tripping react-hooks/set-state-in-effect (the rule flags any
+  // setState-containing function referenced from an effect callback, even
+  // behind an await; nested callbacks like .then are its sanctioned form).
+  const fetchClientAndServices = useCallback(async () => {
+    const [clientData, servicesData] = await Promise.all([getClientById(clientId), getServices()]);
+    return { clientData, servicesData };
+  }, [clientId]);
+
+  const applyData = (
+    clientData: Awaited<ReturnType<typeof getClientById>>,
+    servicesData: Service[]
+  ) => {
+    if (clientData) {
+      setClient(clientData);
+      setEditForm({
+        name: clientData.name,
+        surname: clientData.surname || '',
+        email: clientData.email || '',
+        phone: clientData.phone || '',
+        notes: clientData.notes || '',
+      });
+    }
+    setServices(servicesData.filter((s) => s.isVisible));
+  };
+
+  // Refetch entry point for event handlers (spinner + state updates).
+  const loadData = async () => {
     setIsLoading(true);
     try {
-      const [clientData, servicesData] = await Promise.all([
-        getClientById(clientId),
-        getServices(),
-      ]);
-      if (clientData) {
-        setClient(clientData);
-        setEditForm({
-          name: clientData.name,
-          surname: clientData.surname || '',
-          email: clientData.email || '',
-          phone: clientData.phone || '',
-          notes: clientData.notes || '',
-        });
-      }
-      setServices(servicesData.filter((s) => s.isVisible));
+      const { clientData, servicesData } = await fetchClientAndServices();
+      applyData(clientData, servicesData);
     } catch (err) {
       toastError('Error al cargar datos');
       console.error(err);
     } finally {
       setIsLoading(false);
     }
-  }, [clientId, toastError]);
+  };
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    let active = true;
+    (async () => {
+      try {
+        const { clientData, servicesData } = await fetchClientAndServices();
+        if (active) {
+          applyData(clientData, servicesData);
+        }
+      } catch (err) {
+        if (active) {
+          toastError('Error al cargar datos');
+          console.error(err);
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [fetchClientAndServices, toastError]);
 
   const handleSaveEdit = async () => {
     try {
