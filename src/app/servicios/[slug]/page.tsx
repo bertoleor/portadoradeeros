@@ -6,6 +6,7 @@ import { ServiceImageCarousel } from '@/components/client/ServiceImageCarousel';
 import { ServiceIcon } from '@/components/ui/ServiceIcons';
 import { getServiceBySlug } from '@/lib/api/services';
 import { getAdminSettings } from '@/lib/api/settings';
+import { resolveWhatsAppUrl } from '@/lib/socials';
 
 import type { Metadata } from 'next';
 
@@ -56,6 +57,9 @@ export default async function ServicioDetalle({
     alias: settings?.bankDetails?.alias || '',
   };
 
+  // WhatsApp pill: settings → env → literal (single source in src/lib/socials.ts)
+  const whatsappUrl = resolveWhatsAppUrl(settings?.socialLinks?.whatsapp);
+
   return (
     <section className="py-12 md:py-20 px-4 md:px-8 bg-transparent">
       <div className="max-w-[1200px] mx-auto">
@@ -105,9 +109,7 @@ export default async function ServicioDetalle({
             </div>
 
             {/* Redes sociales — pills */}
-            {(settings?.socialLinks?.instagram ||
-              settings?.socialLinks?.whatsapp ||
-              settings?.socialLinks?.tiktok) && (
+            {(settings?.socialLinks?.instagram || whatsappUrl || settings?.socialLinks?.tiktok) && (
               <div className="flex flex-wrap items-center gap-2 mt-6 mb-8">
                 {settings?.socialLinks?.instagram && (
                   <a
@@ -136,9 +138,9 @@ export default async function ServicioDetalle({
                   </a>
                 )}
 
-                {settings?.socialLinks?.whatsapp && (
+                {whatsappUrl && (
                   <a
-                    href={settings.socialLinks.whatsapp}
+                    href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 hover:-translate-y-px hover:shadow-md glass-pill"

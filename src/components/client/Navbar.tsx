@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 import { getAdminSettings } from '@/lib/api/settings';
+import { resolveWhatsAppUrl } from '@/lib/socials';
 
 const navLinks = [
   { href: '/', label: 'Inicio' },
@@ -22,7 +23,11 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [socialLinks, setSocialLinks] = useState({ instagram: '', whatsapp: '', tiktok: '' });
+  const [socialLinks, setSocialLinks] = useState({
+    instagram: '',
+    whatsapp: resolveWhatsAppUrl(),
+    tiktok: '',
+  });
   const { scrollY } = useScroll();
   const lastScrollY = useRef(0);
 
@@ -46,7 +51,7 @@ export function Navbar() {
         if (settings) {
           setSocialLinks({
             instagram: settings.socialLinks.instagram || 'https://instagram.com/portadoradeeros',
-            whatsapp: settings.socialLinks.whatsapp || 'https://wa.me/5491138854297',
+            whatsapp: resolveWhatsAppUrl(settings.socialLinks.whatsapp),
             tiktok: settings.socialLinks.tiktok || 'https://tiktok.com/@portadoradeeros',
           });
         }
@@ -174,7 +179,7 @@ export function Navbar() {
                     TikTok
                   </a>
                   <a
-                    href={socialLinks.whatsapp || '#'}
+                    href={socialLinks.whatsapp}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-medium hover:text-[rgba(15,15,20,0.9)] text-[rgba(15,15,20,0.6)] transition-colors"
