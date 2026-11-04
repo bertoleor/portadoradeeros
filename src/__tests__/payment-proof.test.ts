@@ -133,7 +133,7 @@ describe("Payment Proof Validation", () => {
       });
 
       expect(createResult.ok).toBe(true);
-      if (!createResult.ok) return;
+      if (!createResult.ok) {return;}
 
       // Try to confirm without payment proof - should fail
       const confirmResult = await confirmAppointment(createResult.data.id);
@@ -161,7 +161,7 @@ describe("Payment Proof Validation", () => {
       });
 
       expect(createResult.ok).toBe(true);
-      if (!createResult.ok) return;
+      if (!createResult.ok) {return;}
 
       // Confirm should succeed since payment proof exists
       const confirmResult = await confirmAppointment(createResult.data.id);
@@ -188,7 +188,7 @@ describe("Payment Proof Validation", () => {
       });
 
       expect(createResult.ok).toBe(true);
-      if (!createResult.ok) return;
+      if (!createResult.ok) {return;}
 
       // Should still be able to confirm (backward compatibility)
       const confirmResult = await confirmAppointment(createResult.data.id);
