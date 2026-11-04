@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { HONEYPOT_FIELD } from '@/lib/spam-protection';
+import { HONEYPOT_FIELD } from "@/lib/spam-protection";
 
 /**
  * H3 hardening (F4-refresh 2026-10-07): server-side zod validation for the
@@ -26,13 +26,14 @@ import { HONEYPOT_FIELD } from '@/lib/spam-protection';
  * contract of `appointments.ts`.
  */
 export const appointmentSchema = z.object({
-  serviceId: z.string().max(100),
-  serviceName: z.string().trim().min(1).max(200),
-  serviceDurationMinutes: z.number().finite().positive().max(1440).optional(),
-  clientName: z.string().trim().min(1).max(300),
-  clientEmail: z.email('Email inválido').max(320),
-  clientPhone: z.string().trim().max(50).optional(),
-  appointmentDate: z.date(),
-  notes: z.string().trim().max(5000).optional(),
-  [HONEYPOT_FIELD]: z.string().optional(),
+	serviceId: z.string().max(100),
+	serviceName: z.string().trim().min(1).max(200),
+	serviceDurationMinutes: z.number().finite().positive().max(1440).optional(),
+	clientName: z.string().trim().min(1).max(300),
+	clientEmail: z.email("Email inválido").max(320),
+	clientPhone: z.string().trim().max(50).optional(),
+	appointmentDate: z.date(),
+	notes: z.string().trim().max(5000).optional(),
+	paymentProofUrl: z.url("URL de comprobante inválida").optional(),
+	[HONEYPOT_FIELD]: z.string().optional(),
 });
