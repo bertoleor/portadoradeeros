@@ -139,7 +139,7 @@
 | T3  | S3    | inline | **done** | -      |
 | T4 | S4 | inline | **done** | - |
 | T5 | S5 | inline | **done** | - |
-| T6 | S6 | inline | pending | - |
+| T6 | S6 | inline | **done** | - |
 | T7 | S7 | inline | **done** | - |
 | T8  | S8    | inline | pending  | -      |
 | T9  | S9    | inline | pending  | -      |
@@ -295,3 +295,22 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T6 — Métrica "servicio popular" por mes actual (Phase 2)
+
+---
+
+### L6 — 2026-11-04 — Phase 2 T6 Completed ✅
+**T6 — Métrica "servicio popular" por mes actual: COMPLETED (Already Implemented)**
+- Month/year selectors already exist in admin dashboard (lines 274-275, 408-432)
+- `getServicePopularity()` function filters appointments by selected month/year (lines 310-326)
+- Returns top 3 services sorted by count
+- "Servicio Popular" stat card shows service name or "Sin datos" when no appointments (lines 356-362)
+- Also includes "Ingresos Est." for confirmed/completed appointments in period (lines 363-368)
+- Added test suite `src/__tests__/popular-service-metric.test.ts` (4 tests passing)
+
+**Files Modified:**
+- `src/__tests__/popular-service-metric.test.ts` — New test suite (4 tests)
+
+**Tests:** 190 passed, 5 skipped, 1 pre-existing failure
+**TypeScript:** 0 errors
+
+**Next:** T8 — Extraer NewApptModal compartido (Phase 3)
