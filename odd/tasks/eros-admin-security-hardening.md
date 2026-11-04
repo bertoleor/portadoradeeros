@@ -141,7 +141,7 @@
 | T5 | S5 | inline | **done** | - |
 | T6 | S6 | inline | **done** | - |
 | T7 | S7 | inline | **done** | - |
-| T8  | S8    | inline | pending  | -      |
+| T8 | S8 | inline | **done** | - |
 | T9  | S9    | inline | pending  | -      |
 | T10 | S10   | inline | pending  | -      |
 | T11 | S11   | inline | pending  | -      |
@@ -314,3 +314,33 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T8 — Extraer NewApptModal compartido (Phase 3)
+
+---
+
+### L7 — 2026-11-04 — Phase 3 T8 Completed ✅
+**T8 — Extraer NewApptModal compartido: COMPLETED**
+- Created shared component `src/components/admin/NewApptModal.tsx` with:
+  - All form fields (name, surname, email, phone, service, date, time, notes)
+  - Validation (required fields, email format, phone digits)
+  - Uses `zonedWallClockMs` for timezone-safe date handling (EROS-D1/ADR-0002)
+  - Calls `createAppointmentAdmin` with proper error handling
+  - Toast notifications for success/error
+  - Consistent styling with Tailwind/backdrop-blur
+- Updated `src/app/admin/calendario/page.tsx`:
+  - Removed local `NewApptModal` (~290 lines)
+  - Uses imported shared component with `selectedDate` prop
+- Updated `src/app/admin/clientes/page.tsx`:
+  - Removed local `NewApptModal` (~300 lines)
+  - Uses imported shared component with `defaultName` and `defaultEmail` props
+  - Removed unused imports (DatePicker, Select, TimePicker, Clock)
+- Cleaned up duplicate `statusLabel` in clientes page
+
+**Files Modified:**
+- `src/components/admin/NewApptModal.tsx` (new shared component)
+- `src/app/admin/calendario/page.tsx` (removed local modal, uses shared)
+- `src/app/admin/clientes/page.tsx` (removed local modal, uses shared)
+
+**Tests:** 190 passed, 5 skipped, 1 pre-existing failure
+**TypeScript:** 0 errors
+
+**Next:** T9 — Hook useFormValidation compartido (Phase 3)
