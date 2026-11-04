@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Button, DatePicker, Select, TimePicker } from "@/components/ui";
 import { useToast } from "@/components/ui/ToastProvider";
 import { createAppointmentAdmin } from "@/lib/api/appointments";
-import { zonedWallClockMs } from "@/lib/timezone";
+import { parseAppointmentDate } from "@/lib/date-helpers";
 
 import type { Service } from "@/types";
 
@@ -114,7 +114,7 @@ export function NewApptModal({
 		// submitted instant must be built with the canonical helper — never
 		// `new Date(y, m-1, d, hh, mm)`, which resolves in the BROWSER's
 		// local timezone and drifts for any client outside UTC-3.
-		const apptDate = new Date(zonedWallClockMs(form.date, form.time));
+		const apptDate = new Date(parseAppointmentDate(form.date, form.time));
 		if (Number.isNaN(apptDate.getTime())) {
 			toastError("Fecha u hora inválida.");
 			return;

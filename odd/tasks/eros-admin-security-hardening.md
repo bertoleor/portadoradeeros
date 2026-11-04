@@ -143,7 +143,7 @@
 | T7 | S7 | inline | **done** | - |
 | T8 | S8 | inline | **done** | - |
 | T9 | S9 | inline | **done** | - |
-| T10 | S10   | inline | pending  | -      |
+| T10 | S10 | inline | **done** | - |
 | T11 | S11   | inline | pending  | -      |
 | T12 | S12   | inline | pending  | -      |
 | T13 | S13   | inline | pending  | -      |
@@ -369,3 +369,36 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T10 — Helper parseAppointmentDate compartido (Phase 3)
+
+---
+
+### L9 — 2026-11-04 — Phase 3 T10 Completed ✅
+**T10 — Helper parseAppointmentDate compartido: COMPLETED**
+- Created shared module `src/lib/date-helpers.ts` with:
+  - `parseLocalDate(dateStr)` - parses "YYYY-MM-DD" to Date at noon (for display)
+  - `parseAppointmentDate(dateStr, hhmm)` - canonical ART date+time to epoch ms (for storage)
+  - `formatAppointmentDate(instantMs)` - epoch ms to "YYYY-MM-DD" ART
+  - `formatAppointmentTime(instantMs)` - epoch ms to "HH:mm" ART
+  - `formatAppointmentDateTime(instantMs)` - epoch ms to full "es-AR" string
+  - `getAppointmentDayBounds(dateStr)` - [startMs, endExclusiveMs) for ART day
+  - `isAppointmentOnDate(instantMs, dateStr)` - check if appointment falls on ART day
+  - `parseDbAppointment(isoString)` - ISO string to ART date/time parts
+  - `splitAppointmentDateTime(instantMs)` - epoch ms to {date, time} parts
+  - `appointmentSortKey(instantMs)` - sort key for appointments
+- Updated `src/components/client/ServiceContactForm.tsx`:
+  - Removed local `parseLocalDate` function
+  - Now imports `parseLocalDate` from `@/lib/date-helpers`
+- Updated `src/components/admin/NewApptModal.tsx`:
+  - Replaced `zonedWallClockMs` with `parseAppointmentDate` from shared module
+- Added test suite `src/__tests__/date-helpers.test.ts` (14 tests passing)
+
+**Files Created/Modified:**
+- `src/lib/date-helpers.ts` (new shared module)
+- `src/__tests__/date-helpers.test.ts` (14 tests)
+- `src/components/client/ServiceContactForm.tsx` (uses shared helper)
+- `src/components/admin/NewApptModal.tsx` (uses shared helper)
+
+**Tests:** 204 passed, 25 skipped, 1 pre-existing failure
+**TypeScript:** 0 errors
+
+**Next:** T11 — Paginación getAppointments (Phase 3)
