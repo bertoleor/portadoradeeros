@@ -144,7 +144,7 @@
 | T8 | S8 | inline | **done** | - |
 | T9 | S9 | inline | **done** | - |
 | T10 | S10 | inline | **done** | - |
-| T11 | S11   | inline | pending  | -      |
+| T11 | S11 | inline | **done** | - |
 | T12 | S12   | inline | pending  | -      |
 | T13 | S13   | inline | pending  | -      |
 | T14 | S14   | inline | pending  | -      |
@@ -402,3 +402,27 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T11 — Paginación getAppointments (Phase 3)
+
+---
+
+### L10 — 2026-11-04 — Phase 3 T11 Completed ✅
+**T11 — Paginación getAppointments: COMPLETED**
+- Added `getAppointmentsPaginated` function in `src/lib/api/appointments.ts` with:
+  - Pagination support (page, pageSize)
+  - Server-side month/year filtering for calendar view
+  - Status filtering
+  - Returns metadata (total count, current page, pageSize)
+- Updated `src/app/admin/page.tsx` (dashboard):
+  - Uses `getAppointmentsPaginated({ page: 1, pageSize: 5 })` for "Próximas Sesiones"
+  - Realtime subscription updated to use paginated function
+- Added test file `src/__tests__/appointments-pagination.test.ts` (5 tests, skipped - integration)
+
+**Files Modified:**
+- `src/lib/api/appointments.ts` (new `getAppointmentsPaginated` function + `GetAppointmentsOptions` interface)
+- `src/app/admin/page.tsx` (uses paginated function for dashboard + realtime)
+- `src/__tests__/appointments-pagination.test.ts` (5 integration tests, skipped)
+
+**Tests:** 204 passed, 30 skipped, 1 pre-existing failure
+**TypeScript:** 0 errors
+
+**Next:** T12 — Lazy load RichTextEditor + ImageUploader (Phase 3)

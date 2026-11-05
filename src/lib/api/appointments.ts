@@ -381,6 +381,78 @@ export async function getAppointments() {
 	return data;
 }
 
+export interface GetAppointmentsOptions {
+	page?: number;
+	pageSize?: number;
+	month?: number;
+	year?: number;
+	status?: string;
+}
+
+export async function getAppointmentsPaginated(
+	options: GetAppointmentsOptions = {}
+): Promise<{ data: unknown[]; total: number; page: number; pageSize: number }> {
+	const supabase = await createClient();
+
+	const {
+		page = 1,
+		pageSize = 20,
+		month,
+		year,
+		status,
+	} = options;
+
+	let query = supabase
+		.from("appointments")
+		.select(
+			`
+      *,
+      services ( title, price )
+    `,
+			{ count: "exact" },
+		)
+		.order("created_at", { ascending: false });
+
+	// Filter by month/year if provided (server-side for calendar month view)
+	if (month !== undefined && year !== undefined) {
+	const { startMs, endExclusiveMs: dayEndMs } = artDayBounds(`${year}-${String(month + 1).padStart(2, "0")}-01`);
+		// Need to get the full month range
+		const startDate = new Date(startMs);
+		const endDate = new Date(startDate);
+		endDate.setMonth(endDate.getMonth() + 1);
+	const monthEndExclusiveMs = zonedWallClockMs(
+			`${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, "0")}-01`,
+			"00:00"
+		);
+
+		query = query
+			.filter("appointment_date", "gte", new Date(startMs).toISOString())
+		.filter("appointment_date", "lt", new Date(monthEndExclusiveMs).toISOString());
+	}
+
+	if (status) {
+		query = query.eq("status", status);
+	}
+
+	const from = (page - 1) * pageSize;
+	const to = from + pageSize - 1;
+	query = query.range(from, to);
+
+	const { data, error, count } = await query;
+
+	if (error) {
+		console.error("Failed to fetch appointments:", error);
+		return { data: [], total: 0, page, pageSize };
+	}
+
+	return {
+		data: data || [],
+		total: count || 0,
+		page,
+		pageSize,
+	};
+}
+
 export async function getBookedSlots(dateStr: string, durationMinutes = 60) {
 	const supabase = createServiceClient();
 
