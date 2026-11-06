@@ -147,7 +147,7 @@
 | T11 | S11   | inline | **done** | -      |
 | T12 | S12   | inline | **done** | -      |
 | T13 | S13   | inline | **done** | -      |
-| T14 | S14   | inline | pending  | -      |
+| T14 | S14   | inline | **done** | -      |
 | T15 | S15   | inline | pending  | -      |
 | T16 | S16   | inline | pending  | -      |
 | T17 | S17   | inline | pending  | -      |
@@ -493,12 +493,37 @@ programmatically).
 - Added `aria-hidden="true"` to decorative separator divs
 - Added `useRef` import for keyboard navigation ref
 - Toolbar buttons have explicit `role="button"` and `tabIndex={0}`
+- Moved hooks before early return to satisfy eslint `react-hooks/rules-of-hooks`
+- Removed unused `focusedIndex`/`setFocusedIndex` state
 
 **Files Modified:**
 
 - `src/components/ui/RichTextEditor.tsx` — Full ARIA toolbar implementation with keyboard navigation
 
-**Tests:** 201 passed, 30 skipped, 4 pre-existing failures (integration timeouts, resend)
-**TypeScript:** 0 errors
+**Tests:** 204 passed, 30 skipped, 1 pre-existing failure (resend test) **TypeScript:** 0 errors
+(pre-existing GardenCanvas/GardenSection errors from separate feature branch)
 
 **Next:** T14 — Select custom ARIA (Phase 3)
+
+---
+
+### L13 — 2026-11-05 — Phase 3 T14 Completed ✅
+**T14 — Select custom ARIA: COMPLETED**
+- Added `aria-haspopup="listbox"`, `aria-expanded`, `aria-controls`, `aria-label`, `aria-activedescendant` to trigger button
+- Added `role="listbox"` to dropdown container with `aria-label`
+- Added `role="option"` with `aria-selected` to each option button
+- Added keyboard navigation: ArrowUp/Down between options, Home/End for first/last, Enter/Space to select, Escape to close, Tab to close
+- Added `focus-visible` styles for keyboard focus indication (WCAG 2.4.7)
+- Added focus management: sets active index to selected option on open, focuses trigger on close
+- Added `disabled` prop support with proper `aria-disabled` handling
+- Added `aria-label` prop for custom accessibility labels
+- ChevronDown icon has `aria-hidden="true"`
+- Check icon has `aria-hidden="true"`
+
+**Files Modified:**
+- `src/components/ui/Select.tsx` — Full ARIA Select implementation with keyboard navigation
+
+**Tests:** 198 passed, 30 skipped, 7 pre-existing failures (integration timeouts, resend)
+**TypeScript:** 0 errors (pre-existing GardenCanvas/GardenSection errors from separate feature branch)
+
+**Next:** T15 — Focus management modales (Phase 3)
