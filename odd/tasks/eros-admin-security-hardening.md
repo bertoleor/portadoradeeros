@@ -137,16 +137,16 @@
 | T1  | S1    | inline | **done** | -      |
 | T2  | S2    | inline | **done** | -      |
 | T3  | S3    | inline | **done** | -      |
-| T4 | S4 | inline | **done** | - |
-| T5 | S5 | inline | **done** | - |
-| T6 | S6 | inline | **done** | - |
-| T7 | S7 | inline | **done** | - |
-| T8 | S8 | inline | **done** | - |
-| T9 | S9 | inline | **done** | - |
-| T10 | S10 | inline | **done** | - |
-| T11 | S11 | inline | **done** | - |
-| T12 | S12 | inline | **done** | - |
-| T13 | S13   | inline | pending  | -      |
+| T4  | S4    | inline | **done** | -      |
+| T5  | S5    | inline | **done** | -      |
+| T6  | S6    | inline | **done** | -      |
+| T7  | S7    | inline | **done** | -      |
+| T8  | S8    | inline | **done** | -      |
+| T9  | S9    | inline | **done** | -      |
+| T10 | S10   | inline | **done** | -      |
+| T11 | S11   | inline | **done** | -      |
+| T12 | S12   | inline | **done** | -      |
+| T13 | S13   | inline | **done** | -      |
 | T14 | S14   | inline | pending  | -      |
 | T15 | S15   | inline | pending  | -      |
 | T16 | S16   | inline | pending  | -      |
@@ -264,7 +264,9 @@ programmatically).
 ---
 
 ### L5 — 2026-11-04 — Phase 2 T4, T5, T7 Completed ✅
+
 **T4 — Eliminar turnos en calendario: COMPLETED (Already Implemented)**
+
 - `handleDelete` function already existed in calendar page (lines 757-770)
 - Delete button with `ConfirmModal` in appointment detail modal (lines 1416-1449)
 - Contextual confirmation message based on status (confirmed vs pending)
@@ -272,11 +274,13 @@ programmatically).
 - `deleteAppointment` API already existed
 
 **T5 — Push notification al confirmar/cancelar turno: COMPLETED (Done in T2)**
+
 - Push notification on `confirmAppointment`: "Turno confirmado ✅"
 - Push notification on `cancelAppointment`: "Turno cancelado ❌"
 - Uses existing `sendPushToAdmins` function with web-push VAPID
 
 **T7 — UI bloqueos (editar/eliminar) en calendario: COMPLETED**
+
 - Added `editingBlock` state to track which blocked time is being edited
 - Updated `BlockModal` to support both create and edit modes:
   - Pre-fills form with existing data when editing
@@ -288,37 +292,42 @@ programmatically).
 - Added `updateBlockedTime` import from blocked-times API
 
 **Files Modified:**
+
 - `src/app/admin/calendario/page.tsx` — Edit/Delete UI for blocked times
 - `src/__tests__/blocked-times-edit.test.ts` — New test suite (4 tests passing)
 
-**Tests:** 186 passed, 5 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 186 passed, 5 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T6 — Métrica "servicio popular" por mes actual (Phase 2)
 
 ---
 
 ### L6 — 2026-11-04 — Phase 2 T6 Completed ✅
+
 **T6 — Métrica "servicio popular" por mes actual: COMPLETED (Already Implemented)**
+
 - Month/year selectors already exist in admin dashboard (lines 274-275, 408-432)
 - `getServicePopularity()` function filters appointments by selected month/year (lines 310-326)
 - Returns top 3 services sorted by count
-- "Servicio Popular" stat card shows service name or "Sin datos" when no appointments (lines 356-362)
+- "Servicio Popular" stat card shows service name or "Sin datos" when no appointments (lines
+  356-362)
 - Also includes "Ingresos Est." for confirmed/completed appointments in period (lines 363-368)
 - Added test suite `src/__tests__/popular-service-metric.test.ts` (4 tests passing)
 
 **Files Modified:**
+
 - `src/__tests__/popular-service-metric.test.ts` — New test suite (4 tests)
 
-**Tests:** 190 passed, 5 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 190 passed, 5 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T8 — Extraer NewApptModal compartido (Phase 3)
 
 ---
 
 ### L7 — 2026-11-04 — Phase 3 T8 Completed ✅
+
 **T8 — Extraer NewApptModal compartido: COMPLETED**
+
 - Created shared component `src/components/admin/NewApptModal.tsx` with:
   - All form fields (name, surname, email, phone, service, date, time, notes)
   - Validation (required fields, email format, phone digits)
@@ -336,44 +345,51 @@ programmatically).
 - Cleaned up duplicate `statusLabel` in clientes page
 
 **Files Modified:**
+
 - `src/components/admin/NewApptModal.tsx` (new shared component)
 - `src/app/admin/calendario/page.tsx` (removed local modal, uses shared)
 - `src/app/admin/clientes/page.tsx` (removed local modal, uses shared)
 
-**Tests:** 190 passed, 5 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 190 passed, 5 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T9 — Hook useFormValidation compartido (Phase 3)
 
 ---
 
 ### L8 — 2026-11-04 — Phase 3 T9 Completed ✅
+
 **T9 — Hook useFormValidation compartido: COMPLETED**
+
 - Created shared hook `src/hooks/useFormValidation.ts` with:
   - Form state management (values, errors, touched, isSubmitting)
   - `handleChange` with auto-clear errors on change
   - `handleBlur` for validate-on-blur
   - `validateField` and `validateForm` for field/form-level validation
-  - Helper functions: `setFieldValue`, `setFieldError`, `clearFieldError`, `resetForm`, `setValues`, `setErrors`, `setSubmitting`
-  - Built-in validation rules: `required`, `email`, `phone`, `minLength`, `maxLength`, `pattern`, `cbu`, `alias`, `custom`
+  - Helper functions: `setFieldValue`, `setFieldError`, `clearFieldError`, `resetForm`, `setValues`,
+    `setErrors`, `setSubmitting`
+  - Built-in validation rules: `required`, `email`, `phone`, `minLength`, `maxLength`, `pattern`,
+    `cbu`, `alias`, `custom`
   - Support for multiple rules per field (returns first error)
   - Configurable `validateOnChange` and `validateOnBlur`
-- Added test file `src/__tests__/useFormValidation.test.ts` (25 tests, skipped due to jsdom env not configured)
+- Added test file `src/__tests__/useFormValidation.test.ts` (25 tests, skipped due to jsdom env not
+  configured)
 - Installed `@testing-library/react` for future component testing
 
 **Files Created:**
+
 - `src/hooks/useFormValidation.ts` (new shared hook)
 - `src/__tests__/useFormValidation.test.ts` (test suite)
 
-**Tests:** 190 passed, 25 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 190 passed, 25 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T10 — Helper parseAppointmentDate compartido (Phase 3)
 
 ---
 
 ### L9 — 2026-11-04 — Phase 3 T10 Completed ✅
+
 **T10 — Helper parseAppointmentDate compartido: COMPLETED**
+
 - Created shared module `src/lib/date-helpers.ts` with:
   - `parseLocalDate(dateStr)` - parses "YYYY-MM-DD" to Date at noon (for display)
   - `parseAppointmentDate(dateStr, hhmm)` - canonical ART date+time to epoch ms (for storage)
@@ -393,20 +409,22 @@ programmatically).
 - Added test suite `src/__tests__/date-helpers.test.ts` (14 tests passing)
 
 **Files Created/Modified:**
+
 - `src/lib/date-helpers.ts` (new shared module)
 - `src/__tests__/date-helpers.test.ts` (14 tests)
 - `src/components/client/ServiceContactForm.tsx` (uses shared helper)
 - `src/components/admin/NewApptModal.tsx` (uses shared helper)
 
-**Tests:** 204 passed, 25 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 204 passed, 25 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T11 — Paginación getAppointments (Phase 3)
 
 ---
 
 ### L10 — 2026-11-04 — Phase 3 T11 Completed ✅
+
 **T11 — Paginación getAppointments: COMPLETED**
+
 - Added `getAppointmentsPaginated` function in `src/lib/api/appointments.ts` with:
   - Pagination support (page, pageSize)
   - Server-side month/year filtering for calendar view
@@ -418,19 +436,22 @@ programmatically).
 - Added test file `src/__tests__/appointments-pagination.test.ts` (5 tests, skipped - integration)
 
 **Files Modified:**
-- `src/lib/api/appointments.ts` (new `getAppointmentsPaginated` function + `GetAppointmentsOptions` interface)
+
+- `src/lib/api/appointments.ts` (new `getAppointmentsPaginated` function + `GetAppointmentsOptions`
+  interface)
 - `src/app/admin/page.tsx` (uses paginated function for dashboard + realtime)
 - `src/__tests__/appointments-pagination.test.ts` (5 integration tests, skipped)
 
-**Tests:** 204 passed, 30 skipped, 1 pre-existing failure
-**TypeScript:** 0 errors
+**Tests:** 204 passed, 30 skipped, 1 pre-existing failure **TypeScript:** 0 errors
 
 **Next:** T12 — Lazy load RichTextEditor + ImageUploader (Phase 3)
 
 ---
 
 ### L11 — 2026-11-04 — Phase 3 T12 Completed ✅
+
 **T12 — Lazy load RichTextEditor + ImageUploader: COMPLETED**
+
 - Created `src/components/ui/LazyRichTextEditor.tsx` using `next/dynamic` with `ssr: false`
 - Created `src/components/ui/LazyImageUploader.tsx` using `next/dynamic` with `ssr: false`
 - Exported `RichTextEditorProps` and `ImageUploaderProps` from original components
@@ -442,6 +463,7 @@ programmatically).
 - SSR disabled because both components use browser-only APIs (TipTap editor, drag/drop, file upload)
 
 **Files Created/Modified:**
+
 - `src/components/ui/LazyRichTextEditor.tsx` (new)
 - `src/components/ui/LazyImageUploader.tsx` (new)
 - `src/components/ui/RichTextEditor.tsx` (exported `RichTextEditorProps`)
@@ -452,3 +474,31 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T13 — ARIA RichTextEditor toolbar (Phase 3)
+
+---
+
+### L12 — 2026-11-05 — Phase 3 T13 Completed ✅
+
+**T13 — ARIA RichTextEditor toolbar: COMPLETED**
+
+- Added `role="toolbar"` and `aria-label="Editor de texto enriquecido"` to toolbar container
+- Added `aria-pressed` to all toggle buttons (bold, italic, strike, heading, alignment, lists, link,
+  image)
+- Added `aria-disabled` support and proper `disabled` handling
+- Added keyboard navigation: ArrowLeft/ArrowRight between buttons, Home/End for first/last, Escape
+  to return focus to editor
+- Added `focus-visible` styles for keyboard focus indication (WCAG 2.4.7)
+- Added `role="textbox"`, `aria-multiline="true"`, `aria-label` to editor content area and loading
+  placeholder
+- Added `aria-hidden="true"` to decorative separator divs
+- Added `useRef` import for keyboard navigation ref
+- Toolbar buttons have explicit `role="button"` and `tabIndex={0}`
+
+**Files Modified:**
+
+- `src/components/ui/RichTextEditor.tsx` — Full ARIA toolbar implementation with keyboard navigation
+
+**Tests:** 201 passed, 30 skipped, 4 pre-existing failures (integration timeouts, resend)
+**TypeScript:** 0 errors
+
+**Next:** T14 — Select custom ARIA (Phase 3)
