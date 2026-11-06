@@ -15,10 +15,11 @@ import {
 	User,
 	X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Button, DatePicker, Select, TimePicker } from "@/components/ui";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
+import { FocusTrap } from "@/components/ui/FocusTrap";
 import { useToast } from "@/components/ui/ToastProvider";
 import {
 	cancelAppointment,
@@ -134,14 +135,26 @@ function BlockModal({
 		}
 	};
 
+	const titleRef = React.useRef<HTMLHeadingElement | null>(null);
+	const closeButtonRef = React.useRef<HTMLButtonElement | null>(null);
+	const firstInputRef = React.useRef<HTMLInputElement | null>(null);
+	const triggerRef = React.useRef<HTMLButtonElement | null>(null);
+
 	return (
-		<>
+		<FocusTrap
+			isActive={true}
+			onEscape={onClose}
+			autoFocus={true}
+			initialFocusRef={firstInputRef}
+			returnFocusRef={triggerRef}
+		>
 			<motion.div
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={{ opacity: 0 }}
 				onClick={onClose}
 				className="fixed inset-0 bg-black/30 z-[60]"
+				role="presentation"
 			/>
 			<motion.div
 				initial={{ opacity: 0, scale: 0.96 }}
@@ -150,15 +163,19 @@ function BlockModal({
 				className="fixed inset-0 m-auto w-full max-w-md h-fit bg-white/85 backdrop-blur-2xl rounded-3xl z-[70] border border-white/60 overflow-hidden"
 			>
 				<div className="p-4 border-b border-[rgba(15,15,20,0.08)] flex items-center justify-between">
-					<h3 className="font-medium text-gray-900">
+					<h3
+						ref={titleRef}
+						className="font-medium text-gray-900"
+					>
 						{isEditing ? "Editar Bloqueo" : "Bloquear Fecha"}
 					</h3>
 					<button
+						ref={closeButtonRef}
 						onClick={onClose}
 						aria-label="Cerrar"
-						className="p-1.5 hover:bg-gray-100 rounded-lg"
+						className="p-1.5 hover:bg-gray-100 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/40 focus-visible:ring-offset-2"
 					>
-						<X size={16} className="text-gray-500" />
+						<X size={16} className="text-gray-500" aria-hidden="true" />
 					</button>
 				</div>
 				<div className="p-4 space-y-3">
@@ -256,7 +273,7 @@ function BlockModal({
 					</Button>
 				</div>
 			</motion.div>
-		</>
+		</FocusTrap>
 	);
 }
 

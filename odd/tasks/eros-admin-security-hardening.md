@@ -148,7 +148,7 @@
 | T12 | S12   | inline | **done** | -      |
 | T13 | S13   | inline | **done** | -      |
 | T14 | S14   | inline | **done** | -      |
-| T15 | S15   | inline | pending  | -      |
+| T15 | S15   | inline | **done** | -      |
 | T16 | S16   | inline | pending  | -      |
 | T17 | S17   | inline | pending  | -      |
 
@@ -527,3 +527,35 @@ programmatically).
 **TypeScript:** 0 errors (pre-existing GardenCanvas/GardenSection errors from separate feature branch)
 
 **Next:** T15 — Focus management modales (Phase 3)
+
+---
+
+### L14 — 2026-11-06 — Phase 3 T15 Completed ✅
+**T15 — Focus management modales: COMPLETED**
+- Created shared `FocusTrap` component (`src/components/ui/FocusTrap.tsx`) with:
+  - Focus trapping via Tab/Shift+Tab within container
+  - Escape key handling with configurable callback
+  - Auto-focus on activation (uses `initialFocusRef` or first focusable element)
+  - Focus restoration on deactivation (uses `returnFocusRef` or previously focused element)
+  - `aria-modal="true"` and `role="dialog"` on container
+- Updated `ConfirmModal` to use `FocusTrap`:
+  - Auto-focuses confirm button on open
+  - Restores focus to trigger element on close
+  - Added `focus-visible` styles for keyboard focus indication
+  - Added proper ARIA labels and IDs
+- Updated `BlockModal` (inline in `src/app/admin/calendario/page.tsx`) to use `FocusTrap`:
+  - Auto-focuses first input (title field) on open
+  - Restores focus to trigger element on close
+  - Added `focus-visible` styles to all interactive elements
+  - Added `aria-hidden="true"` to decorative close icon
+  - Proper `RefObject` typing for compatibility
+
+**Files Created/Modified:**
+- `src/components/ui/FocusTrap.tsx` (new shared component)
+- `src/components/ui/ConfirmModal.tsx` (uses FocusTrap)
+- `src/app/admin/calendario/page.tsx` (imports FocusTrap, BlockModal uses FocusTrap)
+
+**Tests:** 198 passed, 30 skipped, 7 pre-existing failures (integration timeouts, resend)
+**TypeScript:** 0 errors (pre-existing GardenCanvas/GardenSection errors from separate feature branch)
+
+**Next:** T16 — Runbooks (ORN-217) (Phase 3)
