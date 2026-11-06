@@ -145,7 +145,7 @@
 | T9 | S9 | inline | **done** | - |
 | T10 | S10 | inline | **done** | - |
 | T11 | S11 | inline | **done** | - |
-| T12 | S12   | inline | pending  | -      |
+| T12 | S12 | inline | **done** | - |
 | T13 | S13   | inline | pending  | -      |
 | T14 | S14   | inline | pending  | -      |
 | T15 | S15   | inline | pending  | -      |
@@ -426,3 +426,29 @@ programmatically).
 **TypeScript:** 0 errors
 
 **Next:** T12 — Lazy load RichTextEditor + ImageUploader (Phase 3)
+
+---
+
+### L11 — 2026-11-04 — Phase 3 T12 Completed ✅
+**T12 — Lazy load RichTextEditor + ImageUploader: COMPLETED**
+- Created `src/components/ui/LazyRichTextEditor.tsx` using `next/dynamic` with `ssr: false`
+- Created `src/components/ui/LazyImageUploader.tsx` using `next/dynamic` with `ssr: false`
+- Exported `RichTextEditorProps` and `ImageUploaderProps` from original components
+- Updated `src/app/admin/servicios/[slug]/page.tsx`:
+  - Replaced `RichTextEditor` import with `LazyRichTextEditor`
+  - Replaced `ImageUploader` import with `LazyImageUploader`
+  - Updated JSX usages to use lazy components
+- Added skeleton loading placeholders for both components
+- SSR disabled because both components use browser-only APIs (TipTap editor, drag/drop, file upload)
+
+**Files Created/Modified:**
+- `src/components/ui/LazyRichTextEditor.tsx` (new)
+- `src/components/ui/LazyImageUploader.tsx` (new)
+- `src/components/ui/RichTextEditor.tsx` (exported `RichTextEditorProps`)
+- `src/components/ui/ImageUploader.tsx` (exported `ImageUploaderProps`)
+- `src/app/admin/servicios/[slug]/page.tsx` (uses lazy components)
+
+**Tests:** 201 passed, 30 skipped, 4 pre-existing failures (integration timeouts, resend)
+**TypeScript:** 0 errors
+
+**Next:** T13 — ARIA RichTextEditor toolbar (Phase 3)
