@@ -77,24 +77,24 @@ El proyecto usa una paleta de colores moderna basada en escala de grises con ace
 
 ```css
 :root {
-  /* Blanco, Negro, Grises */
-  --black: #1d1d1f;
-  --white: #ffffff;
+	/* Blanco, Negro, Grises */
+	--black: #1d1d1f;
+	--white: #ffffff;
 
-  /* Escala de grises iOS */
-  --gray-900: #1d1d1f;
-  --gray-800: #333333;
-  --gray-700: #4a4a4a;
-  --gray-600: #666666;
-  --gray-500: #86868b;
+	/* Escala de grises iOS */
+	--gray-900: #1d1d1f;
+	--gray-800: #333333;
+	--gray-700: #4a4a4a;
+	--gray-600: #666666;
+	--gray-500: #86868b;
 
-  /* Tema Shadcn */
-  --primary: #1d1d1f;
-  --secondary: #f2f2f7;
-  --muted: #f5f5f7;
-  --accent: #f2f2f7;
-  --destructive: #ff3b30;
-  --border: #e5e5ea;
+	/* Tema Shadcn */
+	--primary: #1d1d1f;
+	--secondary: #f2f2f7;
+	--muted: #f5f5f7;
+	--accent: #f2f2f7;
+	--destructive: #ff3b30;
+	--border: #e5e5ea;
 }
 ```
 
@@ -242,10 +242,10 @@ El proyecto usa los breakpoints estándar de Tailwind: `sm`, `md`, `lg`, `xl`, `
 
 ```typescript
 // lib/email.ts
-const SERVICE_ID = process.env.EMAILJS_SERVICE_ID || '';
-const PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || '';
-const PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY || '';
-const ADMIN_EMAIL = 'portadoradeeros@gmail.com';
+const SERVICE_ID = process.env.EMAILJS_SERVICE_ID || "";
+const PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || "";
+const PRIVATE_KEY = process.env.EMAILJS_PRIVATE_KEY || "";
+const ADMIN_EMAIL = "portadoradeeros@gmail.com";
 ```
 
 ### 5.3 Plantillas de Email
@@ -426,7 +426,7 @@ VAPID_PRIVATE_KEY
 ### 10.4 Mejoras de Seguridad
 
 1. **Rate limiting**: Prevenir spam en formularios
-2. ** Honeypot**: Campo oculto para detectar bots
+2. \*\* Honeypot**: Campo oculto para detectar bots
 3. **Validación de inputs**: Ya implementada en su mayoría
 
 ---
@@ -525,3 +525,26 @@ VAPID_PRIVATE_KEY
 _Documento generado como parte de la auditoría integral del proyecto Portadora de Eros. Este
 documento consolida el análisis de código fuente, archivos de configuración y documentación
 existente para proporcionar una visión completa del estado del proyecto._
+
+
+**Actualizaciones T15-T16 (Fase 3 Completo)**
+
+### Focus Management Modales (T15)
+- FocusTrap component created in `src/components/ui/FocusTrap.tsx`
+- Focus trapping (Tab/Shift+Tab), Escape handling, auto-focus, focus restoration
+- Applied to ConfirmModal and BlockModal
+- WCAG 2.4.7 focus-visible styles
+
+### Runbooks (T16)
+- ORN-217 `docs/runbooks/admin-security-hardening.md` created
+- Documents security hardening, reproduction steps, solution commands
+- Verified: 198 tests passed, typecheck 0 errors, Strix 0 findings
+
+### Seguridad Mejorada
+- AES-256-GCM + HKDF bank encryption
+- Payment proof validation with Zod `.url()`
+- CBU/alias validation server + client
+- 5-layer defense-in-depth active
+- Strix deep scan: 0 findings
+
+**All T15-T16 tasks complete. Ready for final audit update (T17).**
