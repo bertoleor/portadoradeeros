@@ -526,7 +526,26 @@ programmatically).
 **Tests:** 198 passed, 30 skipped, 7 pre-existing failures (integration timeouts, resend)
 **TypeScript:** 0 errors (pre-existing GardenCanvas/GardenSection errors from separate feature branch)
 
-**Next:** T15 — Focus management modales (Phase 3)
+### L15 — 2026-11-06 — Phase 3 T16 Completed ✅
+**T16 — Runbooks (ORN-217): COMPLETED**
+- Created `docs/runbooks/admin-security-hardening.md` documenting:
+  - Problem description for admin security hardening
+  - Reproduction steps for bank encryption, payment proof, CBU/alias validation
+  - Solution commands (`pnpm test`, `pnpm run typecheck`)
+  - Post-verification checks table
+- Runbook covers: bank encryption (AES-256-GCM + HKDF), payment proof validation, CBU/alias validation, FocusTrap modales, RLS policies
+- Verified: 198 tests passed, typecheck 0 errors, Strix 0 findings
+- Coordinates with T15 (FocusTrap) and T17 (audit update)
+
+**Files Created/Modified:**
+- `docs/runbooks/admin-security-hardening.md` (new ORN-217)
+- `odd/tasks/eros-admin-security-hardening.md` (T16 marker)
+
+**Tests:** 198 passed, 30 skipped, 7 pre-existing failures
+**TypeScript:** 0 errors
+
+**Next:** T17 — Actualizar auditoría (ORN-??) (Phase 3)
+
 
 ---
 
@@ -557,5 +576,24 @@ programmatically).
 
 **Tests:** 198 passed, 30 skipped, 7 pre-existing failures (integration timeouts, resend)
 **TypeScript:** 0 errors (pre-existing GardenCanvas/GardenSection errors from separate feature branch)
+
+### L15 — 2026-11-06 — Phase 3 T16 Completed ✅
+**T16 — Runbooks (ORN-217): COMPLETED**
+- Created `docs/runbooks/admin-security-hardening.md` documenting:
+  - Problem description for admin security hardening
+  - Reproduction steps for bank encryption, payment proof, CBU/alias validation
+  - Solution commands (`pnpm test`, `pnpm run typecheck`)
+  - Post-verification checks table
+- Runbook covers: bank encryption (AES-256-GCM + HKDF), payment proof validation, CBU/alias validation, FocusTrap modales, RLS policies
+- Verified: 198 tests passed, typecheck 0 errors, Strix 0 findings
+- Coordinates with T15 (FocusTrap) and T17 (audit update)
+
+**Files Created/Modified:**
+- `docs/runbooks/admin-security-hardening.md` (new ORN-217)
+- `odd/tasks/eros-admin-security-hardening.md` (T16 marker)
+
+**Tests:** 198 passed, 30 skipped, 7 pre-existing failures
+**TypeScript:** 0 errors
+
 
 **Next:** T16 — Runbooks (ORN-217) (Phase 3)
