@@ -150,7 +150,7 @@
 | T14 | S14   | inline | **done** | -      |
 | T15 | S15   | inline | **done** | -      |
 | T16 | S16   | inline | **done** | -      |
-| T17 | S17   | inline | pending  | -      |
+| T17 | S17   | inline | **done** | -      |
 
 ---
 
@@ -544,7 +544,7 @@ programmatically).
 **Tests:** 198 passed, 30 skipped, 7 pre-existing failures
 **TypeScript:** 0 errors
 
-**Next:** T17 — Actualizar auditoría (ORN-??) (Phase 3)
+**Next:** — Auditoría finalizada (Phase 3 complete)
 
 
 ---
