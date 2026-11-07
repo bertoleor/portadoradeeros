@@ -149,7 +149,7 @@
 | T13 | S13   | inline | **done** | -      |
 | T14 | S14   | inline | **done** | -      |
 | T15 | S15   | inline | **done** | -      |
-| T16 | S16   | inline | pending  | -      |
+| T16 | S16   | inline | **done** | -      |
 | T17 | S17   | inline | pending  | -      |
 
 ---
